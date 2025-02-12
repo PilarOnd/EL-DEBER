@@ -1,0 +1,36 @@
+/* global.css */
+
+/* Variables globales */
+:root {
+    --verde-principal: #207742;
+}
+
+/* Estilo general del cuerpo */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Botón personalizado */
+.btn-custom {
+    background-color: var(--verde-principal);
+    color: white;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    text-decoration: none;
+    font-size: smaller
+}
+
+.btn-custom:hover {
+    background-color: var(--verde-principal);
+    color: black;
+}
+
+/* Estilo del logo */
+.brand img {
+    width: 175px; /* Ajusta según el tamaño deseado */
+    height: auto;
+    margin-top: -50px; /* Sube la imagen */
+}

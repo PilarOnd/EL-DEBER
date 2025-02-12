@@ -1,0 +1,64 @@
+{
+  "campañas": [
+    {
+      "id": "1",
+      "nombre": "BANCO MERCANTIL - 2025",
+      "fecha_inicio": "05-02-2021",
+      "fecha_fin": "28-02-2021",
+      "presupuesto": {
+        "monto": 600,
+        "moneda": "USD"
+      },
+      "plataforma": {
+        "nombre": "Facebook",
+        "tipo": "Post Ads",
+        "actualización": "01-03-2021"
+      }
+    },
+    {
+      "id": "2",
+      "nombre": "SOFIA - 2025",
+      "fecha_inicio": "10-03-2023",
+      "fecha_fin": "30-03-2023",
+      "presupuesto": {
+        "monto": 800,
+        "moneda": "USD"
+      },
+      "plataforma": {
+        "nombre": "Instagram",
+        "tipo": "Post Ads",
+        "actualización": "12-07-2025"
+      }
+    },
+    {
+      "id": "3",
+      "nombre": "FARMACIA CHAVEZ - 2025",
+      "fecha_inicio": "15-06-2024",
+      "fecha_fin": "30-06-2024",
+      "presupuesto": {
+        "monto": 500,
+        "moneda": "USD"
+      },
+      "plataforma": {
+        "nombre": "Facebook",
+        "tipo": "Post Ads",
+        "actualización": "30-04-2023"
+      }
+    },
+    {
+      "id": "4",
+      "nombre": "DISMAC - 2024",
+      "fecha_inicio": "01-09-2024",
+      "fecha_fin": "15-09-2024",
+      "presupuesto": {
+        "monto": 700,
+        "moneda": "USD"
+      },
+      "plataforma": {
+        "nombre": "Tiktok",
+        "tipo": "Banner Gold",
+        "actualización": "23-09-2023"
+      }
+    }
+  ]
+}
