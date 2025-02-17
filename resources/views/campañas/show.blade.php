@@ -13,7 +13,6 @@
     <header>
         <p>holaaaaaaaa</p>
     </header>
-
     <div class="container mt-4">
         <div class="row text-center align-items-center" style="background-image: url('/images/background.jpg'); background-size: cover; padding: 20px; border-radius: 10px;">
             <div class="col-md-3">
