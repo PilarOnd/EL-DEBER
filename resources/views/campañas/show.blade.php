@@ -15,7 +15,7 @@
 <div class="container mt-4" style="max-width: 65%; margin: 0 auto;">
     <!--banner-->
     <div class="row g-0"> <!-- Añadimos g-0 para eliminar los gutters -->
-        <div class="col-12 p-0"> <!-- Añadimos p-0 para eliminar el padding -->
+        <div class="col-12 p-0"> <!-- Añadimos p-0 para eliminar el padd -->
             <div class="banner-cliente" style="background-color: {{ $cliente['color'] }}">
                 <img src="{{ asset(str_replace('public/', '', $cliente['logo'])) }}" alt="{{ $cliente['nombre'] }}" class="cliente-logo">
             </div>
