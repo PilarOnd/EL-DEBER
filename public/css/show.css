@@ -53,5 +53,28 @@ body::before {
     max-width: 80%; /* Ajustar el ancho de la barra de progreso */
     margin: 5px auto; /* Espacio superior e inferior */
 }
+/* tamalo de fuente p */
+p.mb-0 {
+    font-size: 15.5px !important;
+}
+/* logos y colores de clientes*/
+.banner-cliente {
+    width: 100%;
+    height: 197px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px 10px 0 0;
+}
+
+.cliente-logo {
+    width: 200px;    /* ancho fijo */
+    height: 100px;   /* alto fijo */
+    object-fit: contain; /* mantiene la proporción de la imagen sin distorsionarla */
+    padding: 10px;   /* espacio alrededor del logo */
+}
+
+
+
 
 

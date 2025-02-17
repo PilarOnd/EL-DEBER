@@ -33,9 +33,8 @@ Route::post('login', [LoginController::class, 'login']);
 
 
 
-Route::get('/campañas', [CampañaController::class, 'index']);
+Route::get('/campañas', [CampañaController::class, 'index'])->name('campañas.index');
 Route::get('/campañas/{id}', [CampañaController::class, 'show'])->name('campañas.show');
-Route::get('/campañas/{id}', [CampañaController::class, 'show']);
 
 
 

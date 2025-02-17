@@ -1,10 +1,40 @@
 {
+  "cliente" :[
+    { 
+      "id": 10,
+      "nombre": "BANCO MERCANTIL" , 
+      "color":"#296140" , 
+      "logo":"public/img/logos/bancomercantil-logo.png"
+    },
+    { 
+      "id": 20,
+      "nombre": "SOFIA" , 
+      "color":"#ffffff" , 
+      "logo":"public/img/logos/sofia-logo.png"
+    },
+    { 
+      "id": 30,
+      "nombre": "FARMACIA CHAVEZ" , 
+      "color":"#05b1ea" , 
+      "logo":"public/img/logos/farmaciachavez-logo.png"
+    },
+    { 
+      "id": 40,
+      "nombre": "DISMAC" , 
+      "color":"#ffffff" , 
+      "logo":"public/img/logos/dismac-logo.png"
+    }
+  ],
   "campañas": [
     {
       "id": "1",
-      "nombre": "BANCO MERCANTIL - 2025",
+      "nombre": "BANCO MERCANTIL - 2021",
+      "cliente_id": 10,
+      "gestión": 2021,
       "fecha_inicio": "05-02-2021",
       "fecha_fin": "28-02-2021",
+      "objetivo": 31000000 ,
+      "impresiones": 22325432,
       "presupuesto": {
         "monto": 600,
         "moneda": "USD"
@@ -18,8 +48,12 @@
     {
       "id": "2",
       "nombre": "SOFIA - 2025",
+      "cliente_id": 20,
+      "gestión": 2025,
       "fecha_inicio": "10-03-2023",
       "fecha_fin": "30-03-2023",
+      "objetivo": 55600100,
+      "impresiones": 12005164,
       "presupuesto": {
         "monto": 800,
         "moneda": "USD"
@@ -32,9 +66,13 @@
     },
     {
       "id": "3",
-      "nombre": "FARMACIA CHAVEZ - 2025",
+      "nombre": "FARMACIA CHAVEZ - 2023",
+      "cliente_id": 30,
+      "gestión": 2023,
       "fecha_inicio": "15-06-2024",
       "fecha_fin": "30-06-2024",
+      "objetivo": 31000000,
+      "impresiones": 12010091,
       "presupuesto": {
         "monto": 500,
         "moneda": "USD"
@@ -48,8 +86,12 @@
     {
       "id": "4",
       "nombre": "DISMAC - 2024",
+      "cliente_id": 40,
+      "gestión": 2024,
       "fecha_inicio": "01-09-2024",
       "fecha_fin": "15-09-2024",
+      "objetivo": 42000500,
+      "impresiones": 31092184,
       "presupuesto": {
         "monto": 700,
         "moneda": "USD"

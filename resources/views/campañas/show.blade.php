@@ -16,8 +16,9 @@
     <!--banner-->
     <div class="row g-0"> <!-- Añadimos g-0 para eliminar los gutters -->
         <div class="col-12 p-0"> <!-- Añadimos p-0 para eliminar el padding -->
-            <img src="{{ asset('img/reporte.png') }}" alt="Informe de campaña" 
-                 style="width: 100%; height: 200px; object-fit: cover;">
+            <div class="banner-cliente" style="background-color: {{ $cliente['color'] }}">
+                <img src="{{ asset(str_replace('public/', '', $cliente['logo'])) }}" alt="{{ $cliente['nombre'] }}" class="cliente-logo">
+            </div>
         </div>
     </div>
     <!-- datos-->
@@ -41,15 +42,38 @@
    
                 <div class="col-md-3 text-center d-flex flex-column align-items-center">
                     <h5 class="fw-bold text-success">PRESUPUESTO</h5>
-                    <h4 class="fw-bold">{{ number_format($campaña['presupuesto']['monto'], 0, '', '.') }} ${{ strtoupper($campaña['presupuesto']['moneda']) }}</h4>
+                    <h4 class="fw-bold"style="font-size: 19.5px;">{{ number_format($campaña['presupuesto']['monto'], 0, '', '.') }} ${{ strtoupper($campaña['presupuesto']['moneda']) }}</h4>
 
                     <div class="progress" style="height: 10px; background-color: #ddd; border-radius: 5px; width: 100%;">
                         <div class="progress-bar bg-success" role="progressbar"
                              style="width: 100%; border-radius: 5px;" aria-valuenow="100"
                              aria-valuemin="0" aria-valuemax="100"></div>
                    </div>
-                 <p class="mb-0" style="font-size: 14px;">{{ number_format($campaña['presupuesto']['monto'], 0, '', '.') }} ${{ strtoupper($campaña['presupuesto']['moneda']) }}</p>
+                 <p class="mb-1" style="font-size: 13px;">{{ number_format($campaña['presupuesto']['monto'], 0, '', '.') }} ${{ strtoupper($campaña['presupuesto']['moneda']) }}</p>
                </div>            
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229, 0.9);">
+                 <div class="col-md-4 d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold text-success">Objetivo Proyectado</h5>
+                    <p class="mb-0">{{ $campaña['objetivo'] }} Impresiones</p>
+                </div>
+
+                <div class="col-md-4 d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold text-success">Objetivo Logrado</h5>
+                    <p class="mb-0">{{ $campaña['impresiones'] }} Impresiones</p>
+                </div>
+
+                <div class="col-md-4 d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold text-success">% de Efectividad</h5>
+                    <p class="mb-0">{{ $efectividad }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgba(245, 245, 245, 0.9);">
+
             </div>
         </div>
     </div>
