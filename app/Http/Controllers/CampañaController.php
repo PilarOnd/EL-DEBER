@@ -26,35 +26,43 @@ class CampañaController extends Controller
 
         return view('campañas.index', compact('campañas'));
     }
-
+ 
     public function show($id)
     {
         $data = $this->getJsonData();
-
+    
         // Buscar la campaña por el ID
         $campaña = collect($data['campañas'])->firstWhere('id', $id);
-
+    
         if (!$campaña) {
             abort(404, 'Campaña no encontrada');
         }
-
+    
         // Buscar el cliente asociado a la campaña
         $cliente = collect($data['cliente'])->firstWhere('id', $campaña['cliente_id']);
-
+    
         if (!$cliente) {
             abort(404, 'Cliente no encontrado');
         }
-
+    
+        // Buscar la creatividad asociada a un cliente
+        $creatividades = collect($data['creatividades'])->where('campaña_id', $campaña['id'])->all();
+    
+        if (!$creatividades) {
+            abort(404, 'Creatividad no encontrada');
+        }
+    
         // Calcular el % de efectividad
         $efectividad = $this->calcularEfectividad($campaña['impresiones'], $campaña['objetivo']);
-
+    
         // Formatear fechas
         $campaña['fecha_inicio_formatted'] = date('d M Y', strtotime($campaña['fecha_inicio']));
         $campaña['fecha_fin_formatted'] = date('d M Y', strtotime($campaña['fecha_fin']));
-
-        return view('campañas.show', compact('campaña', 'cliente', 'efectividad'));
+    
+        // Pasar los datos a la vista
+        return view('campañas.show', compact('campaña', 'cliente', 'efectividad', 'creatividades'));
     }
-
+    // Función para calcular la efectividad basada en impresiones y objetivo
     private function calcularEfectividad($impresiones, $objetivo)
     {
         if ($objetivo <= 0) {

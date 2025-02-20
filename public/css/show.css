@@ -73,6 +73,19 @@ p.mb-0 {
     object-fit: contain; /* mantiene la proporción de la imagen sin distorsionarla */
     padding: 10px;   /* espacio alrededor del logo */
 }
+/* ícono */
+.icono-hover {
+    transition: transform 0.3s ease-in-out;
+}
+
+.icono-hover:hover {
+    transform: scale(1.3);
+}
+/* tabla de datos de creatividades*/
+.custom-row-bg {
+    background-color: rgba(245, 245, 245, 0.9);
+}
+
 
 
 

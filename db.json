@@ -1,28 +1,28 @@
 {
-  "cliente" :[
-    { 
+  "cliente": [
+    {
       "id": 10,
-      "nombre": "BANCO MERCANTIL" , 
-      "color":"#296140" , 
-      "logo":"public/img/logos/bancomercantil-logo.png"
+      "nombre": "BANCO MERCANTIL",
+      "color": "#296140",
+      "logo": "public/img/logos/bancomercantil-logo.png"
     },
-    { 
+    {
       "id": 20,
-      "nombre": "SOFIA" , 
-      "color":"#ffffff" , 
-      "logo":"public/img/logos/sofia-logo.png"
+      "nombre": "SOFIA",
+      "color": "#ffffff",
+      "logo": "public/img/logos/sofia-logo.png"
     },
-    { 
+    {
       "id": 30,
-      "nombre": "FARMACIA CHAVEZ" , 
-      "color":"#05b1ea" , 
-      "logo":"public/img/logos/farmaciachavez-logo.png"
+      "nombre": "FARMACIA CHAVEZ",
+      "color": "#05b1ea",
+      "logo": "public/img/logos/farmaciachavez-logo.png"
     },
-    { 
+    {
       "id": 40,
-      "nombre": "DISMAC" , 
-      "color":"#ffffff" , 
-      "logo":"public/img/logos/dismac-logo.png"
+      "nombre": "DISMAC",
+      "color": "#ffffff",
+      "logo": "public/img/logos/dismac-logo.png"
     }
   ],
   "campañas": [
@@ -33,15 +33,14 @@
       "gestión": 2021,
       "fecha_inicio": "05-02-2021",
       "fecha_fin": "28-02-2021",
-      "objetivo": 31000000 ,
-      "impresiones": 22325432,
+      "objetivo": 310000,
+      "impresiones": 223232,
       "presupuesto": {
         "monto": 600,
         "moneda": "USD"
       },
       "plataforma": {
         "nombre": "Facebook",
-        "tipo": "Post Ads",
         "actualización": "01-03-2021"
       }
     },
@@ -52,8 +51,8 @@
       "gestión": 2025,
       "fecha_inicio": "10-03-2023",
       "fecha_fin": "30-03-2023",
-      "objetivo": 55600100,
-      "impresiones": 12005164,
+      "objetivo": 350100,
+      "impresiones": 120164,
       "presupuesto": {
         "monto": 800,
         "moneda": "USD"
@@ -71,15 +70,14 @@
       "gestión": 2023,
       "fecha_inicio": "15-06-2024",
       "fecha_fin": "30-06-2024",
-      "objetivo": 31000000,
-      "impresiones": 12010091,
+      "objetivo": 310000,
+      "impresiones": 120091,
       "presupuesto": {
         "monto": 500,
         "moneda": "USD"
       },
       "plataforma": {
         "nombre": "Facebook",
-        "tipo": "Post Ads",
         "actualización": "30-04-2023"
       }
     },
@@ -90,16 +88,80 @@
       "gestión": 2024,
       "fecha_inicio": "01-09-2024",
       "fecha_fin": "15-09-2024",
-      "objetivo": 42000500,
-      "impresiones": 31092184,
+      "objetivo": 420500,
+      "impresiones": 312184,
       "presupuesto": {
         "monto": 700,
         "moneda": "USD"
       },
       "plataforma": {
         "nombre": "Tiktok",
-        "tipo": "Banner Gold",
         "actualización": "23-09-2023"
+      }
+    }
+  ],
+  "creatividades": [
+    {
+      "id": "200_mobile",
+      "icono": "public/img/creatividades/sofia-productos.png",
+      "campaña_id": "2",
+      "cliente_id": "20",
+      "display": ["Mobile"],
+      "formato_alto_impacto": {
+        "redes_sociales": "Post Orgánico"
+      },
+      "redes_sociales": ["Facebook", "Instagram"],
+      "rendimiento": {
+        "clics": 100,
+        "impresiones": 80110,
+        "ctr": 6.67
+      }
+    },
+    {
+      "id": "200_desktop",
+      "icono": "public/img/creatividades/sofia-productos.png",
+      "campaña_id": "2",
+      "cliente_id": "20",
+      "display": ["Desktop"],
+      "formato_alto_impacto": {
+        "redes_sociales": "Post Orgánico"
+      },
+      "redes_sociales": ["Facebook", "Instagram"],
+      "rendimiento": {
+        "clics": 200,
+        "impresiones": 40055,
+        "ctr": 6.67
+      }
+    },
+    {
+      "id": "300_desktop",
+      "icono": "public/img/creatividades/sofia-productos.png",
+      "campaña_id": "3",
+      "cliente_id": "30",
+      "display": ["Desktop"],
+      "formato_alto_impacto": {
+        "redes_sociales": "Post Orgánico"
+      },
+      "redes_sociales": ["Facebook", "Instagram"],
+      "rendimiento": {
+        "clics": 200,
+        "impresiones": 40055,
+        "ctr": 6.67
+      }
+    }, {
+      "id": "400_desktop",
+      "icono": "public/img/creatividades/sofia-productos.png",
+      "campaña_id": "4",
+      "cliente_id": "40",
+      "display": ["Desktop"],
+      "formato_alto_impacto": {
+        "redes_sociales": "Post Orgánico"
+      },
+      "redes_sociales": ["Facebook", "Instagram"],
+      "rendimiento": {
+        "clics": 200,
+        "impresiones": 40055,
+        "ctr": 6.67
       }
     }
   ]
