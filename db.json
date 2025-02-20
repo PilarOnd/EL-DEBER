@@ -114,7 +114,7 @@
       "rendimiento": {
         "clics": 100,
         "impresiones": 80110,
-        "ctr": 6.67
+        "ctr": 0
       }
     },
     {
@@ -130,7 +130,7 @@
       "rendimiento": {
         "clics": 200,
         "impresiones": 40055,
-        "ctr": 6.67
+        "ctr": 0
       }
     },
     {
@@ -146,7 +146,7 @@
       "rendimiento": {
         "clics": 200,
         "impresiones": 40055,
-        "ctr": 6.67
+        "ctr": 0
       }
     }, {
       "id": "400_desktop",
@@ -161,7 +161,7 @@
       "rendimiento": {
         "clics": 200,
         "impresiones": 40055,
-        "ctr": 6.67
+        "ctr": 0
       }
     }
   ]
