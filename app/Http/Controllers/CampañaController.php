@@ -52,6 +52,24 @@ class CampañaController extends Controller
             abort(404, 'Creatividad no encontrada');
         }
     
+        // Calcular CTR para cada creatividad
+        $creatividades = collect($creatividades)->map(function ($creatividad) {
+            $impresiones = $creatividad['rendimiento']['impresiones'];
+            $clics = $creatividad['rendimiento']['clics'];
+            
+            // Calcular CTR
+            $creatividad['rendimiento']['ctr'] = $impresiones > 0 
+                ? round(($clics / $impresiones) * 100, 2)
+                : 0;
+                
+            return $creatividad;
+        })->all();
+    
+        $totales = $this->calcularTotales($creatividades);
+    
+        // Actualizar las impresiones de la campaña con el total calculado
+        $campaña['impresiones'] = $totales['impresiones'];
+    
         // Calcular el % de efectividad
         $efectividad = $this->calcularEfectividad($campaña['impresiones'], $campaña['objetivo']);
     
@@ -60,7 +78,24 @@ class CampañaController extends Controller
         $campaña['fecha_fin_formatted'] = date('d M Y', strtotime($campaña['fecha_fin']));
     
         // Pasar los datos a la vista
-        return view('campañas.show', compact('campaña', 'cliente', 'efectividad', 'creatividades'));
+        return view('campañas.show', compact('campaña', 'cliente', 'efectividad', 'creatividades', 'totales'));
+    }
+
+    private function calcularTotales($creatividades)
+    {
+        $impresiones = collect($creatividades)->sum('rendimiento.impresiones');
+        $clics = collect($creatividades)->sum('rendimiento.clics');
+        $ctr = 0;
+
+        if ($impresiones > 0) {
+            $ctr = round(($clics / $impresiones) * 100, 2);
+        }
+
+        return [
+            'impresiones' => $impresiones,
+            'clics' => $clics,
+            'ctr' => $ctr
+        ];
     }
     // Función para calcular la efectividad basada en impresiones y objetivo
     private function calcularEfectividad($impresiones, $objetivo)

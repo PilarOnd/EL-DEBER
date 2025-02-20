@@ -65,6 +65,7 @@ p.mb-0 {
     justify-content: center;
     align-items: center;
     border-radius: 10px 10px 0 0;
+    position: relative; /* Para posicionar el texto */
 }
 
 .cliente-logo {
@@ -85,6 +86,51 @@ p.mb-0 {
 .custom-row-bg {
     background-color: rgba(245, 245, 245, 0.9);
 }
+
+/* Estilos para los elementos con el color del cliente */
+.cliente-text {
+    transition: color 0.3s ease;
+}
+
+.progress-bar {
+    background-color: var(--cliente-color, #198754) !important;
+}
+/* Mantener el total en negro */
+.table tbody tr.fw-bold td {
+    color: #000000 !important;
+}
+
+/* Eliminar cualquier color verde residual */
+.text-success,
+.bg-success,
+.table .text-success {
+    color: var(--cliente-color) !important;
+}
+
+/* Asegurar que la barra de progreso use el color del cliente */
+.progress-bar.bg-success {
+    background-color: var(--cliente-color) !important;
+}
+
+/* Estilos para el banner */
+.banner-texto {
+    position: absolute;
+    bottom: 25px;
+    right: 20px;
+    color: black;
+    font-weight: bold;
+    font-size: 26px;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255);
+    font-family: 'Poppins', sans-serif;
+    text-align: right;
+    line-height: 1.2; /* Ajusta el espaciado entre líneas */
+}
+
+/* Eliminar margen inferior de las tablas */
+.table {
+    margin-bottom: 0 !important;
+}
+
 
 
 

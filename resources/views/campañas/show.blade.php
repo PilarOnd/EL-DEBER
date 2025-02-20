@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
     <title>Detalles de la Campaña</title>
 </head>
-<body>
+<body style="--cliente-color: {{ $cliente['color_fuente'] }}">
 
 <div class="container mt-4" style="max-width: 65%; margin: 0 auto;">
     <!--banner-->
@@ -18,6 +18,7 @@
         <div class="col-12 p-0"> 
             <div class="banner-cliente" style="background-color: {{ $cliente['color'] }}">
                 <img src="{{ asset(str_replace('public/', '', $cliente['logo'])) }}" alt="{{ $cliente['nombre'] }}" class="cliente-logo">
+                <div class="banner-texto">INFORME<br>DE CAMPAÑA</div>
             </div>
         </div>
     </div>
@@ -26,17 +27,17 @@
         <div class="col-12">
             <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgba(245, 245, 245, 0.9);">
                 <div class="col-md-4 d-flex flex-column justify-content-center">
-                    <h5 class="fw-bold text-success">CAMPAÑA</h5>
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">CAMPAÑA</h5>
                     <p class="mb-0">{{ $campaña['nombre'] }}</p>
                 </div>
 
                 <div class="col-md-4 d-flex flex-column justify-content-center">
-                    <h5 class="fw-bold text-success">FECHA</h5>
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">FECHA</h5>
                     <p class="mb-0">{{ date('d M Y', strtotime($campaña['fecha_inicio'])) }} <br> al <br> {{ date('d M Y', strtotime($campaña['fecha_fin'])) }}</p>
                 </div>
    
                 <div class="col-md-4 text-center d-flex flex-column align-items-center">
-                    <h5 class="fw-bold text-success">PRESUPUESTO</h5>
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">PRESUPUESTO</h5>
                     <h4 class="fw-bold"style="font-size: 19.5px;">{{ number_format($campaña['presupuesto']['monto'], 0, '', '.') }} ${{ strtoupper($campaña['presupuesto']['moneda']) }}</h4>
 
                     <div class="progress" style="height: 10px; background-color: #ddd; border-radius: 5px; width: 100%;">
@@ -50,23 +51,32 @@
         </div>
         <div class="col-12">
             <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229, 0.9);">
-                <div class="col-md-3 d-flex flex-column justify-content-center">
-                    <h5 class="fw-bold text-success">{{ $campaña['plataforma']['nombre'] }}</h5>
+                <div class="col-md-3 text-center">
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Redes Sociales</h5>
                     <p class="mb-0">act. {{ date('d/m/Y', strtotime($campaña['plataforma']['actualización'])) }}</p>
                 </div>
+
                 <div class="col-md-3 d-flex flex-column justify-content-center">
-                    <h5 class="fw-bold text-success">Objetivo Proyectado</h5>
-                    <p class="mb-0">{{ $campaña['objetivo'] }} Impresiones</p>
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Objetivo Proyectado</h5>
+                    <p class="mb-0">{{ number_format($campaña['objetivo'], 0, '', '.') }} Impresiones</p>
                 </div>
 
                 <div class="col-md-3 d-flex flex-column justify-content-center">
-                    <h5 class="fw-bold text-success">Objetivo Logrado</h5>
-                    <p class="mb-0">{{ $campaña['impresiones'] }} Impresiones</p>
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Objetivo Logrado</h5>
+                    <p class="mb-0">{{ number_format($campaña['impresiones'], 0, '', '.') }} Impresiones</p>
                 </div>
 
                 <div class="col-md-3 d-flex flex-column justify-content-center">
-                    <h5 class="fw-bold text-success">% de Efectividad</h5>
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">% de Efectividad</h5>
                     <p class="mb-0">{{ $efectividad }}%</p>
+                </div>
+            </div>
+        </div>
+        @foreach ($campaña['plataforma']['redes_sociales'] as $redSocial)
+        <div class="col-12">
+            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgba(245, 245, 245, 0.9);">
+                <div class="col-md-12 text-center">
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">{{ $redSocial }}</h5>
                 </div>
             </div>
         </div>
@@ -82,26 +92,50 @@
                     </tr>
                 </thead>
                 <tbody>
-                   @foreach ($creatividades as $creatividad)
+                   @php
+                       $creatividadesRedSocial = array_filter($creatividades, function($creatividad) use ($redSocial) {
+                           return $creatividad['redes_sociales'] === $redSocial;
+                       });
+                       
+                       $totalesRedSocial = [
+                           'impresiones' => 0,
+                           'clics' => 0,
+                           'ctr' => 0
+                       ];
+                   @endphp
+                   
+                   @foreach ($creatividadesRedSocial as $creatividad)
+                       @php
+                           $totalesRedSocial['impresiones'] += $creatividad['rendimiento']['impresiones'];
+                           $totalesRedSocial['clics'] += $creatividad['rendimiento']['clics'];
+                       @endphp
                        <tr class="custom-row-bg">
                           <td>
                              <img src="{{ asset(str_replace('public/', '', $creatividad['icono'])) }}" alt="Icono" class="icono-hover" style="width: 50px; cursor: pointer;">
                           </td>
                           <td>{{ implode(", ", $creatividad['display']) }}</td>                           
-                          <td>{{ $creatividad['rendimiento']['impresiones'] }}</td>                           
-                          <td>{{ $creatividad['rendimiento']['clics'] }}</td>                           
-                          <td>{{ $creatividad['rendimiento']['ctr'] }}</td>
-                        </tr>
+                          <td>{{ number_format($creatividad['rendimiento']['impresiones'], 0, '', '.') }}</td>                           
+                          <td>{{ number_format($creatividad['rendimiento']['clics'], 0, '', '.') }}</td>                           
+                          <td>{{ $creatividad['rendimiento']['ctr'] }}%</td>
+                       </tr>
                    @endforeach
+                   
+                   @php
+                       $totalesRedSocial['ctr'] = $totalesRedSocial['impresiones'] > 0 
+                           ? round(($totalesRedSocial['clics'] / $totalesRedSocial['impresiones']) * 100, 2)
+                           : 0;
+                   @endphp
+                   
                    <tr class="fw-bold custom-row-bg">
-                       <td colspan="2">Total</td>
-                       <td>0000000</td>
-                       <td>0000000</td>
-                       <td>0000000</td>
+                       <td colspan="2">Total {{ $redSocial }}</td>
+                       <td>{{ number_format($totalesRedSocial['impresiones'], 0, '', '.') }}</td>
+                       <td>{{ number_format($totalesRedSocial['clics'], 0, '', '.') }}</td>
+                       <td>{{ $totalesRedSocial['ctr'] }}%</td>
                    </tr>
-             </tbody>
-         </table>
-       </div>
+                </tbody>
+            </table>
+        </div>
+        @endforeach
     </div>
 </div>
 
