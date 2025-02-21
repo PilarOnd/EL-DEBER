@@ -81,7 +81,8 @@
         "moneda": "USD"
       },
       "plataforma": {
-        "nombre": "Facebook",
+        "redes_sociales": ["Facebook", "Instagram"],
+        "tipo": "Facebook",
         "actualización": "30-04-2023"
       }
     },
@@ -162,7 +163,7 @@
       "formato_alto_impacto": {
         "redes_sociales": "Post Orgánico"
       },
-      "redes_sociales": ["Facebook", "Instagram"],
+      "redes_sociales": "Instagram",
       "rendimiento": {
         "clics": 200,
         "impresiones": 53321,

@@ -52,7 +52,7 @@
         <div class="col-12">
             <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229, 0.9);">
                 <div class="col-md-3 text-center">
-                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Redes Sociales</h5>
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Formato Display</h5>
                     <p class="mb-0">act. {{ date('d/m/Y', strtotime($campaña['plataforma']['actualización'])) }}</p>
                 </div>
 

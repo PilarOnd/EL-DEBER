@@ -106,4 +106,53 @@ class CampañaController extends Controller
 
         return round(($impresiones / $objetivo) * 100, 2);
     }
+
+    public function showDigital($id)
+    {
+        // Leer el archivo JSON
+        $json = file_get_contents(base_path('prueba.json'));
+        $data = json_decode($json, true);
+        
+        // Obtener los datos necesarios
+        $cliente = $data['cliente'][0];
+        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+        
+        if (!$linea_pedido) {
+            abort(404, 'Campaña no encontrada');
+        }
+        
+        // Obtener los pedidos relacionados
+        $pedidos = collect($data['pedido'])->where('linea_pedido_id', $id)->all();
+        
+        // Obtener los pedido_ids
+        $pedido_ids = collect($pedidos)->pluck('id')->all();
+        
+        // Obtener los formatos de campaña digital relacionados con los pedidos
+        $formato_campaña_digital = collect($data['formato_campaña_digital'])
+            ->whereIn('pedido_id', $pedido_ids)
+            ->all();
+        
+        // Debugging: Imprimir información para verificar
+        \Log::info('Pedido IDs:', $pedido_ids);
+        \Log::info('Creatividades disponibles:', $data['creatividad']);
+        
+        // Obtener las creatividades relacionadas con los pedidos
+        $creatividad = collect($data['creatividad'])
+            ->filter(function($item) use ($pedido_ids) {
+                return in_array($item['pedido_id'], $pedido_ids);
+            })
+            ->values()
+            ->all();
+        
+        // Debugging: Imprimir creatividades filtradas
+        \Log::info('Creatividades filtradas:', $creatividad);
+        
+        return view('campañas.campañas_digitales', compact(
+            'cliente',
+            'linea_pedido',
+            'pedidos',
+            'formato_campaña_digital',
+            'creatividad'
+        ));
+    }
 }

@@ -1,0 +1,128 @@
+{
+    "cliente": [
+      {
+        "id": 1,
+        "nombre": "BANCO MERCANTIL",
+        "color": "#296140",
+        "color_fuente": "#296140",
+        "logo": "public/img/logos/bancomercantil-logo.png"
+      }
+    ],
+    "linea_pedidos": [
+      {
+        "id": 10,
+        "cliente_id": 1,
+        "estado": "Finalizado",
+        "tipo": "Estándar",
+        "fecha_hora_inicio": "2025-02-20 08:00:00",
+        "fecha_hora_fin": "2025-02-21 23:59:00",
+        "objetivo": 350000,
+        "tarifa": {
+        "monto": 450,
+        "moneda": "USD"}
+      }
+    ],
+    "pedido": [
+      {
+        "id": 1,
+        "linea_pedido_id": 10,
+        "estado": "Finalizado",
+        "tipo": "Estándar",
+        "fecha_hora_inicio": "2025-02-20 08:00:00",
+        "fecha_hora_fin": "2025-02-20 23:59:00",
+        "impresiones": 160000
+      },
+      {
+        "id": 2,
+        "linea_pedido_id": 10,
+        "estado": "Finalizado",
+        "tipo": "Estándar",
+        "fecha_hora_inicio": "2025-02-21 08:00:00",
+        "fecha_hora_fin": "2025-02-21 23:59:00",
+        "impresiones": 125000
+      }
+    ],
+    "formato_campaña_digital": [
+      {
+        "id": 1,
+        "pedido_id": 1,
+        "facebook": {
+          "visualizaciones": 42056,
+          "alcance": 40987,
+          "interacciones": 0,
+          "clics_enlaces": 0,
+          "reacciones": 489,
+          "comentarios": 262,
+          "compartidos": 61,
+          "guardados": 64
+        },
+        "instagram": {
+          "visualizaciones": 8052,
+          "alcance": 6904,
+          "interacciones": 0,
+          "me_gusta": 25,
+          "comentarios": 3,
+          "compartidos": 6,
+          "guardados": 2
+        }
+      },
+      {
+        "id": 2,
+        "pedido_id": 2,
+        "facebook": {
+          "visualizaciones": 89542,
+          "alcance": 62023,
+          "interacciones": 0,
+          "clics_enlaces": 0,
+          "reacciones": 325,
+          "comentarios": 14,
+          "compartidos": 17,
+          "guardados": 8
+        },
+        "instagram": {
+          "visualizaciones": 32166,
+          "alcance": 21067,
+          "interacciones": 0,
+          "me_gusta": 175,
+          "comentarios": 10,
+          "compartidos": 82,
+          "guardados": 12
+        }
+      }
+    ],
+    "creatividad": [
+      {
+        "id": "1",
+        "icono": "public/img/creatividades/sofia-productos.png",
+        "pedido_id": 1,
+        "cliente_id": 1,
+        "display": ["Mobile"],
+        "formato_alto_impacto": {
+          "redes_sociales": "Post Orgánico"
+        },
+        "redes_sociales": "Facebook",
+        "rendimiento": {
+          "clics": 0,
+          "impresiones": 160000,
+          "ctr": 0
+        }
+      },
+      {
+        "id": "2",
+        "icono": "public/img/creatividades/sofia-productos2.png",
+        "pedido_id": 2,
+        "cliente_id": 1,
+        "display": ["Mobile"],
+        "formato_alto_impacto": {
+          "redes_sociales": "Post Orgánico"
+        },
+        "redes_sociales": "Instagram",
+        "rendimiento": {
+          "clics": 0,
+          "impresiones": 125000,
+          "ctr": 0
+        }
+      }
+    ]
+  }
+  
