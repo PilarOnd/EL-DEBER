@@ -1,0 +1,25 @@
+{
+    "cliente":[
+      {
+        "id": "",
+        "nombre": "",
+        "color": "",
+        "color_fuente": "",
+        "logo": ""
+      }
+    ],
+    "linea_pedidos": [
+      {
+        "id": "",
+        "cliente_id": "",
+        "estado": "",
+        "tipo": "",
+        "fecha_hora_inicio": "",
+        "fecha_hora_fin": "",
+        "objetivo": "",
+        "tarifa": {
+        "monto": "",
+        "moneda": ""}
+      }
+    ]
+}
