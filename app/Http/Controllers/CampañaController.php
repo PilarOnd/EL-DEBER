@@ -83,18 +83,20 @@ class CampañaController extends Controller
 
     private function calcularTotales($creatividades)
     {
-        $impresiones = collect($creatividades)->sum('rendimiento.impresiones');
-        $clics = collect($creatividades)->sum('rendimiento.clics');
-        $ctr = 0;
+        $impresiones = 0;
+        $clics = 0;
 
-        if ($impresiones > 0) {
-            $ctr = round(($clics / $impresiones) * 100, 2);
+        foreach ($creatividades as $creatividad) {
+            if (isset($creatividad['rendimiento']['metricas'])) {
+                $impresiones += $creatividad['rendimiento']['metricas']['impresiones'] ?? 0;
+                $clics += $creatividad['rendimiento']['metricas']['clics'] ?? 0;
+            }
         }
 
         return [
             'impresiones' => $impresiones,
             'clics' => $clics,
-            'ctr' => $ctr
+            'ctr' => $impresiones > 0 ? round(($clics / $impresiones) * 100, 2) : 0
         ];
     }
     // Función para calcular la efectividad basada en impresiones y objetivo
@@ -153,6 +155,132 @@ class CampañaController extends Controller
             'pedidos',
             'formato_campaña_digital',
             'creatividad'
+        ));
+    }
+
+    public function todasCampañas($id)
+    {
+        // Leer el archivo JSON
+        $json = file_get_contents(base_path('base.json'));
+        $data = json_decode($json, true);
+        
+        // Obtener los datos necesarios
+        $cliente = $data['cliente'][0];
+        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+        
+        if (!$linea_pedido) {
+            abort(404, 'Campaña no encontrada');
+        }
+        
+        // Obtener los pedidos relacionados
+        $pedidos = collect($data['pedidos'])->where('linea_pedido_id', $id)->all();
+        
+        // Obtener los pedido_ids
+        $pedido_ids = collect($pedidos)->pluck('id')->all();
+        
+        // Obtener creatividades relacionadas con los pedidos
+        $creatividades = collect($data['creatividades'])
+            ->filter(function($item) use ($pedido_ids) {
+                return in_array($item['pedido_id'], $pedido_ids);
+            })
+            ->map(function ($creatividad) {
+                // Asegurarnos de que exista la estructura base de rendimiento
+                if (!isset($creatividad['rendimiento'])) {
+                    $creatividad['rendimiento'] = [];
+                }
+
+                // Procesar métricas de Facebook si existen
+                if (isset($creatividad['rendimiento']['facebook'])) {
+                    $facebook = $creatividad['rendimiento']['facebook'];
+                    $visualizaciones = $facebook['visualizaciones'] ?? 0;
+                    $clics = $facebook['clics_enlaces'] ?? 0;
+                    
+                    $creatividad['rendimiento']['facebook']['ctr'] = 
+                        $visualizaciones > 0 ? round(($clics / $visualizaciones) * 100, 2) : 0;
+                }
+                
+                // Procesar métricas de Instagram si existen
+                if (isset($creatividad['rendimiento']['instagram'])) {
+                    $instagram = $creatividad['rendimiento']['instagram'];
+                    $visualizaciones = $instagram['visualizaciones'] ?? 0;
+                    $me_gusta = $instagram['me_gusta'] ?? 0;
+                    
+                    $creatividad['rendimiento']['instagram']['ctr'] = 
+                        $visualizaciones > 0 ? round(($me_gusta / $visualizaciones) * 100, 2) : 0;
+                }
+                
+                return $creatividad;
+            })
+            ->values()
+            ->all();
+
+        // Calcular totales para display
+        $totalesDisplay = collect($creatividades)
+            ->filter(function($creatividad) {
+                return $creatividad['tipo_formato'] === 'display';
+            })
+            ->reduce(function($carry, $creatividad) {
+                $carry['impresiones'] += $creatividad['rendimiento']['metricas']['impresiones'] ?? 0;
+                $carry['clics'] += $creatividad['rendimiento']['metricas']['clics'] ?? 0;
+                return $carry;
+            }, ['impresiones' => 0, 'clics' => 0]);
+
+        // Calcular CTR
+        $totalesDisplay['ctr'] = $totalesDisplay['impresiones'] > 0 
+            ? round(($totalesDisplay['clics'] / $totalesDisplay['impresiones']) * 100, 2) 
+            : 0;
+
+        // Calcular totales generales y efectividad
+        $totales = $this->calcularTotales($creatividades);
+        $efectividad = $this->calcularEfectividad($totales['impresiones'], $linea_pedido['objetivo']);
+
+        // Preparar datos de campaña
+        $campaña = [
+            'nombre' => $linea_pedido['tipo'],
+            'fecha_inicio' => $linea_pedido['fecha_hora_inicio'],
+            'fecha_fin' => $linea_pedido['fecha_hora_fin'],
+            'objetivo' => $linea_pedido['objetivo'],
+            'presupuesto' => [
+                'monto' => $linea_pedido['tarifa']['cpd'],
+                'moneda' => $linea_pedido['tarifa']['moneda']
+            ],
+            'impresiones' => $totales['impresiones'],
+            'plataforma' => [
+                'actualización' => date('Y-m-d'),
+                'redes_sociales' => ['Facebook', 'Instagram']
+            ]
+        ];
+
+        // Obtener datos de display takeover
+        $displayTakeover = null;
+        if (isset($data['formatos']['display'])) {
+            $displays = collect($data['formatos']['display']);
+            $displayTakeover = $displays
+                ->filter(function($item) use ($pedido_ids) {
+                    return in_array($item['pedido_id'] ?? null, $pedido_ids);
+                })
+                ->map(function ($display) {
+                    return [
+                        'metricas_totales' => $display['metricas_totales'] ?? [],
+                        'resultados_dispositivo' => $display['resultados_dispositivo'] ?? [],
+                        'resultados_bloque' => $display['resultados_bloque'] ?? []
+                    ];
+                })
+                ->first();
+        }
+
+        if ($displayTakeover) {
+            $campaña['plataforma']['display'] = $displayTakeover;
+        }
+
+        return view('campañas.todascampañas', compact(
+            'campaña',
+            'cliente',
+            'creatividades',
+            'efectividad',
+            'displayTakeover',
+            'totales',
+            'totalesDisplay'
         ));
     }
 }

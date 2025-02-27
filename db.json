@@ -44,7 +44,7 @@
         "moneda": "USD"
       },
       "plataforma": {
-        "nombre": "Facebook",
+        "nombre": "Desktop",
         "actualización": "01-03-2021"
       }
     },
@@ -62,8 +62,8 @@
         "moneda": "USD"
       },
       "plataforma": {
-        "redes_sociales": ["Facebook", "Instagram"],
-        "tipo": "Post Ads",
+        "redes_sociales": ["Desktop", "Mobile"],
+        "tipo": "Mobile",
         "actualización": "12-07-2025"
       }
     },
@@ -81,8 +81,8 @@
         "moneda": "USD"
       },
       "plataforma": {
-        "redes_sociales": ["Facebook", "Instagram"],
-        "tipo": "Facebook",
+        "redes_sociales": ["Desktop", "Mobile"],
+        "tipo": "Mobile",
         "actualización": "30-04-2023"
       }
     },
@@ -100,7 +100,7 @@
         "moneda": "USD"
       },
       "plataforma": {
-        "nombre": "Tiktok",
+        "nombre": "Desktop",
         "actualización": "23-09-2023"
       }
     }
@@ -115,7 +115,7 @@
       "formato_alto_impacto": {
         "redes_sociales": "Post Orgánico"
       },
-      "redes_sociales": "Facebook",
+      "redes_sociales": "Desktop",
       "rendimiento": {
         "clics": 100,
         "impresiones": 33321,
@@ -131,7 +131,7 @@
       "formato_alto_impacto": {
         "redes_sociales": "Post Orgánico"
       },
-      "redes_sociales": "Facebook",
+      "redes_sociales": "Desktop",
       "rendimiento": {
         "clics": 200,
         "impresiones": 53321,
@@ -147,7 +147,7 @@
       "formato_alto_impacto": {
         "redes_sociales": "Post Orgánico"
       },
-      "redes_sociales": "Instagram",
+      "redes_sociales": "Mobile",
       "rendimiento": {
         "clics": 600,
         "impresiones": 23321,
@@ -163,7 +163,7 @@
       "formato_alto_impacto": {
         "redes_sociales": "Post Orgánico"
       },
-      "redes_sociales": "Instagram",
+      "redes_sociales": "Mobile",
       "rendimiento": {
         "clics": 200,
         "impresiones": 53321,
@@ -178,7 +178,7 @@
       "formato_alto_impacto": {
         "redes_sociales": "Post Orgánico"
       },
-      "redes_sociales": ["Facebook", "Instagram"],
+      "redes_sociales": ["Desktop", "Mobile"],
       "rendimiento": {
         "clics": 200,
         "impresiones": 40055,

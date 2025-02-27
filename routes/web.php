@@ -36,6 +36,7 @@ Route::post('login', [LoginController::class, 'login']);
 Route::get('/campañas', [CampañaController::class, 'index'])->name('campañas.index');
 Route::get('/campañas/{id}', [CampañaController::class, 'show'])->name('campañas.show');
 Route::get('/campañas/digital/{id}', [CampañaController::class, 'showDigital'])->name('campañas.digital');
+Route::get('/campañas/{id}/todas', [CampañaController::class, 'todasCampañas'])->name('campañas.todas');
 
 
 

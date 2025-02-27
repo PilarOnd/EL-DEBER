@@ -1,25 +1,440 @@
 {
-    "cliente":[
+  "cliente": [
+    {
+      "id": 1,
+      "nombre": "SOFIA",
+      "color": "#ffffff",
+      "color_fuente": "#ed1c24",
+      "logo": "public/img/logos/sofia-logo.png"
+    }
+  ],
+  "linea_pedidos": [
+    {
+      "id": 10,
+      "cliente_id": 1,
+      "estado": "Finalizado",
+      "tipo": "Estandar",
+      "fecha_hora_inicio": "2025-02-20 08:00:00",
+      "fecha_hora_fin": "2025-02-21 23:59:00",
+      "objetivo": 350000,
+      "tarifa": {
+        "cpm": 0.72,
+        "cpd": 450,
+        "moneda": "USD"
+      }
+    }
+  ],
+  "pedidos": [
+    {
+      "id": 1,
+      "linea_pedido_id": 10,
+      "estado": "Finalizado",
+      "tipo": "Estandar",
+      "fecha_hora_inicio": "2025-02-20 08:00:00",
+      "fecha_hora_fin": "2025-02-20 23:59:00",
+      "formatos": {
+        "display": [],
+        "take_over": [],
+        "branded_content": [],
+        "post_organico": []
+      },
+      "creatividades": []
+    }
+  ],
+  "formatos": {
+    "campaña_digital": [
       {
-        "id": "",
-        "nombre": "",
-        "color": "",
-        "color_fuente": "",
-        "logo": ""
+        "id": 1,
+        "pedido_id": 1,
+        "tipo": "Redes Sociales",
+        "facebook": {
+          "visualizaciones": 42056,
+          "alcance": 40987,
+          "interacciones": 1500,
+          "clics_enlaces": 856,
+          "reacciones": 489,
+          "comentarios": 262,
+          "compartidos": 61,
+          "guardados": 64
+        },
+        "instagram": {
+          "visualizaciones": 8052,
+          "alcance": 6904,
+          "interacciones": 500,
+          "me_gusta": 25,
+          "comentarios": 3,
+          "compartidos": 6,
+          "guardados": 2
+        }
       }
     ],
-    "linea_pedidos": [
+    "display": [
       {
-        "id": "",
-        "cliente_id": "",
-        "estado": "",
-        "tipo": "",
-        "fecha_hora_inicio": "",
-        "fecha_hora_fin": "",
-        "objetivo": "",
-        "tarifa": {
-        "monto": "",
-        "moneda": ""}
+        "id": 1,
+        "pedido_id": 1,
+        "tipo": "Premium",
+        "metricas_totales": {
+          "impresiones": 285010,
+          "clics": 1500,
+          "ctr": 0.526
+        },
+        "resultados_dispositivo": {
+          "desktop": {
+            "impresiones": 185000,
+            "clics": 950,
+            "ctr": 0.513
+          },
+          "mobile": {
+            "impresiones": 100010,
+            "clics": 550,
+            "ctr": 0.549
+          }
+        },
+        "resultados_bloque": [
+          {
+            "nombre": "Portada Desktop",
+            "fecha": "2025-02-20",
+            "impresiones": 92500,
+            "clics": 475,
+            "ctr": 0.513
+          },
+          {
+            "nombre": "Notas Mobile",
+            "fecha": "2025-02-20",
+            "impresiones": 50005,
+            "clics": 275,
+            "ctr": 0.549
+          }
+        ]
+      }
+    ],
+    "branded_content": [
+      {
+        "id": 1,
+        "pedido_id": 1,
+        "tipo": "Nota Digital",
+        "metricas_nota": {
+          "vistas": 12000,
+          "usuarios_activos": 8000,
+          "vistas_por_usuario": 1.5,
+          "sesiones": 10000,
+          "tiempo_promedio_lectura": "00:02:30",
+          "fecha_publicacion": "2025-02-20 08:00:00"
+        },
+        "publicacion_facebook": {
+          "visualizaciones": 5000,
+          "alcance": 4500,
+          "interacciones": 200,
+          "clics_enlaces": 150,
+          "reacciones": 100,
+          "comentarios": 50,
+          "compartidos": 30,
+          "guardados": 20
+        },
+        "publicacion_instagram": {
+          "visualizaciones": 3000,
+          "alcance": 2500,
+          "interacciones": 150,
+          "me_gusta": 80,
+          "comentarios": 40,
+          "compartidos": 20,
+          "guardados": 10
+        }
       }
     ]
+  },
+  "creatividades": [
+    {
+      "id": 1,
+      "pedido_id": 1,
+      "formato_id": 1,
+      "tipo_formato": "campaña_digital",
+      "recursos": {
+        "imagen": "public/img/creatividades/campañadigital.png",
+        "url_destino": "https://sofia.com/promocion-pollo"
+      },
+      "especificaciones": {
+        "dispositivos": ["Mobile", "Desktop"],
+        "dimensiones": {
+          "alto": 1080,
+          "ancho": 1080
+        },
+        "formato": "PNG",
+        "peso": "250KB"
+      },
+      "plataformas": ["Facebook", "Instagram"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 10:00:00",
+      "fecha_publicacion": "2025-02-20 08:00:00",
+      "rendimiento": {
+        "facebook": {
+          "impresiones": 85000,
+          "alcance": 75000,
+          "interacciones": 3200,
+          "clics_enlaces": 1500,
+          "reacciones": 2100,
+          "comentarios": 350,
+          "compartidos": 180,
+          "guardados": 95
+        },
+        "instagram": {
+          "impresiones": 45000,
+          "alcance": 38000,
+          "interacciones": 2800,
+          "me_gusta": 2200,
+          "comentarios": 280,
+          "compartidos": 150,
+          "guardados": 170
+        }
+      }
+    },
+    {
+      "id": 2,
+      "pedido_id": 1,
+      "formato_id": 1,
+      "tipo_formato": "campaña_digital",
+      "recursos": {
+        "imagen": "public/img/creatividades/campañadigital2.png",
+        "url_destino": "https://sofia.com/carnaval"
+      },
+      "especificaciones": {
+        "dispositivos": ["Mobile", "Desktop"],
+        "dimensiones": {
+          "alto": 1080,
+          "ancho": 1080
+        },
+        "formato": "PNG",
+        "peso": "280KB"
+      },
+      "plataformas": ["Facebook", "Instagram"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 11:00:00",
+      "fecha_publicacion": "2025-02-20 09:00:00",
+      "rendimiento": {
+        "facebook": {
+          "impresiones": 92000,
+          "alcance": 82000,
+          "interacciones": 4100,
+          "clics_enlaces": 1800,
+          "reacciones": 2600,
+          "comentarios": 420,
+          "compartidos": 210,
+          "guardados": 115
+        },
+        "instagram": {
+          "impresiones": 48000,
+          "alcance": 41000,
+          "interacciones": 3200,
+          "me_gusta": 2500,
+          "comentarios": 320,
+          "compartidos": 180,
+          "guardados": 195
+        }
+      }
+    },
+    {
+      "id": 3,
+      "pedido_id": 1,
+      "formato_id": 1,
+      "tipo_formato": "campaña_digital",
+      "recursos": {
+        "imagen": "public/img/creatividades/campañadigital3.png",
+        "url_destino": "https://sofia.com/gana-jameos"
+      },
+      "especificaciones": {
+        "dispositivos": ["Mobile", "Desktop"],
+        "dimensiones": {
+          "alto": 1080,
+          "ancho": 1080
+        },
+        "formato": "PNG",
+        "peso": "265KB"
+      },
+      "plataformas": ["Facebook", "Instagram"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 12:00:00",
+      "fecha_publicacion": "2025-02-20 10:00:00",
+      "rendimiento": {
+        "facebook": {
+          "impresiones": 88000,
+          "alcance": 78000,
+          "interacciones": 3800,
+          "clics_enlaces": 1650,
+          "reacciones": 2400,
+          "comentarios": 380,
+          "compartidos": 195,
+          "guardados": 105
+        },
+        "instagram": {
+          "impresiones": 46500,
+          "alcance": 39500,
+          "interacciones": 3000,
+          "me_gusta": 2350,
+          "comentarios": 300,
+          "compartidos": 165,
+          "guardados": 182
+        }
+      }
+    },
+    {
+      "id": 4,
+      "pedido_id": 1,
+      "formato_id": 2,
+      "tipo_formato": "nota_digital",
+      "recursos": {
+        "imagen": "public/img/creatividades/notadigitalpagweb.jpeg",
+        "url_destino": "https://eldeber.com.bo/sofia-sostenibilidad"
+      },
+      "especificaciones": {
+        "dispositivos": ["Mobile", "Desktop"],
+        "dimensiones": {
+          "alto": 628,
+          "ancho": 1200
+        },
+        "formato": "PNG",
+        "peso": "180KB"
+      },
+      "plataformas": ["Web"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 13:00:00",
+      "fecha_publicacion": "2025-02-20 11:00:00",
+      "rendimiento": {
+        "web": {
+          "vistas_unicas": 15000,
+          "tiempo_promedio_lectura": "00:03:15",
+          "scroll_promedio": "75%",
+          "rebote": "25%"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "pedido_id": 1,
+      "formato_id": 2,
+      "tipo_formato": "nota_digital",
+      "recursos": {
+        "imagen": "public/img/creatividades/notadigitalfacebook1.jpg",
+        "url_destino": "https://facebook.com/eldeber/posts/sofia-sostenibilidad"
+      },
+      "especificaciones": {
+        "dispositivos": ["Mobile", "Desktop"],
+        "dimensiones": {
+          "alto": 628,
+          "ancho": 1200
+        },
+        "formato": "PNG",
+        "peso": "200KB"
+      },
+      "plataformas": ["Facebook"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 14:00:00",
+      "fecha_publicacion": "2025-02-20 12:00:00",
+      "rendimiento": {
+        "facebook": {
+          "impresiones": 25000,
+          "alcance": 22000,
+          "interacciones": 1200,
+          "clics_enlaces": 850,
+          "reacciones": 750,
+          "comentarios": 120,
+          "compartidos": 85,
+          "guardados": 45
+        }
+      }
+    },
+    {
+      "id": 6,
+      "pedido_id": 1,
+      "formato_id": 2,
+      "tipo_formato": "nota_digital",
+      "recursos": {
+        "imagen": "public/img/creatividades/notadigitalinstagram1.jpg",
+        "url_destino": "https://instagram.com/eldeber/p/sofia-sostenibilidad"
+      },
+      "especificaciones": {
+        "dispositivos": ["Mobile"],
+        "dimensiones": {
+          "alto": 1080,
+          "ancho": 1080
+        },
+        "formato": "PNG",
+        "peso": "190KB"
+      },
+      "plataformas": ["Instagram"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 15:00:00",
+      "fecha_publicacion": "2025-02-20 13:00:00",
+      "rendimiento": {
+        "instagram": {
+          "impresiones": 18000,
+          "alcance": 15500,
+          "interacciones": 950,
+          "me_gusta": 820,
+          "comentarios": 85,
+          "compartidos": 45,
+          "guardados": 65
+        }
+      }
+    },
+    {
+      "id": 7,
+      "pedido_id": 1,
+      "formato_id": 3,
+      "tipo_formato": "display",
+      "recursos": {
+        "imagen": "public/img/creatividades/display_takeover_mobile1.jpeg",
+        "url_destino": "https://sofia.com/promociones"
+      },
+      "especificaciones": {
+        "dispositivos": ["Mobile"],
+        "dimensiones": {
+          "alto": 600,
+          "ancho": 320
+        },
+        "formato": "PNG",
+        "peso": "150KB"
+      },
+      "plataformas": ["Web"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 16:00:00",
+      "fecha_publicacion": "2025-02-20 14:00:00",
+      "rendimiento": {
+        "metricas": {
+          "impresiones": 100010,
+          "clics": 550,
+          "ctr": 0.549
+        }
+      }
+    },
+    {
+      "id": 8,
+      "pedido_id": 1,
+      "formato_id": 3,
+      "tipo_formato": "display",
+      "recursos": {
+        "imagen": "public/img/creatividades/display_takeover_desktop1.jpeg",
+        "url_destino": "https://sofia.com/promociones"
+      },
+      "especificaciones": {
+        "dispositivos": ["Desktop"],
+        "dimensiones": {
+          "alto": 600,
+          "ancho": 1200
+        },
+        "formato": "PNG",
+        "peso": "220KB"
+      },
+      "plataformas": ["Web"],
+      "estado": "Activo",
+      "fecha_creacion": "2025-02-19 17:00:00",
+      "fecha_publicacion": "2025-02-20 15:00:00",
+      "rendimiento": {
+        "metricas": {
+          "impresiones": 185000,
+          "clics": 950,
+          "ctr": 0.513
+        }
+      }
+    }
+  ]
 }

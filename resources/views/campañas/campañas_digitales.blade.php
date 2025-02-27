@@ -12,7 +12,7 @@
 </head>
 <body style="--cliente-color: {{ $cliente['color_fuente'] }}">
 
-<div class="container mt-4" style="max-width: 65%; margin: 0 auto;">
+<div class="container mt-4" style="max-width: 65%; margin: 0 auto; background-color: rgba(245, 245, 245, 0.9);">
     <!--banner-->
     <div class="row g-0"> 
         <div class="col-12 p-0"> 
@@ -23,9 +23,9 @@
         </div>
     </div>
     <!-- datos-->
-    <div class="row g-0 ">
+    <div class="row g-0">
         <div class="col-12">
-            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgba(245, 245, 245, 0.9);">
+            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229);">
                 <div class="col-md-4 d-flex flex-column justify-content-center">
                     <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">CAMPAÑA</h5>
                     <p class="mb-0">{{ $linea_pedido['tipo'] }}</p>
@@ -35,22 +35,22 @@
                     <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">FECHA</h5>
                     <p class="mb-0">{{ date('d M Y', strtotime($linea_pedido['fecha_hora_inicio'])) }} <br> al <br> {{ date('d M Y', strtotime($linea_pedido['fecha_hora_fin'])) }}</p>
                 </div>
-   
+
                 <div class="col-md-4 text-center d-flex flex-column align-items-center">
                     <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">PRESUPUESTO</h5>
                     <h4 class="fw-bold" style="font-size: 19.5px;">{{ number_format($linea_pedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</h4>
-
                     <div class="progress" style="height: 10px; background-color: #ddd; border-radius: 5px; width: 100%;">
                         <div class="progress-bar bg-success" role="progressbar"
                              style="width: 100%; border-radius: 5px;" aria-valuenow="100"
                              aria-valuemin="0" aria-valuemax="100"></div>
-                   </div>
-                 <p class="mb-1" style="font-size: 13px;">{{ number_format($linea_pedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</p>
-               </div>            
+                    </div>
+                    <p class="mb-1" style="font-size: 13px;">{{ number_format($linea_pedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</p>
+                </div>            
             </div>
         </div>
+
         <div class="col-12">
-            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229, 0.9);">
+            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgba(245, 245, 245, 0.9);">
                 <div class="col-md-3 text-center">
                     <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Redes Sociales</h5>
                     <p class="mb-0">act. {{ date('d/m/Y') }}</p>
@@ -78,88 +78,84 @@
                 </div>
             </div>
         </div>
-        @foreach (['Facebook', 'Instagram'] as $redSocial)
-        <div class="col-12">
-            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgba(245, 245, 245, 0.9);">
-                <div class="col-md-12 text-center">
-                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">{{ $redSocial }}</h5>
-                </div>
-            </div>
-        </div>
-        <div class="col-12">
-            <div class="row g-0">
-                <!-- Columna de creatividades -->
-                <div class="col-md-4">
-                    @if(isset($creatividad))
-                        @php
-                            $creatividadesRedSocial = collect($creatividad)->filter(function($item) use ($redSocial) {
-                                return $item['redes_sociales'] === $redSocial;
-                            });
-                        @endphp
-                        
-                        @forelse($creatividadesRedSocial as $item)
-                            <div class="card mb-3">
-                                <img src="{{ asset(str_replace('public/', '', $item['icono'])) }}" 
-                                     class="card-img-top" 
-                                     alt="Creatividad"
-                                     style="max-height: 200px; object-fit: contain; padding: 10px;">
-                                <div class="card-body">
-                                    <p class="card-text">
-                                        <small class="text-muted">Display: {{ implode(', ', $item['display']) }}</small><br>
-                                        <small class="text-muted">Impresiones: {{ number_format($item['rendimiento']['impresiones'], 0, '', '.') }}</small>
-                                    </p>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="alert alert-info">
-                                No hay creatividades para {{ $redSocial }}
-                            </div>
-                        @endforelse
-                    @else
-                        <div class="alert alert-warning">
-                            No se encontraron creatividades
-                        </div>
-                    @endif
-                </div>
-                
-                <!-- Columna de métricas -->
-                <div class="col-md-8">
-                    <table class="table table-bordered text-center align-middle">
-                        <tbody>
-                            @php
-                                $redSocialLower = strtolower($redSocial);
-                                $metricas = collect($formato_campaña_digital)->map(function($formato) use ($redSocialLower) {
-                                    return $formato[$redSocialLower];
-                                })->reduce(function($carry, $item) {
-                                    foreach($item as $key => $value) {
-                                        if (!isset($carry[$key])) {
-                                            $carry[$key] = 0;
-                                        }
-                                        $carry[$key] += $value;
-                                    }
-                                    return $carry;
-                                }, []);
-                                
-                                $chunks = array_chunk($metricas, 4, true);
-                            @endphp
 
-                            @foreach ($chunks as $chunk)
-                                <tr class="custom-row-bg">
-                                    @foreach ($chunk as $metrica => $valor)
-                                        <td style="width: 25%" class="fw-bold">{{ ucfirst(str_replace('_', ' ', $metrica)) }}</td>
-                                    @endforeach
-                                </tr>
-                                <tr class="custom-row-bg">
-                                    @foreach ($chunk as $metrica => $valor)
-                                        <td style="width: 25%">{{ number_format($valor, 0, '', '.') }}</td>
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+        @foreach (['Facebook', 'Instagram'] as $redSocial)
+            <div class="col-12" style="background-color: rgb(233, 229, 229); padding: 10px;">
+                <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229);">
+                    <div class="col-md-12 text-center">
+                        <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">{{ $redSocial }}</h5>
+                    </div>
                 </div>
+
+                @php
+                    $redSocialLower = strtolower($redSocial);
+                    $formatosPedidos = collect($formato_campaña_digital)
+                        ->filter(function($formato) use ($redSocialLower) {
+                            return isset($formato[$redSocialLower]);
+                        });
+                @endphp
+
+                @foreach($formatosPedidos as $formato)
+                    @php
+                        $pedidoActual = collect($pedidos)->firstWhere('id', $formato['pedido_id']);
+                        $creatividadActual = collect($creatividad)
+                            ->firstWhere('pedido_id', $formato['pedido_id']);
+                    @endphp
+
+                    <div class="row g-0" style="margin-bottom: 20px;">
+                        <!-- Columna de creatividad individual -->
+                        <div class="col-md-4">
+                            <div style="background-color: rgb(233, 229, 229); padding: 15px; height: 100%;">
+                                @if($creatividadActual)
+                                    <div class="card mb-3">
+                                        <img src="{{ asset(str_replace('public/', '', $creatividadActual['icono'])) }}" 
+                                             class="card-img-top" 
+                                             alt="Creatividad"
+                                             style="max-height: 200px; object-fit: contain; padding: 10px;">
+                                        <div class="card-body">
+                                            <p class="card-text">
+                                                <small class="text-muted">Display: {{ implode(', ', $creatividadActual['display']) }}</small><br>
+                                                <small class="text-muted">Impresiones: {{ number_format($creatividadActual['rendimiento']['impresiones'], 0, '', '.') }}</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Columna de métricas individual -->
+                        <div class="col-md-8">
+                            <div style="background-color: rgb(233, 229, 229); padding: 15px; height: 100%;">
+                                <h6 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">
+                                    Período: {{ date('d/m/Y', strtotime($pedidoActual['fecha_hora_inicio'])) }} - 
+                                    {{ date('d/m/Y', strtotime($pedidoActual['fecha_hora_fin'])) }}
+                                </h6>
+                                <table class="table table-bordered text-center align-middle">
+                                    <tbody>
+                                        @php
+                                            $metricas = $formato[$redSocialLower];
+                                            $chunks = array_chunk($metricas, 4, true);
+                                        @endphp
+
+                                        @foreach ($chunks as $chunk)
+                                            <tr style="background-color: white;">
+                                                @foreach ($chunk as $metrica => $valor)
+                                                    <td style="width: 25%" class="fw-bold">{{ ucfirst(str_replace('_', ' ', $metrica)) }}</td>
+                                                @endforeach
+                                            </tr>
+                                            <tr style="background-color: white;">
+                                                @foreach ($chunk as $metrica => $valor)
+                                                    <td style="width: 25%">{{ number_format($valor, 0, '', '.') }}</td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        </div>
         @endforeach
     </div>
 </div>
