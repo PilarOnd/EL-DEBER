@@ -8,6 +8,15 @@
       "logo": "public/img/logos/sofia-logo.png"
     }
   ],
+  "usuarios": [
+    {
+      "id": 1,
+      "usuario": "admin",
+      "password": "admin",
+      "nombre": "Administrador",
+      "rol": "admin"
+    }
+  ],
   "linea_pedidos": [
     {
       "id": 10,

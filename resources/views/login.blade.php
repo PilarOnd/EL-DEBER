@@ -17,7 +17,7 @@
         <div class="login-right">
             <h2>Login</h2>
             <p>Para revisar sus campañas activas, por favor inicie sesión con su cuenta de ED-REPORTES.</p>
-            <form method="POST" action="{{ route('login') }}" id="loginForm">
+            <form method="POST" action="{{ route('login.post') }}" id="loginForm">
                 @csrf
                 <div class="input-group">
                     <label for="usuario">Usuario</label>

@@ -92,3 +92,8 @@ body {
 .btn:hover {
     background: #145A32; /* Cambio de color */
 }
+.error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}

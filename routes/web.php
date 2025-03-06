@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CampañaController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -16,28 +15,33 @@ use App\Http\Controllers\CampañaController;
 |
 */
 
+// Ruta principal (home)
 Route::get('/', function () {
     return view('home');
+})->name('home');
+
+// Rutas de autenticación
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Rutas protegidas
+Route::middleware(['auth'])->group(function () {
+    // Ruta del menú
+    Route::get('/menu', function () {
+        return view('menu');
+    })->name('menu');
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    // Rutas de campañas
+    Route::get('/campañas', [CampañaController::class, 'index'])->name('campañas.index');
+    Route::get('/campañas/{id}', [CampañaController::class, 'show'])->name('campañas.show');
+    Route::get('/campañas/digital/{id}', [CampañaController::class, 'showDigital'])->name('campañas.digital');
+    Route::get('/campañas/{id}/todas', [CampañaController::class, 'todasCampañas'])->name('campañas.todas');
 });
-Route::get('login', function () {
-    return view('login');
-});
-Route::get('/dashboard', function () {
-    return view('dashboard'); // Asegúrate de tener 'resources/views/dashboard.blade.php'
-})->name('dashboard');
-
-use App\Http\Controllers\Auth\LoginController;
-
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-
-
-
-Route::get('/campañas', [CampañaController::class, 'index'])->name('campañas.index');
-Route::get('/campañas/{id}', [CampañaController::class, 'show'])->name('campañas.show');
-Route::get('/campañas/digital/{id}', [CampañaController::class, 'showDigital'])->name('campañas.digital');
-Route::get('/campañas/{id}/todas', [CampañaController::class, 'todasCampañas'])->name('campañas.todas');
-
 
 
 
