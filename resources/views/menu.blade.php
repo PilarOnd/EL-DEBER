@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Deber Reportes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
 </head>
 <body>
     <div class="logo-container">
         <img src="{{ asset('img/logo.png') }}" alt="El Deber" class="logo">
-        <h1>El Deber Reportes</h1>
+        <h3>El Deber Reportes</h3>
     </div>
 
     <div class="kpi-section">
-        <h2>KPI's BASE</h2>
         <ul class="kpi-list">
             <li>CPC = Costo x Clic.</li>
             <li>CPE = Costo por Interacción única por usuario.</li>
@@ -25,7 +26,7 @@
     </div>
 
     <div class="campaigns-section">
-        <h2>CAMPAÑAS</h2>
+        <h5>CAMPAÑAS</h5>
         
         <div class="filter-section">
             <div class="year-filter">
