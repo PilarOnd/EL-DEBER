@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Deber Reportes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/menu.css') }}">
 </head>
@@ -30,20 +31,12 @@
         
         <div class="filter-section">
             <div class="year-filter">
-                <span class="filter-option">2019</span>
-                <span class="filter-option">2020</span>
-                <span class="filter-option active">2021</span>
+                <span class="filter-option">2025</span>
             </div>
             
             <div class="month-filter">
                 <span class="filter-option">Todo</span>
-                <span class="filter-option">ENERO</span>
                 <span class="filter-option">FEBRERO</span>
-                <span class="filter-option">MARZO</span>
-                <span class="filter-option">ABRIL</span>
-                <span class="filter-option">MAYO</span>
-                <span class="filter-option">JUNIO</span>
-                <span class="filter-option active">JULIO</span>
             </div>
         </div>
 
@@ -57,15 +50,87 @@
         </div>
     </div>
 
+    <div class="campaigns-list" id="campaignsList">
+        <!-- Aquí se mostrarán las campañas filtradas -->
+    </div>
+
     <script>
-        document.querySelectorAll('.filter-option').forEach(option => {
+    document.addEventListener('DOMContentLoaded', function() {
+        const yearFilter = document.querySelector('.year-filter');
+        const monthFilter = document.querySelector('.month-filter');
+        const campaignsList = document.getElementById('campaignsList');
+
+        // Función para actualizar las campañas
+        async function actualizarCampañas() {
+            const año = yearFilter.querySelector('.active').textContent;
+            const mes = monthFilter.querySelector('.active').textContent;
+
+            try {
+                // Agregar console.log para debugging
+                console.log('Filtrando por:', { año, mes });
+
+                const response = await fetch(`/filtrar-campañas?año=${año}&mes=${mes}`);
+                const campañas = await response.json();
+                
+                // Ver qué datos estamos recibiendo
+                console.log('Campañas recibidas:', campañas);
+                
+                // Limpiar la lista actual
+                campaignsList.innerHTML = '';
+                
+                if (campañas.length === 0) {
+                    campaignsList.innerHTML = '<div class="no-results">No se encontraron campañas para este período</div>';
+                    return;
+                }
+                
+                // Mostrar las campañas filtradas
+                campañas.forEach(campaña => {
+                    const card = document.createElement('div');
+                    card.className = 'campaign-card';
+                    card.innerHTML = `
+                        <h6>${campaña.nombre}</h6>
+                        <p>Cliente: ${campaña.cliente_nombre}</p>
+                        <p>Fecha: ${campaña.fecha_inicio} - ${campaña.fecha_fin}</p>
+                        <p>Objetivo: ${new Intl.NumberFormat().format(campaña.objetivo)} impresiones</p>
+                        <p>Presupuesto: ${campaña.presupuesto.monto} ${campaña.presupuesto.moneda}</p>
+                        <p>Estado: ${campaña.estado}</p>
+                        <p>Tipo: ${campaña.tipo}</p>
+                    `;
+                    campaignsList.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error('Error al filtrar campañas:', error);
+                campaignsList.innerHTML = '<div class="error">Error al cargar las campañas</div>';
+            }
+        }
+
+        // Eventos para los filtros
+        yearFilter.querySelectorAll('.filter-option').forEach(option => {
             option.addEventListener('click', function() {
+                console.log('Año seleccionado:', this.textContent);
                 this.parentElement.querySelectorAll('.filter-option').forEach(sib => {
                     sib.classList.remove('active');
                 });
                 this.classList.add('active');
+                actualizarCampañas();
             });
         });
+
+        monthFilter.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', function() {
+                console.log('Mes seleccionado:', this.textContent);
+                this.parentElement.querySelectorAll('.filter-option').forEach(sib => {
+                    sib.classList.remove('active');
+                });
+                this.classList.add('active');
+                actualizarCampañas();
+            });
+        });
+
+        // Cargar campañas iniciales
+        actualizarCampañas();
+    });
     </script>
 </body>
 </html>

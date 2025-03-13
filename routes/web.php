@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\CampañaController;
+use App\Http\Controllers\MenuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +29,7 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
     // Ruta del menú
-    Route::get('/menu', function () {
-        return view('menu');
-    })->name('menu');
+    Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 
     Route::get('/dashboard', function () {
         return view('dashboard');
@@ -41,6 +40,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/campañas/{id}', [CampañaController::class, 'show'])->name('campañas.show');
     Route::get('/campañas/digital/{id}', [CampañaController::class, 'showDigital'])->name('campañas.digital');
     Route::get('/campañas/{id}/todas', [CampañaController::class, 'todasCampañas'])->name('campañas.todas');
+
+    Route::get('/filtrar-campañas', [MenuController::class, 'filtrarCampañas'])->name('filtrar.campañas');
 });
 
 
