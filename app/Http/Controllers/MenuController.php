@@ -53,7 +53,8 @@ class MenuController extends Controller
             $campañas = $lineaPedidos->map(function($pedido) use ($clientes) {
                 $cliente = $clientes[$pedido['cliente_id']] ?? null;
                 return [
-                    'nombre' => $cliente ? $cliente['nombre'] . ' - ' . date('Y', strtotime($pedido['fecha_hora_inicio'])) : 'Cliente no encontrado',
+                    'id' => $pedido['id'],
+                    'nombre' => $cliente ? $cliente['nombre'] . ' - Descargas ' . date('Y', strtotime($pedido['fecha_hora_inicio'])) : 'Cliente no encontrado',
                     'cliente_nombre' => $cliente ? $cliente['nombre'] : 'Cliente no encontrado',
                     'fecha_inicio' => date('d/m/Y', strtotime($pedido['fecha_hora_inicio'])),
                     'fecha_fin' => date('d/m/Y', strtotime($pedido['fecha_hora_fin'])),
