@@ -36,7 +36,6 @@ h3 {
     background-color: transparent;
     padding: 20px;
     border-radius: 8px;
-    margin-bottom: 40px;
     text-align: center;
 }
 
@@ -60,7 +59,7 @@ h3 {
 
 .campaigns-section {
     text-align: center;
-    margin-top: 40px;
+    margin-top: 15px;
 }
 
 .campaigns-section h5 {
@@ -101,22 +100,59 @@ h3 {
 .month-filter {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 25px;
     margin: 15px 0;
 }
 
 .filter-option {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.9em;
+    color: #666;
+    position: relative;
+    padding-left: 30px;
+    min-height: 24px;
+    user-select: none;
 }
 
-.filter-option.active {
-    background-color: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
+.filter-option::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background-color: white;
+}
+
+.filter-option.active::before {
+    border-color: #207742;
+}
+
+.filter-option.active::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background-color: #207742;
+    border-radius: 50%;
+}
+
+.filter-option:hover:not(.active)::before {
+    border-color: #207742;
+}
+
+.month-filter .filter-option {
+    padding-left: 30px;
 }
 
 .download-section {
