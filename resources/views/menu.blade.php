@@ -30,32 +30,18 @@
         <h5>CAMPAÑAS</h5>
         
         <div class="filter-section">
-            <!-- Skeleton loading para los filtros -->
-            <div id="loading-filters" class="loading">
-                <div class="skeleton filter"></div>
-                <div class="skeleton filter"></div>
-                <div class="skeleton filter"></div>
+            <div class="year-filter">
+                <span class="filter-option active">2025</span>
             </div>
-
-            <div id="filters-content" style="display: none;">
-                <div class="year-filter">
-                    <span class="filter-option active">2025</span>
-                </div>
-                
-                <div class="month-filter">
-                    <span class="filter-option">Todo</span>
-                    <span class="filter-option active">FEBRERO</span>
-                </div>
+            
+            <div class="month-filter">
+                <span class="filter-option">Todo</span>
+                <span class="filter-option active">FEBRERO</span>
             </div>
         </div>
 
         <div class="campaigns-list" id="campaignsList">
-            <!-- Skeleton loading para las campañas -->
-            <div id="loading-campaigns" class="loading">
-                <div class="skeleton title"></div>
-                <div class="skeleton"></div>
-                <div class="skeleton"></div>
-            </div>
+            <!-- Las campañas se insertarán aquí -->
         </div>
 
         <div class="download-section">

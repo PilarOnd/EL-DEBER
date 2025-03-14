@@ -204,4 +204,39 @@ class CampañaController extends Controller
             'efectividad'
         ));
     }
+
+    public function showDisplay($id)
+    {
+        $json = file_get_contents(base_path('base.json'));
+        $data = json_decode($json, true);
+
+        // Obtener datos del cliente
+        $cliente = $data['cliente'][0];
+
+        // Obtener la línea de pedido
+        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+
+        // Obtener el pedido relacionado
+        $pedido = collect($data['pedidos'])->firstWhere('linea_pedido_id', $linea_pedido['id']);
+
+        // Obtener creatividades relacionadas con display
+        $creatividades = collect($data['creatividades'])
+            ->filter(function($creatividad) {
+                return $creatividad['tipo_formato'] === 'display';
+            })
+            ->values()
+            ->all();
+
+        // Obtener datos específicos del display
+        $displayTakeover = collect($data['formatos']['display'])
+            ->firstWhere('pedido_id', $pedido['id']);
+
+        return view('campañas.display', compact(
+            'cliente',
+            'linea_pedido',
+            'pedido',
+            'creatividades',
+            'displayTakeover'
+        ));
+    }
 }
