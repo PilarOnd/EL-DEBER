@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
     <title>Campaña Display</title>
@@ -61,39 +62,93 @@
    
                     <div class="col-md-4 text-center d-flex flex-column align-items-center">
                         <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">PRESUPUESTO</h5>
-                        <h4 class="fw-bold" style="font-size: 19.5px;">{{ number_format($linea_pedido['tarifa']['cpd'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</h4>
-
+                        <h4 class="fw-bold" style="font-size: 19.5px;">{{ number_format($linea_pedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</h4>
                         <div class="progress" style="height: 10px; background-color: #ddd; border-radius: 5px; width: 100%;">
+                            @php
+                                $porcentaje = $linea_pedido['objetivo'] > 0 ? min(100, ($pedido['impresiones'] / $linea_pedido['objetivo']) * 100) : 0;
+                            @endphp
                             <div class="progress-bar bg-success" role="progressbar"
-                                 style="width: 100%; border-radius: 5px;" aria-valuenow="100"
+                                 style="width: {{ $porcentaje }}%; border-radius: 5px;" aria-valuenow="{{ $porcentaje }}"
                                  aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <p class="mb-1" style="font-size: 13px;">{{ number_format($linea_pedido['tarifa']['cpd'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</p>
+                        <p class="mb-1" style="font-size: 13px;">{{ number_format($linea_pedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</p>
                     </div>            
                 </div>
             </div>
         </div>
 
+        <div class="col-12">
+            <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229, 0.9);">
+                <div class="col-md-3 text-center">
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Formato Campaña Display</h5>
+                    <p class="mb-0">{{ \Carbon\Carbon::parse($linea_pedido['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</p>
+                </div>
+
+                <div class="col-md-3 d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Objetivo Proyectado</h5>
+                    <p class="mb-0">{{ number_format($linea_pedido['objetivo'], 0, '', '.') }} Impresiones</p>
+                </div>
+
+                <div class="col-md-3 d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Objetivo Logrado</h5>
+                    <p class="mb-0">{{ number_format($displayTakeover['metricas_totales']['impresiones'], 0, '', '.') }} Impresiones</p>
+                </div>
+
+                <div class="col-md-3 d-flex flex-column justify-content-center">
+                    <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">% de Efectividad</h5>
+                    <p class="mb-0">{{ number_format(($displayTakeover['metricas_totales']['impresiones'] / $linea_pedido['objetivo']) * 100, 2) }}%</p>
+                </div>
+            </div>
+        </div>
+
         {{-- Métricas y objetivos --}}
-        <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229, 0.9);">
-            <div class="col-md-3 text-center">
-                <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Formato Display</h5>
-                <p class="mb-0">act. {{ date('d/m/Y') }}</p>
+        <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229);">
+            <div class="col-12 mb-4">
+                <h3 class="fw-bold" style="color: {{ $cliente['color_fuente'] }}">Resultados Generales - Take overs</h3>
             </div>
 
-            <div class="col-md-3 d-flex flex-column justify-content-center">
-                <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Impresiones</h5>
-                <p class="mb-0">{{ number_format($displayTakeover['metricas_totales']['impresiones'] ?? 0, 0, '', '.') }}</p>
-            </div>
+            <div class="col-12 d-flex flex-column align-items-center">
+                {{-- Views/Impresiones --}}
+                <div class="mb-4" style="width: 80%; max-width: 600px;">
+                    <div style="background-color: {{ $cliente['color_fuente'] }}; padding: 15px; border-radius: 15px;">
+                        <div class="d-flex align-items-center">
+                            <div style="background-color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                                <i class="bi bi-eye-fill" style="font-size: 24px; color: {{ $cliente['color_fuente'] }};"></i>
+                            </div>
+                            <div class="text-white text-start">
+                                <h5 class="mb-0">Views / Impresiones : {{ number_format($displayTakeover['metricas_totales']['impresiones'], 0, '', '.') }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="col-md-3 d-flex flex-column justify-content-center">
-                <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Clics</h5>
-                <p class="mb-0">{{ number_format($displayTakeover['metricas_totales']['clics'] ?? 0, 0, '', '.') }}</p>
-            </div>
+                {{-- Clics --}}
+                <div class="mb-4" style="width: 80%; max-width: 600px;">
+                    <div style="background-color: {{ $cliente['color_fuente'] }}; padding: 15px; border-radius: 15px;">
+                        <div class="d-flex align-items-center">
+                            <div style="background-color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                                <i class="bi bi-hand-index-thumb-fill" style="font-size: 24px; color: {{ $cliente['color_fuente'] }};"></i>
+                            </div>
+                            <div class="text-white text-start">
+                                <h5 class="mb-0">Clics: {{ number_format($displayTakeover['metricas_totales']['clics'], 0, '', '.') }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="col-md-3 d-flex flex-column justify-content-center">
-                <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">CTR</h5>
-                <p class="mb-0">{{ number_format($displayTakeover['metricas_totales']['ctr'] ?? 0, 2, ',', '.') }}%</p>
+                {{-- CTR --}}
+                <div class="mb-4" style="width: 80%; max-width: 600px;">
+                    <div style="background-color: {{ $cliente['color_fuente'] }}; padding: 15px; border-radius: 15px;">
+                        <div class="d-flex align-items-center">
+                            <div style="background-color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; margin-right: 20px;">
+                                <i class="bi bi-graph-up-arrow" style="font-size: 24px; color: {{ $cliente['color_fuente'] }};"></i>
+                            </div>
+                            <div class="text-white text-start">
+                                <h5 class="mb-0">CTR (promedio de clics) : {{ number_format($displayTakeover['metricas_totales']['ctr'], 2, ',', '.') }}%</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -107,7 +162,10 @@
             <div class="col-md-6">
                 <div class="card mb-3 h-100">
                     <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                        <img src="{{ asset('img/creatividades/display_takeover_desktop1.jpeg') }}" 
+                        @php
+                            $desktopCreatividad = collect($creatividades)->firstWhere('dispositivo', 'desktop');
+                        @endphp
+                        <img src="{{ asset(str_replace('public/', '', $desktopCreatividad['icono'])) }}" 
                              class="card-img-top" 
                              alt="Display Desktop"
                              style="max-height: 100%; max-width: 100%; object-fit: contain;">
@@ -125,7 +183,10 @@
             <div class="col-md-6">
                 <div class="card mb-3 h-100">
                     <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                        <img src="{{ asset('img/creatividades/display_takeover_mobile1.jpeg') }}" 
+                        @php
+                            $mobileCreatividad = collect($creatividades)->firstWhere('dispositivo', 'mobile');
+                        @endphp
+                        <img src="{{ asset(str_replace('public/', '', $mobileCreatividad['icono'])) }}" 
                              class="card-img-top" 
                              alt="Display Mobile"
                              style="max-height: 100%; max-width: 100%; object-fit: contain;">
@@ -141,71 +202,123 @@
         </div>
 
         {{-- Resultados totales (directamente después de las creatividades) --}}
-        <div style="background-color: rgba(245, 245, 245, 0.9); padding: 10px;">
-            <h5 class="fw-bold cliente-text text-center m-0" style="color: {{ $cliente['color_fuente'] }}">Resultados totales</h5>
+        <div style="background-color: rgba(245, 245, 245, 0.9);">
+            <div style="padding: 10px;">
+                <h5 class="fw-bold cliente-text text-center m-0" style="color: {{ $cliente['color_fuente'] }}">Resultados totales</h5>
+            </div>
+            {{-- Tabla de totales generales por dispositivo --}}
+            <div class="d-flex justify-content-center" style="padding: 20px;">
+                <div style="width: 90%; max-width: 1000px;">
+                    <table class="table table-bordered text-center align-middle mb-4" style="background-color: white;">
+                        <thead class="custom-row-bg">
+                            <tr>
+                                <th>Dispositivo</th>
+                                <th>Impresiones</th>
+                                <th>Clics</th>
+                                <th>CTR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $totalesDesktop = $displayTakeover['totales_dispositivos']['desktop'];
+                                $totalesMobile = $displayTakeover['totales_dispositivos']['mobile'];
+                            @endphp
+                            
+                            <tr>
+                                <td>Desktop</td>
+                                <td>{{ number_format($totalesDesktop['impresiones'], 0, '', '.') }}</td>
+                                <td>{{ number_format($totalesDesktop['clics'], 0, '', '.') }}</td>
+                                <td>{{ number_format($totalesDesktop['ctr'], 2, ',', '.') }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile</td>
+                                <td>{{ number_format($totalesMobile['impresiones'], 0, '', '.') }}</td>
+                                <td>{{ number_format($totalesMobile['clics'], 0, '', '.') }}</td>
+                                <td>{{ number_format($totalesMobile['ctr'], 2, ',', '.') }}%</td>
+                            </tr>
+                            <tr style="background-color: rgba(245, 245, 245, 0.9); font-weight: bold;">
+                                <td>Total</td>
+                                <td>{{ number_format($displayTakeover['metricas_totales']['impresiones'], 0, '', '.') }}</td>
+                                <td>{{ number_format($displayTakeover['metricas_totales']['clics'], 0, '', '.') }}</td>
+                                <td>{{ number_format($displayTakeover['metricas_totales']['ctr'], 2, ',', '.') }}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {{-- Tabla detallada por día --}}
+            <div class="d-flex justify-content-center" style="padding: 20px;">
+                <div style="width: 90%; max-width: 1000px;">
+                    <table class="table table-bordered text-center align-middle mb-0" style="background-color: white;">
+                        <thead class="custom-row-bg">
+                            <tr>
+                                <th>Dispositivo</th>
+                                <th>Periodo</th>
+                                <th>Impresiones</th>
+                                <th>Clics</th>
+                                <th>CTR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($displayTakeover['resultados_bloque'] as $bloque)
+                                @php
+                                    $dispositivo = str_contains($bloque['nombre'], 'Desktop') ? 'Desktop' : 'Mobile';
+                                @endphp
+                                <tr>
+                                    <td>{{ $dispositivo }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($bloque['fecha'])->locale('es')->isoFormat('D [de] MMMM') }}</td>
+                                    <td>{{ number_format($bloque['impresiones'], 0, '', '.') }}</td>
+                                    <td>{{ number_format($bloque['clics'], 0, '', '.') }}</td>
+                                    <td>{{ number_format($bloque['ctr'], 2, ',', '.') }}%</td>
+                                </tr>
+                            @endforeach
+                            <tr style="background-color: rgba(245, 245, 245, 0.9); font-weight: bold;">
+                                <td colspan="2">Total</td>
+                                <td>{{ number_format($displayTakeover['metricas_totales']['impresiones'], 0, '', '.') }}</td>
+                                <td>{{ number_format($displayTakeover['metricas_totales']['clics'], 0, '', '.') }}</td>
+                                <td>{{ number_format($displayTakeover['metricas_totales']['ctr'], 2, ',', '.') }}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <table class="table table-bordered text-center align-middle mb-0" style="background-color: white;">
-            <thead class="custom-row-bg">
-                <tr>
-                    <th>Dispositivo</th>
-                    <th>Periodo</th>
-                    <th>Impresiones</th>
-                    <th>Clics</th>
-                    <th>CTR</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($displayTakeover['resultados_bloque'] as $bloque)
-                    @php
-                        $dispositivo = str_contains($bloque['nombre'], 'Desktop') ? 'Desktop' : 'Mobile';
-                    @endphp
-                    <tr>
-                        <td>{{ $dispositivo }}</td>
-                        <td>{{ \Carbon\Carbon::parse($bloque['fecha'])->locale('es')->isoFormat('D [de] MMMM') }}</td>
-                        <td>{{ number_format($bloque['impresiones'], 0, '', '.') }}</td>
-                        <td>{{ number_format($bloque['clics'], 0, '', '.') }}</td>
-                        <td>{{ number_format($bloque['ctr'], 2, ',', '.') }}%</td>
-                    </tr>
-                @endforeach
-                <tr style="background-color: rgba(245, 245, 245, 0.9); font-weight: bold;">
-                    <td colspan="2"></td>
-                    <td>{{ number_format($displayTakeover['metricas_totales']['impresiones'], 0, '', '.') }}</td>
-                    <td>{{ number_format($displayTakeover['metricas_totales']['clics'], 0, '', '.') }}</td>
-                    <td>{{ number_format($displayTakeover['metricas_totales']['ctr'], 2, ',', '.') }}%</td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 </div>
 
 {{-- Sección de Gráficos (después de la tabla) --}}
-<div class="container mt-4" style="max-width: 65%; margin: 0 auto;">
-    <div class="row">
-        {{-- Gráfico de Clics por Hora --}}
+<div class="container" style="max-width: 65%; margin: 0 auto;">
+    {{-- Título de Histogramas --}}
+    <div style="background-color: rgb(233, 229, 229); padding: 10px;">
+        <h5 class="fw-bold cliente-text text-center m-0" style="color: {{ $cliente['color_fuente'] }}">Histogramas</h5>
+    </div>
+    <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229);">
+        {{-- Gráfico de Clics por Día --}}
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">Clics por Hora</h5>
+                    <h5 class="card-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">Clics por Día</h5>
                     <canvas id="clicksChart"></canvas>
                 </div>
             </div>
         </div>
 
-        {{-- Gráfico de CTR por Hora --}}
+        {{-- Gráfico de CTR por Día --}}
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">CTR por Hora</h5>
+                    <h5 class="card-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">CTR por Día</h5>
                     <canvas id="ctrChart"></canvas>
                 </div>
             </div>
         </div>
 
-        {{-- Gráfico de Impresiones por Hora --}}
+        {{-- Gráfico de Impresiones por Día --}}
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">Impresiones por Hora</h5>
+                    <h5 class="card-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">Impresiones por Día</h5>
                     <canvas id="impressionsChart"></canvas>
                 </div>
             </div>
@@ -226,22 +339,24 @@
 </div>
 
 <script>
-// Datos de ejemplo (puedes reemplazarlos con datos reales de tu backend)
-const hoursLabels = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
-                     '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+// Datos del histograma
+const fechas = @json($histograma['fechas']);
+const impresiones = @json($histograma['impresiones']);
+const clics = @json($histograma['clics']);
+const ctr = @json($histograma['ctr']);
 
 // Configuración de colores
 const primaryColor = '{{ $cliente['color_fuente'] }}';
 const backgroundColor = primaryColor + '40'; // Añade transparencia
 
-// Gráfico de Clics por Hora
+// Gráfico de Clics por Día
 new Chart(document.getElementById('clicksChart'), {
     type: 'bar',
     data: {
-        labels: hoursLabels,
+        labels: fechas,
         datasets: [{
             label: 'Clics',
-            data: [65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80],
+            data: clics,
             backgroundColor: backgroundColor,
             borderColor: primaryColor,
             borderWidth: 1
@@ -258,14 +373,14 @@ new Chart(document.getElementById('clicksChart'), {
     }
 });
 
-// Gráfico de CTR por Hora
+// Gráfico de CTR por Día
 new Chart(document.getElementById('ctrChart'), {
     type: 'bar',
     data: {
-        labels: hoursLabels,
+        labels: fechas,
         datasets: [{
             label: 'CTR (%)',
-            data: [2.1, 1.9, 2.3, 2.8, 2.0, 1.8, 2.2, 2.1, 1.9, 2.3, 2.8, 2.0, 1.8, 2.2, 2.1, 1.9, 2.3, 2.8, 2.0, 1.8, 2.2, 2.1, 1.9, 2.3],
+            data: ctr,
             backgroundColor: backgroundColor,
             borderColor: primaryColor,
             borderWidth: 1
@@ -282,14 +397,14 @@ new Chart(document.getElementById('ctrChart'), {
     }
 });
 
-// Gráfico de Impresiones por Hora
+// Gráfico de Impresiones por Día
 new Chart(document.getElementById('impressionsChart'), {
     type: 'bar',
     data: {
-        labels: hoursLabels,
+        labels: fechas,
         datasets: [{
             label: 'Impresiones',
-            data: [3200, 2900, 3500, 2800, 3100, 3000, 2700, 3200, 2900, 3500, 2800, 3100, 3000, 2700, 3200, 2900, 3500, 2800, 3100, 3000, 2700, 3200, 2900, 3500],
+            data: impresiones,
             backgroundColor: backgroundColor,
             borderColor: primaryColor,
             borderWidth: 1
@@ -313,10 +428,10 @@ new Chart(document.getElementById('devicesChart'), {
         labels: ['Desktop', 'Mobile'],
         datasets: [{
             data: [
-                {{ collect($displayTakeover['resultados_bloque'])->where('nombre', 'like', '%Desktop%')->sum('impresiones') }},
-                {{ collect($displayTakeover['resultados_bloque'])->where('nombre', 'like', '%Mobile%')->sum('impresiones') }}
+                {{ $pedido['dispositivos']['desktop']['impresiones'] ?? 0 }},
+                {{ $pedido['dispositivos']['mobile']['impresiones'] ?? 0 }}
             ],
-            backgroundColor: ['#FF0000', '#FFB6C1'],
+            backgroundColor: [primaryColor, primaryColor + '80'],
             borderWidth: 1,
             borderColor: '#fff'
         }]

@@ -23,8 +23,8 @@ class LoginController extends Controller
         ]);
 
         try {
-            // Leer el archivo base.json
-            $jsonPath = base_path('base.json');
+            // Leer el archivo usuarios.json
+            $jsonPath = base_path('usuarios.json');
             $jsonData = json_decode(file_get_contents($jsonPath), true);
             
             // Buscar el usuario

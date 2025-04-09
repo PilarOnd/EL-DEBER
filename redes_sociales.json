@@ -1,0 +1,103 @@
+{
+    "cliente": [
+      {
+        "id": 1,
+        "nombre": "SOFIA",
+        "color": "#ffffff",
+        "color_fuente": "#ed1c24",
+        "logo": "public/img/logos/sofia-logo.png"
+      }
+    ],
+    "linea_pedidos": [
+      {
+        "id": 1,
+        "estado": "Publicando",
+        "tipo": "Estandar",
+        "fecha_inicio": "2025-04-01T08:00:00",
+        "fecha_fin": "2025-04-15T20:00:00",
+        "objetivo": 350000,
+        "tarifa": {
+        "monto": 450,
+        "moneda": "USD"}
+      }
+    ],
+    "pedido": [
+      {
+        "id": 1,
+        "id_lineadepedidos": 1,
+        "estado": "Publicando",
+        "tipo": "Estandar",
+        "fecha_hora_inicio": "2025-02-21 08:00:00",
+        "fecha_hora_fin": "2025-02-21 23:59:00",
+        "facebook": {
+          "visualizaciones": 25000,
+          "alcance": 18000,
+          "interacciones": 1500,
+          "clics_enlaces": 600,
+          "reacciones": 500,
+          "comentarios": 120,
+          "compartidos": 70,
+          "guardados": 40
+        },
+        "instagram": {
+          "visualizaciones": 20000,
+          "alcance": 17000,
+          "interacciones": 1200,
+          "me_gusta": 800,
+          "comentarios": 90,
+          "compartidos": 50,
+          "guardados": 30
+        }
+      },
+      {
+        "id": 2,
+        "id_lineadepedidos": 1,
+        "estado": "Finalizado",
+        "tipo": "Estandar",
+        "fecha_hora_inicio": "2025-02-20 08:00:00",
+        "fecha_hora_fin": "2025-02-20 23:59:00",
+        "facebook": {
+          "visualizaciones": 2300,
+          "alcance": 1000,
+          "interacciones": 500,
+          "clics_enlaces": 123,
+          "reacciones": 256,
+          "comentarios": 90,
+          "compartidos": 71,
+          "guardados": 49
+        },
+        "instagram": {
+          "visualizaciones": 3000,
+          "alcance": 9000,
+          "interacciones": 903,
+          "me_gusta": 873,
+          "comentarios": 99,
+          "compartidos": 70,
+          "guardados": 23
+        }
+      }
+    ],
+    "creatividades": [
+      {
+        "id": 1,
+        "pedido_id": 1,
+        "icono": "public/img/creatividades/campañadigital.png",
+        "display": ["Mobile", "Desktop"],
+        "formato_alto_impacto": {
+           "redes_sociales": "Post Orgánico"
+         },
+       "redes_sociales": ["Facebook","Instagram"]
+      },
+      {
+        "id": 2,
+        "pedido_id": 2,
+        "icono": "public/img/creatividades/campañadigital2.png",
+        "display": ["Mobile", "Desktop"],
+        "formato_alto_impacto": {
+           "redes_sociales": "Post Orgánico"
+         },
+       "redes_sociales": ["Facebook","Instagram"]
+      }
+    ]
+}
+  

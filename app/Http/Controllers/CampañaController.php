@@ -100,61 +100,70 @@ class CampañaController extends Controller
         ];
     }
     // Función para calcular la efectividad basada en impresiones y objetivo
-    private function calcularEfectividad($impresiones, $objetivo)
+    private function calcularEfectividad($logrado, $objetivo, $maximo = 100)
     {
         if ($objetivo <= 0) {
             return 0;
         }
 
-        return round(($impresiones / $objetivo) * 100, 2);
+        $porcentaje = ($logrado / $objetivo) * 100;
+        return round(min($porcentaje, $maximo), 2);
     }
 
+    //VISTA DE REDES SOCIALES | CAMPAÑA DIGITAL
     public function showDigital($id)
     {
         // Leer el archivo JSON
-        $json = file_get_contents(base_path('prueba.json'));
+        $json = file_get_contents(base_path('redes_sociales.json'));
         $data = json_decode($json, true);
         
         // Obtener los datos necesarios
-        $cliente = $data['cliente'][0];
+        $cliente = $data['cliente'];
         $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
         
         if (!$linea_pedido) {
             abort(404, 'Campaña no encontrada');
         }
         
-        // Obtener los pedidos relacionados
-        $pedidos = collect($data['pedido'])->where('linea_pedido_id', $id)->all();
-        
-        // Obtener los pedido_ids
-        $pedido_ids = collect($pedidos)->pluck('id')->all();
-        
-        // Obtener los formatos de campaña digital relacionados con los pedidos
-        $formato_campaña_digital = collect($data['formato_campaña_digital'])
-            ->whereIn('pedido_id', $pedido_ids)
+        // Obtener los pedidos relacionados con la línea de pedido
+        $pedidos = collect($data['pedido'])
+            ->where('id_lineadepedidos', $linea_pedido['id'])
             ->all();
         
-        // Debugging: Imprimir información para verificar
-        \Log::info('Pedido IDs:', $pedido_ids);
-        \Log::info('Creatividades disponibles:', $data['creatividad']);
+        // Calcular el total de impresiones
+        $totalImpresiones = collect($pedidos)->sum(function($p) {
+            return $p['facebook']['visualizaciones'] + $p['instagram']['visualizaciones'];
+        });
+
+        // Calcular la efectividad usando la función global
+        $efectividad = $this->calcularEfectividad($totalImpresiones, $linea_pedido['objetivo']);
         
-        // Obtener las creatividades relacionadas con los pedidos
-        $creatividad = collect($data['creatividad'])
-            ->filter(function($item) use ($pedido_ids) {
-                return in_array($item['pedido_id'], $pedido_ids);
+        // Obtener las creatividades relacionadas
+        $creatividades = collect($data['creatividades'])
+            ->filter(function($creatividad) use ($pedidos) {
+                return collect($pedidos)
+                    ->pluck('id')
+                    ->contains($creatividad['pedido_id']);
+            })
+            ->map(function($creatividad) {
+                $creatividad['redes_sociales'] = array_map('ucfirst', $creatividad['redes_sociales']);
+                return $creatividad;
             })
             ->values()
             ->all();
-        
-        // Debugging: Imprimir creatividades filtradas
-        \Log::info('Creatividades filtradas:', $creatividad);
+
+        // Verificar si hay datos
+        if (empty($creatividades)) {
+            \Log::info('No se encontraron creatividades para el pedido');
+        }
         
         return view('campañas.campañas_digitales', compact(
             'cliente',
             'linea_pedido',
             'pedidos',
-            'formato_campaña_digital',
-            'creatividad'
+            'creatividades',
+            'totalImpresiones',
+            'efectividad'
         ));
     }
 
@@ -207,36 +216,142 @@ class CampañaController extends Controller
 
     public function showDisplay($id)
     {
-        $json = file_get_contents(base_path('base.json'));
+        // Leer el archivo JSON
+        $json = file_get_contents(base_path('f_alto_impacto.json'));
         $data = json_decode($json, true);
 
         // Obtener datos del cliente
-        $cliente = $data['cliente'][0];
+        $cliente = collect($data['clientes'])->first();
 
         // Obtener la línea de pedido
-        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+        $linea_pedido = collect($data['lineas_pedido'])->firstWhere('id', $id);
+        if (!$linea_pedido) {
+            abort(404, 'Campaña no encontrada');
+        }
 
         // Obtener el pedido relacionado
-        $pedido = collect($data['pedidos'])->firstWhere('linea_pedido_id', $linea_pedido['id']);
+        $pedido = collect($data['pedido'])->firstWhere('id_lineadepedidos', $linea_pedido['id']);
 
-        // Obtener creatividades relacionadas con display
+        // Calcular la efectividad usando la función global
+        $efectividad = $this->calcularEfectividad($pedido['impresiones'], $linea_pedido['objetivo']);
+
+        // Obtener creatividades relacionadas
         $creatividades = collect($data['creatividades'])
-            ->filter(function($creatividad) {
-                return $creatividad['tipo_formato'] === 'display';
-            })
+            ->where('pedido_id', $pedido['id'])
             ->values()
             ->all();
 
-        // Obtener datos específicos del display
-        $displayTakeover = collect($data['formatos']['display'])
-            ->firstWhere('pedido_id', $pedido['id']);
+        // Preparar datos para el display takeover
+        $displayTakeover = [
+            'metricas_totales' => [
+                'impresiones' => $pedido['impresiones'],
+                'clics' => $pedido['clics'],
+                'ctr' => $pedido['clics'] > 0 ? round(($pedido['clics'] / $pedido['impresiones']) * 100, 2) : 0,
+                'efectividad' => $efectividad
+            ],
+            'resultados_bloque' => []
+        ];
+
+        // Generar array de fechas desde fecha_hora_inicio hasta fecha_hora_fin
+        $fechaInicio = \Carbon\Carbon::parse($linea_pedido['fecha_hora_inicio'])->startOfDay();
+        $fechaFin = \Carbon\Carbon::parse($linea_pedido['fecha_hora_fin'])->startOfDay();
+        $fechas = [];
+        
+        for($fecha = clone $fechaInicio; $fecha->lte($fechaFin); $fecha->addDay()) {
+            $fechas[] = $fecha->format('Y-m-d');
+        }
+
+        foreach ($fechas as $fecha) {
+            if (isset($pedido['histograma_diario'][$fecha])) {
+                $datos = $pedido['histograma_diario'][$fecha];
+            } else {
+                // Si no hay datos para esta fecha, usar valores en cero
+                $datos = [
+                    'impresiones' => 0,
+                    'clics' => 0
+                ];
+            }
+            
+            // Desktop
+            $displayTakeover['resultados_bloque'][] = [
+                'nombre' => 'Desktop',
+                'fecha' => $fecha,
+                'impresiones' => round($datos['impresiones'] * 0.12),
+                'clics' => round($datos['clics'] * 0.31),
+                'ctr' => 0
+            ];
+
+            // Mobile
+            $displayTakeover['resultados_bloque'][] = [
+                'nombre' => 'Mobile',
+                'fecha' => $fecha,
+                'impresiones' => round($datos['impresiones'] * 0.88),
+                'clics' => round($datos['clics'] * 0.69),
+                'ctr' => 0
+            ];
+        }
+
+        // Calcular CTR para cada bloque
+        foreach ($displayTakeover['resultados_bloque'] as &$bloque) {
+            $bloque['ctr'] = $bloque['impresiones'] > 0 ? 
+                round(($bloque['clics'] / $bloque['impresiones']) * 100, 2) : 0;
+        }
+
+        // Calcular totales por dispositivo
+        $totalesDesktop = [
+            'impresiones' => collect($displayTakeover['resultados_bloque'])
+                ->where('nombre', 'Desktop')
+                ->sum('impresiones'),
+            'clics' => collect($displayTakeover['resultados_bloque'])
+                ->where('nombre', 'Desktop')
+                ->sum('clics')
+        ];
+        
+        $totalesMobile = [
+            'impresiones' => collect($displayTakeover['resultados_bloque'])
+                ->where('nombre', 'Mobile')
+                ->sum('impresiones'),
+            'clics' => collect($displayTakeover['resultados_bloque'])
+                ->where('nombre', 'Mobile')
+                ->sum('clics')
+        ];
+        
+        $totalesDesktop['ctr'] = $totalesDesktop['impresiones'] > 0 
+            ? round(($totalesDesktop['clics'] / $totalesDesktop['impresiones']) * 100, 2) 
+            : 0;
+        
+        $totalesMobile['ctr'] = $totalesMobile['impresiones'] > 0 
+            ? round(($totalesMobile['clics'] / $totalesMobile['impresiones']) * 100, 2) 
+            : 0;
+
+        // Agregar los totales al array displayTakeover
+        $displayTakeover['totales_dispositivos'] = [
+            'desktop' => $totalesDesktop,
+            'mobile' => $totalesMobile
+        ];
+
+        // Preparar datos del histograma
+        $histograma = [
+            'fechas' => [],
+            'impresiones' => [],
+            'clics' => [],
+            'ctr' => []
+        ];
+
+        foreach ($pedido['histograma_diario'] as $fecha => $datos) {
+            $histograma['fechas'][] = \Carbon\Carbon::parse($fecha)->format('d/m');
+            $histograma['impresiones'][] = $datos['impresiones'];
+            $histograma['clics'][] = $datos['clics'];
+            $histograma['ctr'][] = $datos['clics'] > 0 ? round(($datos['clics'] / $datos['impresiones']) * 100, 2) : 0;
+        }
 
         return view('campañas.display', compact(
             'cliente',
             'linea_pedido',
             'pedido',
             'creatividades',
-            'displayTakeover'
+            'displayTakeover',
+            'histograma'
         ));
     }
 }

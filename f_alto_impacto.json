@@ -1,0 +1,85 @@
+{
+  "clientes": [
+    {
+      "id": 1,
+      "nombre": "BANCO MERCANTIL",
+      "color": "#296140",
+      "color_fuente": "#296140",
+      "logo": "public/img/logos/bancomercantil-logo.png"
+    }
+  ],
+  "lineas_pedido": [
+    {
+      "id": 2,
+      "estado": "Finalizado",
+      "tipo": "Propia",
+      "fecha_hora_inicio": "2025-02-18 08:00:00",
+      "fecha_hora_fin": "2025-02-21 23:59:00",
+      "objetivo": 70000,
+      "tarifa": {
+        "monto": 850,
+        "moneda": "USD"}
+      }
+  ],
+  "pedido": [
+    {
+      "id": 3,
+      "id_lineadepedidos": 2,
+      "estado": "Finalizado",
+      "tipo": "Propia",
+      "fecha_hora_inicio": "2025-02-18 08:00:00",
+      "fecha_hora_fin": "2025-02-21 23:59:00",
+      "impresiones": 51000,
+      "clics": 3900,
+      "ctr": 0,
+      "dispositivos": {
+        "mobile": {
+          "impresiones": 45000,
+          "clics": 2700,
+          "ctr": 0
+        },
+        "desktop": {
+          "impresiones": 6000,
+          "clics": 1200,
+          "ctr": 0
+        }
+      },
+      "histograma_diario": {
+        "2025-02-18": {
+          "impresiones": 10000,
+          "clics": 600,
+          "ctr": 0
+        },
+        "2025-02-19": {
+          "impresiones": 14000,
+          "clics": 800,
+          "ctr": 0
+        },
+        "2025-02-20": {
+          "impresiones": 12000,
+          "clics": 1500,
+          "ctr": 0
+        },
+        "2025-02-21": {
+          "impresiones": 15000,
+          "clics": 1000,
+          "ctr": 0
+        }
+      }
+    }
+  ],
+  "creatividades": [
+    {
+      "id": 3,
+      "pedido_id": 3,
+      "icono": "public/img/creatividades/display_takeover_mobile1.jpeg",
+      "dispositivo": "mobile"
+    },
+    {
+      "id": 4,
+      "pedido_id": 3,
+      "icono": "public/img/creatividades/display_takeover_desktop1.jpeg",
+      "dispositivo": "desktop"
+    }
+  ]
+}

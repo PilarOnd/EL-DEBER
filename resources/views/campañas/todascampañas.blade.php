@@ -8,7 +8,33 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Detalles de la Campaña</title>
+    <style>
+        .card-body {
+            min-height: 300px;
+            position: relative;
+            padding: 20px;
+        }
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+        .card {
+            margin-bottom: 20px;
+            background-color: white;
+            border: none;
+        }
+        .graphs-container {
+            background-color: rgb(233, 229, 229);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .graph-title {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body style="--cliente-color: {{ $cliente['color_fuente'] }}">
 
@@ -103,13 +129,14 @@
                     @foreach($creatividadesRedSocial as $creatividad)
                         <div class="col-md-4">
                             <div style="background-color: rgb(233, 229, 229); padding: 15px; height: 100%;">
-                                <div class="card mb-3">
-                                    <img src="{{ asset(str_replace('public/', '', $creatividad['recursos']['imagen'])) }}" 
-                                         class="card-img-top" 
-                                         alt="Creatividad"
-                                         style="max-height: 200px; object-fit: contain; padding: 10px;">
-                                    <div class="card-body">
-                                        <p class="card-text">
+                                <div class="card">
+                                    <div style="height: 200px; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden;">
+                                        <img src="{{ asset(str_replace('public/', '', $creatividad['recursos']['imagen'])) }}" 
+                                             alt="Creatividad"
+                                             style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                    </div>
+                                    <div class="card-body" style="min-height: auto; padding: 10px;">
+                                        <p class="card-text mb-0">
                                             <small class="text-muted">Display: {{ implode(', ', $creatividad['especificaciones']['dispositivos']) }}</small>
                                         </p>
                                     </div>
@@ -390,16 +417,15 @@
                 
                 {{-- Desktop Creatividad --}}
                 <div class="col-md-6">
-                    <div class="card mb-3 h-100">
-                        <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                    <div class="card">
+                        <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden;">
                             <img src="{{ asset('img/creatividades/display_takeover_desktop1.jpeg') }}" 
-                                 class="card-img-top" 
                                  alt="Display Desktop"
-                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
                         </div>
-                        <div class="card-body">
-                            <h6 class="card-title">Desktop</h6>
-                            <p class="card-text">
+                        <div class="card-body" style="min-height: auto; padding: 10px;">
+                            <h6 class="card-title mb-0">Desktop</h6>
+                            <p class="card-text mb-0">
                                 <small class="text-muted">970x250px</small>
                             </p>
                         </div>
@@ -408,16 +434,15 @@
 
                 {{-- Mobile Creatividad --}}
                 <div class="col-md-6">
-                    <div class="card mb-3 h-100">
-                        <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                    <div class="card">
+                        <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden;">
                             <img src="{{ asset('img/creatividades/display_takeover_mobile1.jpeg') }}" 
-                                 class="card-img-top" 
                                  alt="Display Mobile"
-                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                                 style="max-width: 100%; max-height: 100%; object-fit: contain;">
                         </div>
-                        <div class="card-body">
-                            <h6 class="card-title">Mobile</h6>
-                            <p class="card-text">
+                        <div class="card-body" style="min-height: auto; padding: 10px;">
+                            <h6 class="card-title mb-0">Mobile</h6>
+                            <p class="card-text mb-0">
                                 <small class="text-muted">320x100px</small>
                             </p>
                         </div>
@@ -463,10 +488,162 @@
                     </tbody>
                 </table>
             </div>
+
+            {{-- Sección de Gráficos (sin salto de sección) --}}
+            <div class="graphs-container" style="background-color: white;">
+                <div class="row g-0">
+                    {{-- Título de la sección --}}
+                    <div class="col-12 text-center mb-4">
+                        <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">ANÁLISIS DE RENDIMIENTO</h5>
+                    </div>
+
+                    {{-- Gráfico de Clics por Hora --}}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="graph-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">Clics por Hora</h5>
+                                <canvas id="clicksChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Gráfico de CTR por Hora --}}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="graph-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">CTR por Hora</h5>
+                                <canvas id="ctrChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Gráfico de Impresiones por Hora --}}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="graph-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">Impresiones por Hora</h5>
+                                <canvas id="impressionsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Gráfico de Dispositivos --}}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="graph-title text-center cliente-text" style="color: {{ $cliente['color_fuente'] }}">Distribución por Dispositivos</h5>
+                                <canvas id="devicesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 </div>
 </div>
+
+{{-- Mover el script al final del body y modificarlo --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuración común
+    const hoursLabels = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', 
+                       '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+
+    const primaryColor = '{{ $cliente['color_fuente'] }}';
+    const backgroundColor = primaryColor + '40';
+
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    padding: 20,
+                    font: {
+                        size: 12
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    display: false
+                }
+            }
+        }
+    };
+
+    // Función para crear gráficos de barras
+    function createBarChart(canvasId, label, data) {
+        const ctx = document.getElementById(canvasId);
+        if (ctx) {
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: hoursLabels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: primaryColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: commonOptions
+            });
+        }
+    }
+
+    // Crear gráficos individuales
+    createBarChart('clicksChart', 'Clics', [65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80]);
+    createBarChart('ctrChart', 'CTR (%)', [2.1, 1.9, 2.3, 2.8, 2.0, 1.8, 2.2, 2.1, 1.9, 2.3, 2.8, 2.0, 1.8, 2.2, 2.1, 1.9, 2.3, 2.8, 2.0, 1.8, 2.2, 2.1, 1.9, 2.3]);
+    createBarChart('impressionsChart', 'Impresiones', [3200, 2900, 3500, 2800, 3100, 3000, 2700, 3200, 2900, 3500, 2800, 3100, 3000, 2700, 3200, 2900, 3500, 2800, 3100, 3000, 2700, 3200, 2900, 3500]);
+
+    // Gráfico de dispositivos (donut)
+    const ctxDevices = document.getElementById('devicesChart');
+    if (ctxDevices) {
+        new Chart(ctxDevices, {
+            type: 'doughnut',
+            data: {
+                labels: ['Desktop', 'Mobile'],
+                datasets: [{
+                    data: [
+                        {{ collect($displayTakeover['resultados_bloque'])->where('nombre', 'like', '%Desktop%')->sum('impresiones') }},
+                        {{ collect($displayTakeover['resultados_bloque'])->where('nombre', 'like', '%Mobile%')->sum('impresiones') }}
+                    ],
+                    backgroundColor: ['#FF0000', '#FFB6C1'],
+                    borderWidth: 1,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '50%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                layout: {
+                    padding: 20
+                }
+            }
+        });
+    }
+});
+</script>
 
 </body>
 </html>

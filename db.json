@@ -185,21 +185,5 @@
         "ctr": 0
       }
     }
-  ],
-  "usuarios": [
-    {
-      "id": 1,
-      "usuario": "admin",
-      "password": "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
-      "nombre": "Administrador",
-      "rol": "admin"
-    },
-    {
-      "id": 2,
-      "usuario": "cliente",
-      "password": "$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
-      "nombre": "Cliente Demo",
-      "rol": "cliente"
-    }
   ]
 }
