@@ -10,7 +10,7 @@ class CampañaController extends Controller
 {
     private function getJsonData()
     {
-        $json = file_get_contents(base_path('db.json'));
+        $json = file_get_contents(base_path('branded_content.json'));
         return json_decode($json, true);
     }
 
@@ -27,58 +27,97 @@ class CampañaController extends Controller
         return view('campañas.index', compact('campañas'));
     }
  
-    public function show($id)
+    private function calcularTotalesBranded($pedido, $creatividades)
     {
-        $data = $this->getJsonData();
-    
-        // Buscar la campaña por el ID
-        $campaña = collect($data['campañas'])->firstWhere('id', $id);
-    
-        if (!$campaña) {
+        $totales = [
+            'impresiones' => 0,
+            'clics' => 0,
+            'detalles_por_creatividad' => []
+        ];
+
+        foreach ($creatividades as $creatividad) {
+            $impresiones = 0;
+            $clics = 0;
+
+            // Si la creatividad es para redes sociales
+            if (isset($creatividad['redes_sociales'])) {
+                foreach ($creatividad['redes_sociales'] as $red) {
+                    $red = strtolower($red);
+                    if ($red === 'facebook') {
+                        $impresiones = $pedido['redes_sociales']['facebook']['visualizaciones'] ?? 0;
+                        $clics = $pedido['redes_sociales']['facebook']['clics_enlaces'] ?? 0;
+                    } elseif ($red === 'instagram') {
+                        $impresiones = $pedido['redes_sociales']['instagram']['visualizaciones'] ?? 0;
+                        $clics = $pedido['redes_sociales']['instagram']['clics_enlaces'] ?? 0;
+                    } elseif ($red === 'web') {
+                        $impresiones = $pedido['web']['vistas'] ?? 0;
+                        $clics = $pedido['web']['usuarios_activos'] ?? 0;
+                    }
+                }
+            } else {
+                // Para creatividades web
+                $impresiones = $pedido['web']['vistas'] ?? 0;
+                $clics = $pedido['web']['usuarios_activos'] ?? 0;
+                $dispositivo = $creatividad['dispositivo'];
+
+                if (is_array($dispositivo)) {
+                    $impresiones = $pedido[$dispositivo[0]]['visualizaciones'] ?? 0;
+                    $clics = $pedido[$dispositivo[0]]['interacciones'] ?? 0;
+                }
+            }
+
+            $ctr = $impresiones > 0 ? round(($clics / $impresiones) * 100, 2) : 0;
+
+            $totales['detalles_por_creatividad'][] = [
+                'impresiones' => $impresiones,
+                'clics' => $clics,
+                'ctr' => $ctr
+            ];
+
+            $totales['impresiones'] += $impresiones;
+            $totales['clics'] += $clics;
+        }
+
+        $totales['ctr'] = $totales['impresiones'] > 0 ? 
+            round(($totales['clics'] / $totales['impresiones']) * 100, 2) : 0;
+
+        return $totales;
+    }
+
+    public function showBranded($id)
+    {
+        // Leer el archivo JSON
+        $json = file_get_contents(base_path('branded_content.json'));
+        $data = json_decode($json, true);
+        
+        // Obtener los datos necesarios
+        $cliente = $data['cliente'][0];
+        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+        $pedido = $data['pedido'][0];
+        $creatividades = $data['creatividades'];
+        
+        if (!$linea_pedido) {
             abort(404, 'Campaña no encontrada');
         }
-    
-        // Buscar el cliente asociado a la campaña
-        $cliente = collect($data['cliente'])->firstWhere('id', $campaña['cliente_id']);
-    
-        if (!$cliente) {
-            abort(404, 'Cliente no encontrado');
-        }
-    
-        // Buscar la creatividad asociada a un cliente
-        $creatividades = collect($data['creatividades'])->where('campaña_id', $campaña['id'])->all();
-    
-        if (!$creatividades) {
-            abort(404, 'Creatividad no encontrada');
-        }
-    
-        // Calcular CTR para cada creatividad
-        $creatividades = collect($creatividades)->map(function ($creatividad) {
-            $impresiones = $creatividad['rendimiento']['impresiones'];
-            $clics = $creatividad['rendimiento']['clics'];
-            
-            // Calcular CTR
-            $creatividad['rendimiento']['ctr'] = $impresiones > 0 
-                ? round(($clics / $impresiones) * 100, 2)
-                : 0;
-                
-            return $creatividad;
-        })->all();
-    
-        $totales = $this->calcularTotales($creatividades);
-    
-        // Actualizar las impresiones de la campaña con el total calculado
-        $campaña['impresiones'] = $totales['impresiones'];
-    
-        // Calcular el % de efectividad
-        $efectividad = $this->calcularEfectividad($campaña['impresiones'], $campaña['objetivo']);
-    
-        // Formatear fechas
-        $campaña['fecha_inicio_formatted'] = date('d M Y', strtotime($campaña['fecha_inicio']));
-        $campaña['fecha_fin_formatted'] = date('d M Y', strtotime($campaña['fecha_fin']));
-    
+
+        // Calcular totales
+        $totales = $this->calcularTotalesBranded($pedido, $creatividades);
+
+        // Calcular la efectividad
+        $efectividad = $this->calcularEfectividad($pedido['web']['vistas'], $linea_pedido['objetivo']);
+        
+        $pedidos = $data['pedido'];
+        
         // Pasar los datos a la vista
-        return view('campañas.show', compact('campaña', 'cliente', 'efectividad', 'creatividades', 'totales'));
+        return view('campañas.branded', compact(
+            'cliente', 
+            'linea_pedido', 
+            'pedido', 
+            'efectividad', 
+            'creatividades', 
+            'pedidos',
+            'totales'
+        ));
     }
 
     private function calcularTotales($creatividades)
@@ -157,13 +196,16 @@ class CampañaController extends Controller
             \Log::info('No se encontraron creatividades para el pedido');
         }
         
+        $porcentajePresupuesto = $linea_pedido['objetivo'] > 0 ? min(100, ($totalImpresiones / $linea_pedido['objetivo']) * 100) : 0;
+        
         return view('campañas.campañas_digitales', compact(
             'cliente',
             'linea_pedido',
             'pedidos',
             'creatividades',
             'totalImpresiones',
-            'efectividad'
+            'efectividad',
+            'porcentajePresupuesto'
         ));
     }
 
@@ -253,8 +295,8 @@ class CampañaController extends Controller
         ];
 
         // Generar array de fechas desde fecha_hora_inicio hasta fecha_hora_fin
-        $fechaInicio = \Carbon\Carbon::parse($linea_pedido['fecha_hora_inicio'])->startOfDay();
-        $fechaFin = \Carbon\Carbon::parse($linea_pedido['fecha_hora_fin'])->startOfDay();
+        $fechaInicio = \Carbon\Carbon::parse($pedido['fecha_hora_inicio'])->startOfDay();
+        $fechaFin = \Carbon\Carbon::parse($pedido['fecha_hora_fin'])->startOfDay();
         $fechas = [];
         
         for($fecha = clone $fechaInicio; $fecha->lte($fechaFin); $fecha->addDay()) {

@@ -1,0 +1,95 @@
+{
+    "cliente": [
+      {
+        "id": 1,
+        "nombre": "VIVA",
+        "color": "#ffffff",
+        "color_fuente": "#aacc3b",
+        "logo": "public/img/logos/viva-logo.png"
+      }
+    ],
+    "linea_pedidos": [
+      {
+        "id": 3,
+        "estado": "Finalizado",
+        "tipo": "Estandar",
+        "objetivo": 58000,
+        "tarifa": {
+        "monto": 100,
+        "moneda": "USD"}
+      }
+    ],
+      "pedido": [
+        {
+            "id": 5,
+            "cliente_id": 1,
+            "estado": "Finalizado",
+            "tipo": "Estandar",
+            "fecha_hora_inicio": "2024-12-15 08:00:00",
+            "fecha_hora_fin": "2024-12-16 23:59:00",
+            "link_web": "https://eldeber.com.bo/te-puede-interesar/viva-publica-su-primer-reporte-de-sostenibilidad-bajo-los-estandares-internacionales-gri_501451/",
+            "web":{
+                "vistas": 2810,
+                "usuarios_activos": 1491,
+                "vistas_por_usuario": 1.21,
+                "sesiones": 503,
+                "tiempo_promedio_lectura": "00:00:37"
+            },
+            "redes_sociales": {
+                "facebook": {
+                    "visualizaciones": 31805,
+                    "alcance": 25369,
+                    "interacciones": 100,
+                    "clics_enlaces": 53,
+                    "reacciones": 78,
+                    "comentarios": 22,
+                    "compartidos": 2,
+                    "guardados": 0
+                },
+                "instagram": {
+                    "visualizaciones": 5087,
+                    "alcance": 4704,
+                    "interacciones": 55,
+                    "me_gusta": 40,
+                    "comentarios": 4,
+                    "compartidos": 1,
+                    "guardados": 0
+                }
+            }
+        }
+    ],
+    "creatividades": [
+        {
+          "id": 5,
+          "pedido_id": 5,
+          "nombre": "Nota Digital Desktop",
+          "icono": "public/img/creatividades/notaweb.png",
+          "dispositivo": "Desktop",
+          "redes_sociales": ["Web"]
+        },
+        {
+          "id": 6,
+          "pedido_id": 5,
+          "nombre": "Nota Digital Mobile",
+          "icono": "public/img/creatividades/nota.png",
+          "dispositivo": "Mobile",
+          "redes_sociales": ["Web"]
+        },
+        {
+          "id": 7,
+          "pedido_id": 5,
+          "nombre": "Nota Digital Facebook",
+          "icono": "public/img/creatividades/notadigitalfacebook1.jpg",
+          "dispositivo": ["Mobile", "Desktop"],
+          "redes_sociales": ["Facebook"]
+        },
+        {
+          "id": 8,
+          "pedido_id": 5,
+          "nombre": "Nota Digital Instagram",
+          "icono": "public/img/creatividades/notadigitalinstagram1.jpg",
+          "dispositivo": ["Mobile", "Desktop"],
+          "redes_sociales": ["Instagram"]
+        }
+      ]
+}

@@ -11,10 +11,8 @@
     "linea_pedidos": [
       {
         "id": 1,
-        "estado": "Publicando",
+        "estado": "Finalizado",
         "tipo": "Estandar",
-        "fecha_inicio": "2025-04-01T08:00:00",
-        "fecha_fin": "2025-04-15T20:00:00",
         "objetivo": 350000,
         "tarifa": {
         "monto": 450,
@@ -25,7 +23,7 @@
       {
         "id": 1,
         "id_lineadepedidos": 1,
-        "estado": "Publicando",
+        "estado": "Finalizado",
         "tipo": "Estandar",
         "fecha_hora_inicio": "2025-02-21 08:00:00",
         "fecha_hora_fin": "2025-02-21 23:59:00",

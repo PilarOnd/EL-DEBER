@@ -54,9 +54,9 @@
                     <div class="col-md-4 d-flex flex-column justify-content-center">
                         <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">FECHA</h5>
                         <p class="mb-0">
-                            {{ \Carbon\Carbon::parse($linea_pedido['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}
+                            {{ \Carbon\Carbon::parse($pedido['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}
                             <br> al <br>
-                            {{ \Carbon\Carbon::parse($linea_pedido['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}
+                            {{ \Carbon\Carbon::parse($pedido['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}
                         </p>
                     </div>
    
@@ -81,7 +81,7 @@
             <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229, 0.9);">
                 <div class="col-md-3 text-center">
                     <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Formato Campaña Display</h5>
-                    <p class="mb-0">{{ \Carbon\Carbon::parse($linea_pedido['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</p>
+                    <p class="mb-0">{{ \Carbon\Carbon::parse($pedido['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</p>
                 </div>
 
                 <div class="col-md-3 d-flex flex-column justify-content-center">
@@ -163,18 +163,22 @@
                 <div class="card mb-3 h-100">
                     <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
                         @php
-                            $desktopCreatividad = collect($creatividades)->firstWhere('dispositivo', 'desktop');
+                            $desktopCreatividad = collect($creatividades)->firstWhere('dispositivo', 'Desktop');
                         @endphp
-                        <img src="{{ asset(str_replace('public/', '', $desktopCreatividad['icono'])) }}" 
-                             class="card-img-top" 
-                             alt="Display Desktop"
-                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        @if($desktopCreatividad && isset($desktopCreatividad['icono']))
+                            <img src="{{ asset(str_replace('public/', '', $desktopCreatividad['icono'])) }}" 
+                                 class="card-img-top" 
+                                 alt="Display Desktop"
+                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        @else
+                            <div class="text-center">
+                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
+                                <p class="text-muted mt-2">No hay creatividad disponible</p>
+                            </div>
+                        @endif
                     </div>
                     <div class="card-body" style="min-height: auto; padding: 10px;">
                         <h6 class="card-title">Desktop</h6>
-                        <p class="card-text mb-0">
-                            <small class="text-muted">970x250px</small>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -184,18 +188,117 @@
                 <div class="card mb-3 h-100">
                     <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
                         @php
-                            $mobileCreatividad = collect($creatividades)->firstWhere('dispositivo', 'mobile');
+                            $mobileCreatividad = collect($creatividades)->firstWhere('dispositivo', 'Mobile');
                         @endphp
-                        <img src="{{ asset(str_replace('public/', '', $mobileCreatividad['icono'])) }}" 
-                             class="card-img-top" 
-                             alt="Display Mobile"
-                             style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        @if($mobileCreatividad && isset($mobileCreatividad['icono']))
+                            <img src="{{ asset(str_replace('public/', '', $mobileCreatividad['icono'])) }}"
+                                 class="card-img-top"
+                                 alt="Display Mobile"
+                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        @else
+                            <div class="text-center">
+                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
+                                <p class="text-muted mt-2">No hay creatividad disponible</p>
+                            </div>
+                        @endif
                     </div>
                     <div class="card-body" style="min-height: auto; padding: 10px;">
                         <h6 class="card-title">Mobile</h6>
-                        <p class="card-text mb-0">
-                            <small class="text-muted">320x100px</small>
-                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Evidencias de Publicación --}}
+        <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229);">
+            <div class="col-md-12 text-center mb-4">
+                <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Evidencia de Publicación</h5>
+            </div>
+            
+            {{-- Desktop Evidencia --}}
+            <div class="col-md-6">
+                <div class="card mb-3 h-100">
+                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                        @php
+                            $desktopEvidencia = collect($creatividades)
+                                ->where('tipo', 'Evidencia')
+                                ->where('dispositivo', 'Desktop')
+                                ->first();
+                        @endphp
+                        @if($desktopEvidencia && isset($desktopEvidencia['icono']))
+                            <img src="{{ asset(str_replace('public/', '', $desktopEvidencia['icono'])) }}" 
+                                 class="card-img-top" 
+                                 alt="Evidencia Desktop"
+                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        @else
+                            <div class="text-center">
+                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
+                                <p class="text-muted mt-2">No hay evidencia disponible</p>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card-body" style="min-height: auto; padding: 10px;">
+                        <h6 class="card-title">Desktop</h6>
+                    </div>
+                    <div class="card-footer p-0">
+                        <table class="table table-sm table-bordered m-0">
+                            <tr>
+                                <td><strong>Cliente:</strong></td>
+                                <td>{{ $cliente['nombre'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Banner:</strong></td>
+                                <td>{{ $linea_pedido['tipo'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Campaña:</strong></td>
+                                <td>{{ $pedido['nombre'] }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Mobile Evidencia --}}
+            <div class="col-md-6">
+                <div class="card mb-3 h-100">
+                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                        @php
+                            $mobileEvidencia = collect($creatividades)
+                                ->where('tipo', 'Evidencia')
+                                ->where('dispositivo', 'Mobile')
+                                ->first();
+                        @endphp
+                        @if($mobileEvidencia && isset($mobileEvidencia['icono']))
+                            <img src="{{ asset(str_replace('public/', '', $mobileEvidencia['icono'])) }}"
+                                 class="card-img-top"
+                                 alt="Evidencia Mobile"
+                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                        @else
+                            <div class="text-center">
+                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
+                                <p class="text-muted mt-2">No hay evidencia disponible</p>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card-body" style="min-height: auto; padding: 10px;">
+                        <h6 class="card-title">Mobile</h6>
+                    </div>
+                    <div class="card-footer p-0">
+                        <table class="table table-sm table-bordered m-0">
+                            <tr>
+                                <td><strong>Cliente:</strong></td>
+                                <td>{{ $cliente['nombre'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Banner:</strong></td>
+                                <td>{{ $linea_pedido['tipo'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Campaña:</strong></td>
+                                <td>{{ $pedido['nombre'] }}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>

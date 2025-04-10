@@ -37,10 +37,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Rutas de campañas
     Route::get('/campañas', [CampañaController::class, 'index'])->name('campañas.index');
-    Route::get('/campañas/{id}', [CampañaController::class, 'show'])->name('campañas.show');
+    Route::get('/campañas/branded/{id}', [CampañaController::class, 'showBranded'])->name('campañas.branded');
     Route::get('/campañas/digital/{id}', [CampañaController::class, 'showDigital'])->name('campañas.digital');
+    Route::get('/campañas/display/{id}', [CampañaController::class, 'showDisplay'])->name('campañas.display');
     Route::get('/campañas/{id}/todas', [CampañaController::class, 'todasCampañas'])->name('campañas.todas');
-    Route::get('/campañas/{id}/display', [CampañaController::class, 'showDisplay'])->name('campañas.display');
 
     Route::get('/filtrar-campañas', [MenuController::class, 'filtrarCampañas'])->name('filtrar.campañas');
 });

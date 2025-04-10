@@ -13,8 +13,6 @@
       "id": 2,
       "estado": "Finalizado",
       "tipo": "Propia",
-      "fecha_hora_inicio": "2025-02-18 08:00:00",
-      "fecha_hora_fin": "2025-02-21 23:59:00",
       "objetivo": 70000,
       "tarifa": {
         "monto": 850,
@@ -25,6 +23,8 @@
     {
       "id": 3,
       "id_lineadepedidos": 2,
+      "nombre": "Makro Cuenta",
+      "banner": "Take Over",
       "estado": "Finalizado",
       "tipo": "Propia",
       "fecha_hora_inicio": "2025-02-18 08:00:00",
@@ -72,14 +72,30 @@
     {
       "id": 3,
       "pedido_id": 3,
+      "tipo": "Creatividad",
       "icono": "public/img/creatividades/display_takeover_mobile1.jpeg",
-      "dispositivo": "mobile"
+      "dispositivo": "Mobile"
     },
     {
       "id": 4,
       "pedido_id": 3,
+      "tipo": "Creatividad",
       "icono": "public/img/creatividades/display_takeover_desktop1.jpeg",
-      "dispositivo": "desktop"
+      "dispositivo": "Desktop"
+    },
+    {
+      "id": 9,
+      "pedido_id": 3,
+      "tipo": "Evidencia",
+      "icono": "public/img/creatividades/evidencia_desktop_display.png",
+      "dispositivo": "Desktop"
+    },
+    {
+      "id": 10,
+      "pedido_id": 3,
+      "tipo": "Evidencia",
+      "icono": "public/img/creatividades/evidencia_mobile_display.png",
+      "dispositivo": "Mobile"
     }
   ]
 }
