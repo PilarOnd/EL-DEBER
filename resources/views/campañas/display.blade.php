@@ -248,7 +248,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Banner:</strong></td>
-                                <td>{{ $linea_pedido['tipo'] }}</td>
+                                <td>{{ $pedido['banner'] }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Campaña:</strong></td>
@@ -292,7 +292,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Banner:</strong></td>
-                                <td>{{ $linea_pedido['tipo'] }}</td>
+                                <td>{{ $pedido['banner'] }}</td>
                             </tr>
                             <tr>
                                 <td><strong>Campaña:</strong></td>

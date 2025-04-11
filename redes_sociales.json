@@ -11,6 +11,7 @@
     "linea_pedidos": [
       {
         "id": 1,
+        "cliente_id": 1,
         "estado": "Finalizado",
         "tipo": "Estandar",
         "objetivo": 350000,
@@ -23,6 +24,7 @@
       {
         "id": 1,
         "id_lineadepedidos": 1,
+        "nombre": "Promo Carnaval",
         "estado": "Finalizado",
         "tipo": "Estandar",
         "fecha_hora_inicio": "2025-02-21 08:00:00",

@@ -2,21 +2,39 @@
   "clientes": [
     {
       "id": 1,
-      "nombre": "BANCO MERCANTIL",
+      "nombre": "Banco Mercantil",
       "color": "#296140",
       "color_fuente": "#296140",
       "logo": "public/img/logos/bancomercantil-logo.png"
+    },
+    {
+      "id": 2,
+      "nombre": "Tigo",
+      "color": "#00377a",
+      "color_fuente": "#00377a",
+      "logo": "public/img/logos/tigo-logo.png"
     }
   ],
   "lineas_pedido": [
     {
       "id": 2,
+      "cliente_id": 1,
       "estado": "Finalizado",
       "tipo": "Propia",
       "objetivo": 70000,
       "tarifa": {
         "monto": 850,
         "moneda": "USD"}
+      },
+      {
+        "id": 3,
+        "cliente_id": 2,
+        "estado": "Finalizado",
+        "tipo": "Estandar",
+        "objetivo": 3000000,
+        "tarifa": {
+          "monto": 560,
+          "moneda": "USD"}
       }
   ],
   "pedido": [
@@ -66,6 +84,83 @@
           "ctr": 0
         }
       }
+    },
+    {
+      "id": 4,
+      "id_lineadepedidos": 3,
+      "nombre": "Tigo Fex",
+      "banner": "Take Over",
+      "estado": "Finalizado",
+      "tipo": "Propia",
+      "fecha_hora_inicio": "2025-03-22 08:00:00",
+      "fecha_hora_fin": "2025-03-31 23:59:00",
+      "impresiones": 2909019,
+      "clics": 8680,
+      "ctr": 0,
+      "dispositivos": {
+        "mobile": {
+          "impresiones": 1514413,
+          "clics": 8255,
+          "ctr": 0
+        },
+        "desktop": {
+          "impresiones": 1394606,
+          "clics": 425,
+          "ctr": 0
+        }
+      },
+      "histograma_diario": {
+        "2025-03-22": {
+          "impresiones": 100000,
+          "clics": 150,
+          "ctr": 0
+        },
+        "2025-03-23": {
+          "impresiones": 123456,
+          "clics": 320,
+          "ctr": 0
+        },
+        "2025-03-24": {
+          "impresiones": 205000,
+          "clics": 500,
+          "ctr": 0
+        },
+        "2025-03-25": {
+          "impresiones": 412345,
+          "clics": 615,
+          "ctr": 0
+        },
+        "2025-03-26": {
+          "impresiones": 510000,
+          "clics": 720,
+          "ctr": 0
+        },
+        "2025-03-27": {
+          "impresiones": 600123,
+          "clics": 850,
+          "ctr": 0
+        },
+        "2025-03-28": {
+          "impresiones": 321000,
+          "clics": 915,
+          "ctr": 0
+        },
+        "2025-03-29": {
+          "impresiones": 89995,
+          "clics": 1000,
+          "ctr": 0
+        },
+        "2025-03-30": {
+          "impresiones": 299100,
+          "clics": 1190,
+          "ctr": 0
+        },
+        "2025-03-31": {
+          "impresiones": 350000,
+          "clics": 1420,
+          "ctr": 0
+        }
+      }
     }
   ],
   "creatividades": [
@@ -96,6 +191,62 @@
       "tipo": "Evidencia",
       "icono": "public/img/creatividades/evidencia_mobile_display.png",
       "dispositivo": "Mobile"
+    },
+    {
+      "id": 11,
+      "pedido_id": 4,
+      "tipo": "Creatividad",
+      "icono": "public/img/creatividades/display_takeover_mobile2.png",
+      "dispositivo": "Mobile"
+    },
+    {
+      "id": 12,
+      "pedido_id": 4,
+      "tipo": "Creatividad",
+      "icono": "public/img/creatividades/display_takeover_desktop2.png",
+      "dispositivo": "Desktop"
+    },
+    {
+      "id": 13,
+      "pedido_id": 4,
+      "tipo": "Creatividad",
+      "icono": "public/img/creatividades/display_takeover_mobile3.png",
+      "dispositivo": "Mobile"
+    },
+    {
+      "id": 14,
+      "pedido_id": 4,
+      "tipo": "Creatividad",
+      "icono": "public/img/creatividades/display_takeover_desktop3.png",
+      "dispositivo": "Desktop"
+    },
+    {
+      "id": 15,
+      "pedido_id": 4,
+      "tipo": "Evidencia",
+      "icono": "public/img/creatividades/evidencia_mobile_display2.png",
+      "dispositivo": "Mobile"
+    },
+    {
+      "id": 16,
+      "pedido_id": 4,
+      "tipo": "Evidencia",
+      "icono": "public/img/creatividades/evidencia_desktop_display2.png",
+      "dispositivo": "Desktop"
+    },
+    {
+      "id": 17,
+      "pedido_id": 4,
+      "tipo": "Evidencia",
+      "icono": "public/img/creatividades/evidencia_mobile_display3.png",
+      "dispositivo": "Mobile"
+    },
+    {
+      "id": 18,
+      "pedido_id": 4,
+      "tipo": "Evidencia",
+      "icono": "public/img/creatividades/evidencia_desktop_display3.png",
+      "dispositivo": "Desktop"
     }
   ]
 }

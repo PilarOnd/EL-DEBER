@@ -11,6 +11,7 @@
     "linea_pedidos": [
       {
         "id": 3,
+        "cliente_id": 1,
         "estado": "Finalizado",
         "tipo": "Estandar",
         "objetivo": 58000,
@@ -22,7 +23,8 @@
       "pedido": [
         {
             "id": 5,
-            "cliente_id": 1,
+            "id_lineadepedidos": 3,
+            "nombre": "Paquetigos",
             "estado": "Finalizado",
             "tipo": "Estandar",
             "fecha_hora_inicio": "2024-12-15 08:00:00",

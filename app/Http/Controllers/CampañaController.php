@@ -223,6 +223,10 @@ class CampañaController extends Controller
         // Obtener el pedido relacionado
         $pedido = collect($data['pedidos'])->firstWhere('linea_pedido_id', $linea_pedido['id']);
 
+        if (!$pedido) {
+            abort(404, 'No se encontró el pedido asociado a esta campaña');
+        }
+
         // Obtener creatividades
         $creatividades = $data['creatividades'];
 
@@ -273,6 +277,10 @@ class CampañaController extends Controller
 
         // Obtener el pedido relacionado
         $pedido = collect($data['pedido'])->firstWhere('id_lineadepedidos', $linea_pedido['id']);
+
+        if (!$pedido) {
+            abort(404, 'No se encontró el pedido asociado a esta campaña');
+        }
 
         // Calcular la efectividad usando la función global
         $efectividad = $this->calcularEfectividad($pedido['impresiones'], $linea_pedido['objetivo']);
