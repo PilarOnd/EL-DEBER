@@ -24,18 +24,20 @@
       "objetivo": 70000,
       "tarifa": {
         "monto": 850,
-        "moneda": "USD"}
-      },
-      {
-        "id": 3,
-        "cliente_id": 2,
-        "estado": "Finalizado",
-        "tipo": "Estandar",
-        "objetivo": 3000000,
-        "tarifa": {
-          "monto": 560,
-          "moneda": "USD"}
+        "moneda": "USD"
       }
+    },
+    {
+      "id": 3,
+      "cliente_id": 2,
+      "estado": "Finalizado",
+      "tipo": "Estandar",
+      "objetivo": 3000000,
+      "tarifa": {
+        "monto": 560,
+        "moneda": "USD"
+      }
+    }
   ],
   "pedido": [
     {

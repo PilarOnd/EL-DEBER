@@ -266,13 +266,16 @@ class CampañaController extends Controller
         $json = file_get_contents(base_path('f_alto_impacto.json'));
         $data = json_decode($json, true);
 
-        // Obtener datos del cliente
-        $cliente = collect($data['clientes'])->first();
-
         // Obtener la línea de pedido
         $linea_pedido = collect($data['lineas_pedido'])->firstWhere('id', $id);
         if (!$linea_pedido) {
             abort(404, 'Campaña no encontrada');
+        }
+
+        // Obtener datos del cliente basado en el cliente_id de la línea de pedido
+        $cliente = collect($data['clientes'])->firstWhere('id', $linea_pedido['cliente_id']);
+        if (!$cliente) {
+            abort(404, 'Cliente no encontrado');
         }
 
         // Obtener el pedido relacionado
