@@ -12,20 +12,6 @@
     <title>Campaña Display</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .card-body {
-            min-height: 250px;
-            position: relative;
-            padding: 15px;
-        }
-        canvas {
-            width: 100% !important;
-            height: 250px !important;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body style="--cliente-color: {{ $cliente['color_fuente'] }}">
 
@@ -152,154 +138,81 @@
             </div>
         </div>
 
-        {{-- Creatividades de Campaña --}}
-        <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229);">
-            <div class="col-md-12 text-center mb-4">
-                <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Creatividades de Campaña</h5>
-            </div>
-            
-            {{-- Desktop Creatividad --}}
-            <div class="col-md-6">
-                <div class="card mb-3 h-100">
-                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                        @php
-                            $desktopCreatividad = collect($creatividades)->firstWhere('dispositivo', 'Desktop');
-                        @endphp
-                        @if($desktopCreatividad && isset($desktopCreatividad['icono']))
-                            <img src="{{ asset(str_replace('public/', '', $desktopCreatividad['icono'])) }}" 
-                                 class="card-img-top" 
-                                 alt="Display Desktop"
-                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                        @else
-                            <div class="text-center">
-                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
-                                <p class="text-muted mt-2">No hay creatividad disponible</p>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="card-body" style="min-height: auto; padding: 10px;">
-                        <h6 class="card-title">Desktop</h6>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Mobile Creatividad --}}
-            <div class="col-md-6">
-                <div class="card mb-3 h-100">
-                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                        @php
-                            $mobileCreatividad = collect($creatividades)->firstWhere('dispositivo', 'Mobile');
-                        @endphp
-                        @if($mobileCreatividad && isset($mobileCreatividad['icono']))
-                            <img src="{{ asset(str_replace('public/', '', $mobileCreatividad['icono'])) }}"
-                                 class="card-img-top"
-                                 alt="Display Mobile"
-                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                        @else
-                            <div class="text-center">
-                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
-                                <p class="text-muted mt-2">No hay creatividad disponible</p>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="card-body" style="min-height: auto; padding: 10px;">
-                        <h6 class="card-title">Mobile</h6>
-                    </div>
-                </div>
+        {{-- Modal para mostrar imágenes --}}
+        <div id="modalImagen" class="modal-imagen">
+            <div class="modal-contenido">
+                <button class="cerrar-modal">&times;</button>
+                <img id="imagenAmpliada" src="" alt="Imagen Ampliada">
             </div>
         </div>
 
-        {{-- Evidencias de Publicación --}}
-        <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgb(233, 229, 229);">
-            <div class="col-md-12 text-center mb-4">
-                <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Evidencia de Publicación</h5>
+        {{-- Creatividades y Evidencias --}}
+        <div style="background-color: rgba(245, 245, 245, 0.9);">
+            <div style="padding: 10px;">
+                <h5 class="fw-bold cliente-text text-center m-0" style="color: {{ $cliente['color_fuente'] }}">Creatividades y Evidencias</h5>
             </div>
-            
-            {{-- Desktop Evidencia --}}
-            <div class="col-md-6">
-                <div class="card mb-3 h-100">
-                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                        @php
-                            $desktopEvidencia = collect($creatividades)
-                                ->where('tipo', 'Evidencia')
-                                ->where('dispositivo', 'Desktop')
-                                ->first();
-                        @endphp
-                        @if($desktopEvidencia && isset($desktopEvidencia['icono']))
-                            <img src="{{ asset(str_replace('public/', '', $desktopEvidencia['icono'])) }}" 
-                                 class="card-img-top" 
-                                 alt="Evidencia Desktop"
-                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                        @else
-                            <div class="text-center">
-                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
-                                <p class="text-muted mt-2">No hay evidencia disponible</p>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="card-body" style="min-height: auto; padding: 10px;">
-                        <h6 class="card-title">Desktop</h6>
-                    </div>
-                    <div class="card-footer p-0">
-                        <table class="table table-sm table-bordered m-0">
+            <div class="d-flex justify-content-center" style="padding: 20px;">
+                <div style="width: 90%; max-width: 1000px;">
+                    <table class="table table-bordered text-center align-middle mb-4" style="background-color: white;">
+                        <thead class="custom-row-bg">
                             <tr>
-                                <td><strong>Cliente:</strong></td>
-                                <td>{{ $cliente['nombre'] }}</td>
+                                <th>ID</th>
+                                <th>Creatividad</th>
+                                <th>Evidencia Mobile</th>
+                                <th>Evidencia Desktop</th>
+                                <th>Banner</th>
+                                <th>Campaña</th>
                             </tr>
-                            <tr>
-                                <td><strong>Banner:</strong></td>
-                                <td>{{ $pedido['banner'] }}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Campaña:</strong></td>
-                                <td>{{ $pedido['nombre'] }}</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                        </thead>
+                        <tbody>
+                            @php
+                                $creatividades = collect($creatividades)->where('pedido_id', $pedido['id']);
+                            @endphp
 
-            {{-- Mobile Evidencia --}}
-            <div class="col-md-6">
-                <div class="card mb-3 h-100">
-                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                        @php
-                            $mobileEvidencia = collect($creatividades)
-                                ->where('tipo', 'Evidencia')
-                                ->where('dispositivo', 'Mobile')
-                                ->first();
-                        @endphp
-                        @if($mobileEvidencia && isset($mobileEvidencia['icono']))
-                            <img src="{{ asset(str_replace('public/', '', $mobileEvidencia['icono'])) }}"
-                                 class="card-img-top"
-                                 alt="Evidencia Mobile"
-                                 style="max-height: 100%; max-width: 100%; object-fit: contain;">
-                        @else
-                            <div class="text-center">
-                                <i class="bi bi-image" style="font-size: 48px; color: #ccc;"></i>
-                                <p class="text-muted mt-2">No hay evidencia disponible</p>
-                            </div>
-                        @endif
-                    </div>
-                    <div class="card-body" style="min-height: auto; padding: 10px;">
-                        <h6 class="card-title">Mobile</h6>
-                    </div>
-                    <div class="card-footer p-0">
-                        <table class="table table-sm table-bordered m-0">
-                            <tr>
-                                <td><strong>Cliente:</strong></td>
-                                <td>{{ $cliente['nombre'] }}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Banner:</strong></td>
-                                <td>{{ $pedido['banner'] }}</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Campaña:</strong></td>
-                                <td>{{ $pedido['nombre'] }}</td>
-                            </tr>
-                        </table>
-                    </div>
+                            @foreach($creatividades as $creatividad)
+                                <tr style="background-color: white;">
+                                    <td class="align-middle">{{ $creatividad['id'] }}</td>
+                                    <td class="p-2">
+                                        <img src="{{ asset(str_replace('public/', '', $creatividad['icono'])) }}" 
+                                             alt="Creatividad"
+                                             class="icono-hover imagen-clickeable"
+                                             style="width: 100px; cursor: pointer;"
+                                             title="Click para ver imagen completa">
+                                    </td>
+                                    <td class="p-2">
+                                        @if(isset($creatividad['evidencias']['mobile']))
+                                            @foreach($creatividad['evidencias']['mobile'] as $evidencia)
+                                                <img src="{{ asset(str_replace('public/', '', $evidencia['icono'])) }}" 
+                                                     alt="Evidencia Mobile"
+                                                     class="icono-hover imagen-clickeable"
+                                                     style="width: 100px; cursor: pointer;"
+                                                     title="Click para ver imagen completa">
+                                                @if(!$loop->last)
+                                                    <br><br>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </td>
+                                    <td class="p-2">
+                                        @if(isset($creatividad['evidencias']['desktop']))
+                                            @foreach($creatividad['evidencias']['desktop'] as $evidencia)
+                                                <img src="{{ asset(str_replace('public/', '', $evidencia['icono'])) }}" 
+                                                     alt="Evidencia Desktop"
+                                                     class="icono-hover imagen-clickeable"
+                                                     style="width: 100px; cursor: pointer;"
+                                                     title="Click para ver imagen completa">
+                                                @if(!$loop->last)
+                                                    <br><br>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </td>
+                                    <td class="align-middle">{{ $pedido['banner'] }}</td>
+                                    <td class="align-middle">{{ $pedido['nombre'] }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -558,6 +471,41 @@ new Chart(document.getElementById('devicesChart'), {
             padding: 20
         }
     }
+});
+
+// JavaScript para manejar el modal de imágenes
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('modalImagen');
+    const modalImg = document.getElementById('imagenAmpliada');
+    const cerrarModal = document.querySelector('.cerrar-modal');
+    const imagenes = document.querySelectorAll('.imagen-clickeable');
+
+    // Abrir modal al hacer clic en una imagen
+    imagenes.forEach(img => {
+        img.addEventListener('click', function() {
+            modal.style.display = 'flex';
+            modalImg.src = this.src;
+        });
+    });
+
+    // Cerrar modal al hacer clic en la X
+    cerrarModal.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    // Cerrar modal al hacer clic fuera de la imagen
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Cerrar modal con la tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            modal.style.display = 'none';
+        }
+    });
 });
 </script>
 

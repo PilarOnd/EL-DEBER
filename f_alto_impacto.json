@@ -91,7 +91,7 @@
       "id": 4,
       "id_lineadepedidos": 3,
       "nombre": "Tigo Fex",
-      "banner": "Take Over",
+      "banner": "Sticky",
       "estado": "Finalizado",
       "tipo": "Propia",
       "fecha_hora_inicio": "2025-03-22 08:00:00",
@@ -171,84 +171,100 @@
       "pedido_id": 3,
       "tipo": "Creatividad",
       "icono": "public/img/creatividades/display_takeover_mobile1.jpeg",
-      "dispositivo": "Mobile"
-    },
-    {
-      "id": 4,
-      "pedido_id": 3,
-      "tipo": "Creatividad",
-      "icono": "public/img/creatividades/display_takeover_desktop1.jpeg",
-      "dispositivo": "Desktop"
-    },
-    {
-      "id": 9,
-      "pedido_id": 3,
-      "tipo": "Evidencia",
-      "icono": "public/img/creatividades/evidencia_desktop_display.png",
-      "dispositivo": "Desktop"
-    },
-    {
-      "id": 10,
-      "pedido_id": 3,
-      "tipo": "Evidencia",
-      "icono": "public/img/creatividades/evidencia_mobile_display.png",
-      "dispositivo": "Mobile"
+      "evidencias": {
+        "mobile": [
+          {
+            "id": 1,
+            "icono": "public/img/creatividades/evidencia_mobile_display.png"
+          }
+        ],
+        "desktop": [
+          {
+            "id": 2,
+            "icono": "public/img/creatividades/evidencia_desktop_display.png"
+          }
+        ]
+      }
     },
     {
       "id": 11,
       "pedido_id": 4,
       "tipo": "Creatividad",
-      "icono": "public/img/creatividades/display_takeover_mobile2.png",
-      "dispositivo": "Mobile"
+      "icono": "public/img/creatividades/display_premium.png",
+      "evidencias": {
+        "mobile": [
+          {
+            "id": 15,
+            "icono": "public/img/creatividades/evidencia_premium_mobile.png"
+          }
+        ],
+        "desktop": [
+          {
+            "id": 16,
+            "icono": "public/img/creatividades/evidencia_premium_desktop.png"
+          }
+        ]
+      }
     },
     {
       "id": 12,
       "pedido_id": 4,
       "tipo": "Creatividad",
-      "icono": "public/img/creatividades/display_takeover_desktop2.png",
-      "dispositivo": "Desktop"
+      "icono": "public/img/creatividades/display_premium2.png",
+      "evidencias": {
+        "mobile": [
+          {
+            "id": 17,
+            "icono": "public/img/creatividades/evidencia_premium_mobile2.png"
+          }
+        ],
+        "desktop": [
+          {
+            "id": 18,
+            "icono": "public/img/creatividades/evidencia_premium_desktop2.png"
+          }
+        ]
+      }
     },
     {
       "id": 13,
       "pedido_id": 4,
       "tipo": "Creatividad",
-      "icono": "public/img/creatividades/display_takeover_mobile3.png",
-      "dispositivo": "Mobile"
+      "icono": "public/img/creatividades/display_sticky.png",
+      "evidencias": {
+        "mobile": [
+          {
+            "id": 19,
+            "icono": "public/img/creatividades/evidencia_sticky_mobile.png"
+          }
+        ],
+        "desktop": [
+          {
+            "id": 20,
+            "icono": "public/img/creatividades/evidencia_sticky_desktop.png"
+          }
+        ]
+      }
     },
     {
       "id": 14,
       "pedido_id": 4,
       "tipo": "Creatividad",
-      "icono": "public/img/creatividades/display_takeover_desktop3.png",
-      "dispositivo": "Desktop"
-    },
-    {
-      "id": 15,
-      "pedido_id": 4,
-      "tipo": "Evidencia",
-      "icono": "public/img/creatividades/evidencia_mobile_display2.png",
-      "dispositivo": "Mobile"
-    },
-    {
-      "id": 16,
-      "pedido_id": 4,
-      "tipo": "Evidencia",
-      "icono": "public/img/creatividades/evidencia_desktop_display2.png",
-      "dispositivo": "Desktop"
-    },
-    {
-      "id": 17,
-      "pedido_id": 4,
-      "tipo": "Evidencia",
-      "icono": "public/img/creatividades/evidencia_mobile_display3.png",
-      "dispositivo": "Mobile"
-    },
-    {
-      "id": 18,
-      "pedido_id": 4,
-      "tipo": "Evidencia",
-      "icono": "public/img/creatividades/evidencia_desktop_display3.png",
-      "dispositivo": "Desktop"
+      "icono": "public/img/creatividades/display_sticky2.png",
+      "evidencias": {
+        "mobile": [
+          {
+            "id": 21,
+            "icono": "public/img/creatividades/evidencia_sticky_mobile2.png"
+          }
+        ],
+        "desktop": [
+          {
+            "id": 22,
+            "icono": "public/img/creatividades/evidencia_sticky_desktop2.png"
+          }
+        ]
+      }
     }
   ]
 }

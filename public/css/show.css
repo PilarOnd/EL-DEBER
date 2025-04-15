@@ -145,11 +145,66 @@ p.mb-0 {
 }
 
 .card-body {
-    padding: 1rem;
+    min-height: 250px;
+    position: relative;
+    padding: 15px;
 }
 
 .card-text {
     margin-bottom: 0;
+}
+
+/* Estilos para el modal de imágenes */
+.modal-imagen {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal-imagen img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+.cerrar-modal:hover {
+    color: #ccc;
+}
+
+/* Estilos para las tarjetas y canvas */
+canvas {
+    width: 100% !important;
+    height: 250px !important;
+}
+
+.card {
+    margin-bottom: 20px;
 }
 
 
