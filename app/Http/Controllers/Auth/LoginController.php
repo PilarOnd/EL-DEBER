@@ -31,20 +31,11 @@ class LoginController extends Controller
             $usuarioData = collect($jsonData['usuarios'])->where('usuario', $request->usuario)->first();
 
             if ($usuarioData && $request->password === $usuarioData['password']) {
-                // Crear instancia del modelo User
-                $user = new User();
-                $user->usuario = $usuarioData['usuario'];
-                $user->nombre = $usuarioData['nombre'];
-                $user->rol = $usuarioData['rol'];
-                
                 // Almacenar en sesión
-                Session::put('user', $usuarioData);
+                Session::put('usuario', $usuarioData);
                 
-                // Login manual sin usar base de datos
-                Auth::login($user, true);
-
-                // Redirigir a menu.blade.php
-                return redirect()->route('menu');
+                // Redirigir a dashboard
+                return redirect()->route('dashboard');
             }
 
             return back()
@@ -60,8 +51,7 @@ class LoginController extends Controller
 
     public function logout()
     {
-        Session::forget('user');
-        Auth::logout();
+        Session::forget('usuario');
         return redirect()->route('login');
     }
 }

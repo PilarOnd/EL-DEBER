@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'json',
         ],
     ],
 
@@ -60,16 +60,10 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
+        'json' => [
+            'driver' => 'json',
             'model' => App\Models\User::class,
         ],
-        
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
@@ -89,7 +83,7 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'users',
+            'provider' => 'json',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

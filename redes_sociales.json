@@ -1,7 +1,8 @@
 {
+    "tipo": "redes_sociales",
     "cliente": [
       {
-        "id": 1,
+        "id": 3,
         "nombre": "SOFIA",
         "color": "#ffffff",
         "color_fuente": "#ed1c24",
@@ -11,7 +12,7 @@
     "linea_pedidos": [
       {
         "id": 1,
-        "cliente_id": 1,
+        "cliente_id": 3,
         "estado": "Finalizado",
         "tipo": "Estandar",
         "objetivo": 350000,

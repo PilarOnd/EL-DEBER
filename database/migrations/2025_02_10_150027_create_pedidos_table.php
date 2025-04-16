@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->foreignId('linea_pedido_id')->constrained('lineas_pedidos');
+            $table->foreignId('linea_pedido_id')->constrained('linea_pedidos');
             $table->foreignId('anunciante')->constrained('empresas');
             $table->string('segmento');
             $table->timestamp('fecha_inicio')->nullable();

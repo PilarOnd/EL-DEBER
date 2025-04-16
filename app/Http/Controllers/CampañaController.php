@@ -16,15 +16,70 @@ class CampañaController extends Controller
 
     public function index()
     {
-        $data = $this->getJsonData();
-        
-        // Obtener todas las campañas y sus clientes relacionados
-        $campañas = collect($data['campañas'])->map(function ($campaña) use ($data) {
-            $cliente = collect($data['cliente'])->firstWhere('id', $campaña['cliente_id']);
-            return array_merge($campaña, ['cliente' => $cliente]);
-        });
+        // Obtener el usuario de la sesión
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect()->route('login');
+        }
 
-        return view('campañas.index', compact('campañas'));
+        // Cargar datos de campañas display
+        $displayData = json_decode(File::get(base_path('f_alto_impacto.json')), true);
+        $display = [];
+        if (isset($displayData['pedido'])) {
+            foreach ($displayData['pedido'] as $pedido) {
+                // Obtener la línea de pedido correspondiente
+                $lineaPedido = collect($displayData['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+                if ($lineaPedido) {
+                    // Obtener el cliente usando el cliente_id de la línea de pedido
+                    $cliente = collect($displayData['clientes'])->firstWhere('id', $lineaPedido['cliente_id']);
+                    // Si es administrador o el pedido pertenece al usuario
+                    if ($usuario['nombre'] === 'Administrador' || ($cliente && $cliente['nombre'] === $usuario['nombre'])) {
+                        $pedido['cliente'] = $cliente;
+                        $display[] = $pedido;
+                    }
+                }
+            }
+        }
+
+        // Cargar datos de campañas branded content
+        $brandedData = json_decode(File::get(base_path('branded_content.json')), true);
+        $branded = [];
+        if (isset($brandedData['pedido'])) {
+            foreach ($brandedData['pedido'] as $pedido) {
+                // Obtener la línea de pedido correspondiente
+                $lineaPedido = collect($brandedData['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+                if ($lineaPedido) {
+                    // Obtener el cliente usando el cliente_id de la línea de pedido
+                    $cliente = collect($brandedData['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+                    // Si es administrador o el pedido pertenece al usuario
+                    if ($usuario['nombre'] === 'Administrador' || ($cliente && $cliente['nombre'] === $usuario['nombre'])) {
+                        $pedido['cliente'] = $cliente;
+                        $branded[] = $pedido;
+                    }
+                }
+            }
+        }
+
+        // Cargar datos de campañas redes sociales
+        $redesData = json_decode(File::get(base_path('redes_sociales.json')), true);
+        $redes = [];
+        if (isset($redesData['pedido'])) {
+            foreach ($redesData['pedido'] as $pedido) {
+                // Obtener la línea de pedido correspondiente
+                $lineaPedido = collect($redesData['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+                if ($lineaPedido) {
+                    // Obtener el cliente usando el cliente_id de la línea de pedido
+                    $cliente = collect($redesData['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+                    // Si es administrador o el pedido pertenece al usuario
+                    if ($usuario['nombre'] === 'Administrador' || ($cliente && $cliente['nombre'] === $usuario['nombre'])) {
+                        $pedido['cliente'] = $cliente;
+                        $redes[] = $pedido;
+                    }
+                }
+            }
+        }
+
+        return view('campañas.index', compact('display', 'branded', 'redes'));
     }
  
     private function calcularTotalesBranded($pedido, $creatividades)
@@ -86,38 +141,25 @@ class CampañaController extends Controller
 
     public function showBranded($id)
     {
-        // Leer el archivo JSON
-        $json = file_get_contents(base_path('branded_content.json'));
-        $data = json_decode($json, true);
-        
-        // Obtener los datos necesarios
-        $cliente = $data['cliente'][0];
-        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
-        $pedido = $data['pedido'][0];
-        $creatividades = $data['creatividades'];
-        
-        if (!$linea_pedido) {
-            abort(404, 'Campaña no encontrada');
+        // Obtener el usuario de la sesión
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect()->route('login');
         }
 
-        // Calcular totales
-        $totales = $this->calcularTotalesBranded($pedido, $creatividades);
+        $data = json_decode(File::get(base_path('branded_content.json')), true);
+        $pedido = collect($data['pedido'])->firstWhere('id', $id);
+        $lineaPedido = collect($data['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+        $cliente = collect($data['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
 
-        // Calcular la efectividad
-        $efectividad = $this->calcularEfectividad($pedido['web']['vistas'], $linea_pedido['objetivo']);
+        // Verificar que el pedido pertenece al usuario o es administrador
+        if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
+            abort(403, 'No tienes permiso para ver este pedido');
+        }
+
+        $creatividades = collect($data['creatividades'])->where('pedido_id', $id)->values();
         
-        $pedidos = $data['pedido'];
-        
-        // Pasar los datos a la vista
-        return view('campañas.branded', compact(
-            'cliente', 
-            'linea_pedido', 
-            'pedido', 
-            'efectividad', 
-            'creatividades', 
-            'pedidos',
-            'totales'
-        ));
+        return view('campañas.branded', compact('pedido', 'cliente', 'creatividades'));
     }
 
     private function calcularTotales($creatividades)
@@ -262,127 +304,30 @@ class CampañaController extends Controller
 
     public function showDisplay($id)
     {
-        // Leer el archivo JSON
-        $json = file_get_contents(base_path('f_alto_impacto.json'));
-        $data = json_decode($json, true);
-
-        // Obtener la línea de pedido
-        $linea_pedido = collect($data['lineas_pedido'])->firstWhere('id', $id);
-        if (!$linea_pedido) {
-            abort(404, 'Campaña no encontrada');
+        // Obtener el usuario de la sesión
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect()->route('login');
         }
 
-        // Obtener datos del cliente basado en el cliente_id de la línea de pedido
-        $cliente = collect($data['clientes'])->firstWhere('id', $linea_pedido['cliente_id']);
-        if (!$cliente) {
-            abort(404, 'Cliente no encontrado');
-        }
+        $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
+        $pedido = collect($data['pedido'])->firstWhere('id', $id);
 
-        // Obtener el pedido relacionado
-        $pedido = collect($data['pedido'])->firstWhere('id_lineadepedidos', $linea_pedido['id']);
-
+        // Verificar que el pedido existe
         if (!$pedido) {
-            abort(404, 'No se encontró el pedido asociado a esta campaña');
+            abort(404, 'El pedido no existe');
         }
 
-        // Calcular la efectividad usando la función global
-        $efectividad = $this->calcularEfectividad($pedido['impresiones'], $linea_pedido['objetivo']);
+        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+        $cliente = collect($data['clientes'])->firstWhere('id', $linea_pedido['cliente_id']);
 
-        // Obtener creatividades relacionadas
-        $creatividades = collect($data['creatividades'])
-            ->where('pedido_id', $pedido['id'])
-            ->values()
-            ->all();
-
-        // Preparar datos para el display takeover
-        $displayTakeover = [
-            'metricas_totales' => [
-                'impresiones' => $pedido['impresiones'],
-                'clics' => $pedido['clics'],
-                'ctr' => $pedido['clics'] > 0 ? round(($pedido['clics'] / $pedido['impresiones']) * 100, 2) : 0,
-                'efectividad' => $efectividad
-            ],
-            'resultados_bloque' => []
-        ];
-
-        // Generar array de fechas desde fecha_hora_inicio hasta fecha_hora_fin
-        $fechaInicio = \Carbon\Carbon::parse($pedido['fecha_hora_inicio'])->startOfDay();
-        $fechaFin = \Carbon\Carbon::parse($pedido['fecha_hora_fin'])->startOfDay();
-        $fechas = [];
-        
-        for($fecha = clone $fechaInicio; $fecha->lte($fechaFin); $fecha->addDay()) {
-            $fechas[] = $fecha->format('Y-m-d');
+        // Verificar que el pedido pertenece al usuario o es administrador
+        if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
+            abort(403, 'No tienes permiso para ver este pedido');
         }
 
-        foreach ($fechas as $fecha) {
-            if (isset($pedido['histograma_diario'][$fecha])) {
-                $datos = $pedido['histograma_diario'][$fecha];
-            } else {
-                // Si no hay datos para esta fecha, usar valores en cero
-                $datos = [
-                    'impresiones' => 0,
-                    'clics' => 0
-                ];
-            }
-            
-            // Desktop
-            $displayTakeover['resultados_bloque'][] = [
-                'nombre' => 'Desktop',
-                'fecha' => $fecha,
-                'impresiones' => round($datos['impresiones'] * 0.12),
-                'clics' => round($datos['clics'] * 0.31),
-                'ctr' => 0
-            ];
-
-            // Mobile
-            $displayTakeover['resultados_bloque'][] = [
-                'nombre' => 'Mobile',
-                'fecha' => $fecha,
-                'impresiones' => round($datos['impresiones'] * 0.88),
-                'clics' => round($datos['clics'] * 0.69),
-                'ctr' => 0
-            ];
-        }
-
-        // Calcular CTR para cada bloque
-        foreach ($displayTakeover['resultados_bloque'] as &$bloque) {
-            $bloque['ctr'] = $bloque['impresiones'] > 0 ? 
-                round(($bloque['clics'] / $bloque['impresiones']) * 100, 2) : 0;
-        }
-
-        // Calcular totales por dispositivo
-        $totalesDesktop = [
-            'impresiones' => collect($displayTakeover['resultados_bloque'])
-                ->where('nombre', 'Desktop')
-                ->sum('impresiones'),
-            'clics' => collect($displayTakeover['resultados_bloque'])
-                ->where('nombre', 'Desktop')
-                ->sum('clics')
-        ];
+        $creatividades = collect($data['creatividades'])->where('pedido_id', $id)->values();
         
-        $totalesMobile = [
-            'impresiones' => collect($displayTakeover['resultados_bloque'])
-                ->where('nombre', 'Mobile')
-                ->sum('impresiones'),
-            'clics' => collect($displayTakeover['resultados_bloque'])
-                ->where('nombre', 'Mobile')
-                ->sum('clics')
-        ];
-        
-        $totalesDesktop['ctr'] = $totalesDesktop['impresiones'] > 0 
-            ? round(($totalesDesktop['clics'] / $totalesDesktop['impresiones']) * 100, 2) 
-            : 0;
-        
-        $totalesMobile['ctr'] = $totalesMobile['impresiones'] > 0 
-            ? round(($totalesMobile['clics'] / $totalesMobile['impresiones']) * 100, 2) 
-            : 0;
-
-        // Agregar los totales al array displayTakeover
-        $displayTakeover['totales_dispositivos'] = [
-            'desktop' => $totalesDesktop,
-            'mobile' => $totalesMobile
-        ];
-
         // Preparar datos del histograma
         $histograma = [
             'fechas' => [],
@@ -392,19 +337,233 @@ class CampañaController extends Controller
         ];
 
         foreach ($pedido['histograma_diario'] as $fecha => $datos) {
-            $histograma['fechas'][] = \Carbon\Carbon::parse($fecha)->format('d/m');
+            $histograma['fechas'][] = \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('D [de] MMMM');
             $histograma['impresiones'][] = $datos['impresiones'];
             $histograma['clics'][] = $datos['clics'];
-            $histograma['ctr'][] = $datos['clics'] > 0 ? round(($datos['clics'] / $datos['impresiones']) * 100, 2) : 0;
+            $ctr = $datos['impresiones'] > 0 ? round(($datos['clics'] / $datos['impresiones']) * 100, 2) : 0;
+            $histograma['ctr'][] = $ctr;
         }
 
-        return view('campañas.display', compact(
-            'cliente',
-            'linea_pedido',
-            'pedido',
-            'creatividades',
-            'displayTakeover',
-            'histograma'
-        ));
+        // Calcular métricas totales
+        $displayTakeover = [
+            'metricas_totales' => [
+                'impresiones' => $pedido['impresiones'],
+                'clics' => $pedido['clics'],
+                'ctr' => $pedido['impresiones'] > 0 ? round(($pedido['clics'] / $pedido['impresiones']) * 100, 2) : 0
+            ],
+            'totales_dispositivos' => [
+                'mobile' => [
+                    'impresiones' => $pedido['dispositivos']['mobile']['impresiones'],
+                    'clics' => $pedido['dispositivos']['mobile']['clics'],
+                    'ctr' => $pedido['dispositivos']['mobile']['impresiones'] > 0 ? 
+                        round(($pedido['dispositivos']['mobile']['clics'] / $pedido['dispositivos']['mobile']['impresiones']) * 100, 2) : 0
+                ],
+                'desktop' => [
+                    'impresiones' => $pedido['dispositivos']['desktop']['impresiones'],
+                    'clics' => $pedido['dispositivos']['desktop']['clics'],
+                    'ctr' => $pedido['dispositivos']['desktop']['impresiones'] > 0 ? 
+                        round(($pedido['dispositivos']['desktop']['clics'] / $pedido['dispositivos']['desktop']['impresiones']) * 100, 2) : 0
+                ]
+            ],
+            'resultados_bloque' => collect($pedido['histograma_diario'])->map(function($item, $fecha) {
+                $ctr = $item['impresiones'] > 0 ? round(($item['clics'] / $item['impresiones']) * 100, 2) : 0;
+                return [
+                    'nombre' => $fecha,
+                    'fecha' => $fecha,
+                    'impresiones' => $item['impresiones'],
+                    'clics' => $item['clics'],
+                    'ctr' => $ctr
+                ];
+            })->values()->all()
+        ];
+
+        return view('campañas.display', compact('pedido', 'cliente', 'creatividades', 'linea_pedido', 'displayTakeover', 'histograma'));
+    }
+
+    public function showRedes($id)
+    {
+        // Obtener el usuario de la sesión
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect()->route('login');
+        }
+
+        $data = json_decode(File::get(base_path('redes_sociales.json')), true);
+        $pedido = collect($data['pedido'])->firstWhere('id', $id);
+        $lineaPedido = collect($data['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+        $cliente = collect($data['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+
+        // Verificar que el pedido pertenece al usuario o es administrador
+        if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
+            abort(403, 'No tienes permiso para ver este pedido');
+        }
+
+        $creatividades = collect($data['creatividades'])->where('pedido_id', $id)->values();
+        
+        return view('campañas.redes', compact('pedido', 'cliente', 'creatividades'));
+    }
+
+    public function createDisplay()
+    {
+        // Obtener el usuario de la sesión
+        $usuario = session('usuario');
+        if (!$usuario) {
+            return redirect()->route('login');
+        }
+
+        // Cargar datos del archivo JSON
+        $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
+        
+        // Obtener la lista de clientes
+        $clientes = $data['clientes'] ?? [];
+
+        // Si no es administrador, filtrar solo los clientes del usuario
+        if ($usuario['nombre'] !== 'Administrador') {
+            $clientes = array_filter($clientes, function($cliente) use ($usuario) {
+                return $cliente['nombre'] === $usuario['nombre'];
+            });
+        }
+
+        return view('campañas.create_display', compact('clientes'));
+    }
+
+    public function createBranded()
+    {
+        $data = json_decode(File::get(base_path('branded_content.json')), true);
+        $clientes = $data['cliente'] ?? [];
+        return view('campañas.campañasbranded.create', compact('clientes'));
+    }
+
+    public function createRedes()
+    {
+        $data = json_decode(File::get(base_path('redes_sociales.json')), true);
+        $clientes = $data['cliente'] ?? [];
+        return view('campañas.campañasredes.create', compact('clientes'));
+    }
+
+    public function storeDisplay(Request $request)
+    {
+        try {
+            $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
+            
+            // Crear nuevo ID
+            $newId = count($data['pedido']) + 1;
+            
+            // Crear nueva línea de pedido
+            $lineaPedidoId = count($data['linea_pedidos']) + 1;
+            $lineaPedido = [
+                'id' => $lineaPedidoId,
+                'cliente_id' => $request->cliente_id,
+                'fecha_hora_inicio' => $request->fecha_hora_inicio,
+                'fecha_hora_fin' => $request->fecha_hora_fin,
+                'estado' => $request->estado
+            ];
+            
+            // Crear nuevo pedido
+            $pedido = [
+                'id' => $newId,
+                'id_lineadepedidos' => $lineaPedidoId,
+                'nombre' => $request->nombre,
+                'banner' => $request->banner,
+                'fecha_hora_inicio' => $request->fecha_hora_inicio,
+                'fecha_hora_fin' => $request->fecha_hora_fin,
+                'estado' => $request->estado
+            ];
+            
+            // Agregar a los arrays existentes
+            $data['linea_pedidos'][] = $lineaPedido;
+            $data['pedido'][] = $pedido;
+            
+            // Guardar en el archivo JSON
+            File::put(base_path('f_alto_impacto.json'), json_encode($data, JSON_PRETTY_PRINT));
+            
+            return redirect()->route('campañas.index')->with('success', 'Campaña Display creada exitosamente');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al crear la campaña: ' . $e->getMessage());
+        }
+    }
+
+    public function storeBranded(Request $request)
+    {
+        try {
+            $data = json_decode(File::get(base_path('branded_content.json')), true);
+            
+            // Crear nuevo ID
+            $newId = count($data['pedido']) + 1;
+            
+            // Crear nueva línea de pedido
+            $lineaPedidoId = count($data['linea_pedidos']) + 1;
+            $lineaPedido = [
+                'id' => $lineaPedidoId,
+                'cliente_id' => $request->cliente_id,
+                'fecha_hora_inicio' => $request->fecha_hora_inicio,
+                'fecha_hora_fin' => $request->fecha_hora_fin,
+                'estado' => $request->estado
+            ];
+            
+            // Crear nuevo pedido
+            $pedido = [
+                'id' => $newId,
+                'id_lineadepedidos' => $lineaPedidoId,
+                'nombre' => $request->nombre,
+                'contenido' => $request->contenido,
+                'fecha_hora_inicio' => $request->fecha_hora_inicio,
+                'fecha_hora_fin' => $request->fecha_hora_fin,
+                'estado' => $request->estado
+            ];
+            
+            // Agregar a los arrays existentes
+            $data['linea_pedidos'][] = $lineaPedido;
+            $data['pedido'][] = $pedido;
+            
+            // Guardar en el archivo JSON
+            File::put(base_path('branded_content.json'), json_encode($data, JSON_PRETTY_PRINT));
+            
+            return redirect()->route('campañas.index')->with('success', 'Campaña Branded Content creada exitosamente');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al crear la campaña: ' . $e->getMessage());
+        }
+    }
+
+    public function storeRedes(Request $request)
+    {
+        try {
+            $data = json_decode(File::get(base_path('redes_sociales.json')), true);
+            
+            // Crear nuevo ID
+            $newId = count($data['pedido']) + 1;
+            
+            // Crear nueva línea de pedido
+            $lineaPedidoId = count($data['linea_pedidos']) + 1;
+            $lineaPedido = [
+                'id' => $lineaPedidoId,
+                'cliente_id' => $request->cliente_id,
+                'fecha_hora_inicio' => $request->fecha_hora_inicio,
+                'fecha_hora_fin' => $request->fecha_hora_fin,
+                'estado' => $request->estado
+            ];
+            
+            // Crear nuevo pedido
+            $pedido = [
+                'id' => $newId,
+                'id_lineadepedidos' => $lineaPedidoId,
+                'nombre' => $request->nombre,
+                'redes_sociales' => $request->redes_sociales,
+                'fecha_hora_inicio' => $request->fecha_hora_inicio,
+                'fecha_hora_fin' => $request->fecha_hora_fin,
+                'estado' => $request->estado
+            ];
+            
+            // Agregar a los arrays existentes
+            $data['linea_pedidos'][] = $lineaPedido;
+            $data['pedido'][] = $pedido;
+            
+            // Guardar en el archivo JSON
+            File::put(base_path('redes_sociales.json'), json_encode($data, JSON_PRETTY_PRINT));
+            
+            return redirect()->route('campañas.index')->with('success', 'Campaña de Redes Sociales creada exitosamente');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al crear la campaña: ' . $e->getMessage());
+        }
     }
 }

@@ -1,24 +1,25 @@
 {
+  "tipo": "display",
   "clientes": [
     {
       "id": 1,
-      "nombre": "Banco Mercantil",
-      "color": "#296140",
-      "color_fuente": "#296140",
-      "logo": "public/img/logos/bancomercantil-logo.png"
-    },
-    {
-      "id": 2,
       "nombre": "Tigo",
       "color": "#00377a",
       "color_fuente": "#00377a",
       "logo": "public/img/logos/tigo-logo.png"
+    },
+    {
+      "id": 4,
+      "nombre": "Banco Mercantil",
+      "color": "#296140",
+      "color_fuente": "#296140",
+      "logo": "public/img/logos/bancomercantil-logo.png"
     }
   ],
-  "lineas_pedido": [
+  "linea_pedidos": [
     {
       "id": 2,
-      "cliente_id": 1,
+      "cliente_id": 4,
       "estado": "Finalizado",
       "tipo": "Propia",
       "objetivo": 70000,
@@ -29,7 +30,7 @@
     },
     {
       "id": 3,
-      "cliente_id": 2,
+      "cliente_id": 1,
       "estado": "Finalizado",
       "tipo": "Estandar",
       "objetivo": 3000000,

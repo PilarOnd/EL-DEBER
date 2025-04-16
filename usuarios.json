@@ -2,10 +2,43 @@
     "usuarios": [
         {
           "id": 1,
-          "usuario": "admin",
-          "password": "admin",
+          "usuario": "Administrador",
+          "password": "12345678",
           "nombre": "Administrador",
-          "rol": "admin"
+          "rol": "admin",
+          "cliente_id": null
+        },
+        {
+          "id": 2,
+          "usuario": "Tigo",
+          "password": "12345678",
+          "nombre": "Tigo",
+          "rol": "cliente",
+          "cliente_id": 1
+        },
+        {
+          "id": 3,
+          "usuario": "Viva",
+          "password": "12345678",
+          "nombre": "Viva",
+          "rol": "cliente",
+          "cliente_id": 2
+        },
+        {
+          "id": 4,
+          "usuario": "Sofia",
+          "password": "12345678",
+          "nombre": "Sofia",
+          "rol": "cliente",
+          "cliente_id": 3
+        },
+        {
+          "id": 5,
+          "usuario": "Banco Mercantil",
+          "password": "12345678",
+          "nombre": "Banco Mercantil",
+          "rol": "cliente",
+          "cliente_id": 4
         }
       ]
 }

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('lineas_pedidos', function (Blueprint $table) {
+    Schema::create('linea_pedidos', function (Blueprint $table) {
         $table->id();
         $table->string('nombre');
         $table->enum('estado', ['detenido', 'finalizado', 'publicando', 'listo']);
@@ -28,7 +28,7 @@ return new class extends Migration
 
 public function down()
 {
-    Schema::dropIfExists('lineas_pedidos');
+    Schema::dropIfExists('linea_pedidos');
 }
 
 };
