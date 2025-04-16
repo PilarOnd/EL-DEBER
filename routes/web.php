@@ -34,23 +34,31 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Rutas de campañas
+    // Rutas de campañas (índice general)
     Route::get('/campañas', [CampañaController::class, 'index'])->name('campañas.index');
-    Route::get('/campañas/display/{id}', [CampañaController::class, 'showDisplay'])->name('campañas.display');
-    Route::get('/campañas/branded/{id}', [CampañaController::class, 'showBranded'])->name('campañas.branded');
-    Route::get('/campañas/redes/{id}', [CampañaController::class, 'showRedes'])->name('campañas.redes');
-    Route::get('/campañas/digital/{id}', [CampañaController::class, 'showDigital'])->name('campañas.digital');
     Route::get('/campañas/{id}/todas', [CampañaController::class, 'todasCampañas'])->name('campañas.todas');
+    Route::get('/campañas/digital/{id}', [CampañaController::class, 'showDigital'])->name('campañas.digital');
 
-    // Rutas para crear campañas
-    Route::get('/campañas/display/create', [CampañaController::class, 'createDisplay'])->name('campañas.display.create');
-    Route::get('/campañas/branded/create', [CampañaController::class, 'createBranded'])->name('campañas.branded.create');
-    Route::get('/campañas/redes/create', [CampañaController::class, 'createRedes'])->name('campañas.redes.create');
+    // Rutas para Campañas Display
+    Route::prefix('campañas/display')->group(function () {
+        Route::get('/create', [CampañaController::class, 'createDisplay'])->name('campañas.display.create');
+        Route::post('/', [CampañaController::class, 'storeDisplay'])->name('campañas.display.store');
+        Route::get('/{id}', [CampañaController::class, 'showDisplay'])->name('campañas.display');
+    });
 
-    // Rutas para almacenar campañas
-    Route::post('/campañas/display/store', [CampañaController::class, 'storeDisplay'])->name('campañas.display.store');
-    Route::post('/campañas/branded/store', [CampañaController::class, 'storeBranded'])->name('campañas.branded.store');
-    Route::post('/campañas/redes/store', [CampañaController::class, 'storeRedes'])->name('campañas.redes.store');
+    // Rutas para Campañas Branded Content
+    Route::prefix('campañas/branded')->group(function () {
+        Route::get('/create', [CampañaController::class, 'createBranded'])->name('campañas.branded.create');
+        Route::post('/', [CampañaController::class, 'storeBranded'])->name('campañas.branded.store');
+        Route::get('/{id}', [CampañaController::class, 'showBranded'])->name('campañas.branded');
+    });
+
+    // Rutas para Campañas Redes Sociales
+    Route::prefix('campañas/redes')->group(function () {
+        Route::get('/create', [CampañaController::class, 'createRedes'])->name('campañas.redes.create');
+        Route::post('/', [CampañaController::class, 'storeRedes'])->name('campañas.redes.store');
+        Route::get('/{id}', [CampañaController::class, 'showRedes'])->name('campañas.redes');
+    });
 
     Route::get('/filtrar-campañas', [MenuController::class, 'filtrarCampañas'])->name('filtrar.campañas');
 });

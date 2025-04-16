@@ -148,16 +148,31 @@ class CampañaController extends Controller
         }
 
         $data = json_decode(File::get(base_path('branded_content.json')), true);
-        $pedido = collect($data['pedido'])->firstWhere('id', $id);
-        $lineaPedido = collect($data['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
-        $cliente = collect($data['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+        
+        // Verificar si existe el pedido
+        $pedido = collect($data['pedido'] ?? [])->firstWhere('id', $id);
+        if (!$pedido) {
+            abort(404, 'Pedido no encontrado');
+        }
+
+        // Verificar si existe la línea de pedido
+        $lineaPedido = collect($data['linea_pedidos'] ?? [])->firstWhere('id', $pedido['id_lineadepedidos']);
+        if (!$lineaPedido) {
+            abort(404, 'Línea de pedido no encontrada');
+        }
+
+        // Verificar si existe el cliente
+        $cliente = collect($data['cliente'] ?? [])->firstWhere('id', $lineaPedido['cliente_id']);
+        if (!$cliente) {
+            abort(404, 'Cliente no encontrado');
+        }
 
         // Verificar que el pedido pertenece al usuario o es administrador
-        if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
+        if ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre']) {
             abort(403, 'No tienes permiso para ver este pedido');
         }
 
-        $creatividades = collect($data['creatividades'])->where('pedido_id', $id)->values();
+        $creatividades = collect($data['creatividades'] ?? [])->where('pedido_id', $id)->values();
         
         return view('campañas.branded', compact('pedido', 'cliente', 'creatividades'));
     }
@@ -389,56 +404,54 @@ class CampañaController extends Controller
         }
 
         $data = json_decode(File::get(base_path('redes_sociales.json')), true);
-        $pedido = collect($data['pedido'])->firstWhere('id', $id);
-        $lineaPedido = collect($data['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
-        $cliente = collect($data['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+        
+        // Verificar si existe el pedido
+        $pedido = collect($data['pedido'] ?? [])->firstWhere('id', $id);
+        if (!$pedido) {
+            abort(404, 'Pedido no encontrado');
+        }
+
+        // Verificar si existe la línea de pedido
+        $lineaPedido = collect($data['linea_pedidos'] ?? [])->firstWhere('id', $pedido['id_lineadepedidos']);
+        if (!$lineaPedido) {
+            abort(404, 'Línea de pedido no encontrada');
+        }
+
+        // Verificar si existe el cliente
+        $cliente = collect($data['cliente'] ?? [])->firstWhere('id', $lineaPedido['cliente_id']);
+        if (!$cliente) {
+            abort(404, 'Cliente no encontrado');
+        }
 
         // Verificar que el pedido pertenece al usuario o es administrador
-        if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
+        if ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre']) {
             abort(403, 'No tienes permiso para ver este pedido');
         }
 
-        $creatividades = collect($data['creatividades'])->where('pedido_id', $id)->values();
+        $creatividades = collect($data['creatividades'] ?? [])->where('pedido_id', $id)->values();
         
         return view('campañas.redes', compact('pedido', 'cliente', 'creatividades'));
     }
 
     public function createDisplay()
     {
-        // Obtener el usuario de la sesión
-        $usuario = session('usuario');
-        if (!$usuario) {
-            return redirect()->route('login');
-        }
-
-        // Cargar datos del archivo JSON
         $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
-        
-        // Obtener la lista de clientes
         $clientes = $data['clientes'] ?? [];
-
-        // Si no es administrador, filtrar solo los clientes del usuario
-        if ($usuario['nombre'] !== 'Administrador') {
-            $clientes = array_filter($clientes, function($cliente) use ($usuario) {
-                return $cliente['nombre'] === $usuario['nombre'];
-            });
-        }
-
-        return view('campañas.create_display', compact('clientes'));
+        return view('/campañas/campañasdisplay/create_display', compact('clientes'));
     }
 
     public function createBranded()
     {
         $data = json_decode(File::get(base_path('branded_content.json')), true);
         $clientes = $data['cliente'] ?? [];
-        return view('campañas.campañasbranded.create', compact('clientes'));
+        return view('/campañas/campañasbranded/create_branded', compact('clientes'));
     }
 
     public function createRedes()
     {
         $data = json_decode(File::get(base_path('redes_sociales.json')), true);
         $clientes = $data['cliente'] ?? [];
-        return view('campañas.campañasredes.create', compact('clientes'));
+        return view('/campañas/campañasredes/create_redes', compact('clientes'));
     }
 
     public function storeDisplay(Request $request)
@@ -538,9 +551,13 @@ class CampañaController extends Controller
             $lineaPedido = [
                 'id' => $lineaPedidoId,
                 'cliente_id' => $request->cliente_id,
-                'fecha_hora_inicio' => $request->fecha_hora_inicio,
-                'fecha_hora_fin' => $request->fecha_hora_fin,
-                'estado' => $request->estado
+                'estado' => $request->estado,
+                'tipo' => 'Estandar',
+                'objetivo' => 0,
+                'tarifa' => [
+                    'monto' => 0,
+                    'moneda' => 'USD'
+                ]
             ];
             
             // Crear nuevo pedido
@@ -548,10 +565,29 @@ class CampañaController extends Controller
                 'id' => $newId,
                 'id_lineadepedidos' => $lineaPedidoId,
                 'nombre' => $request->nombre,
-                'redes_sociales' => $request->redes_sociales,
+                'estado' => $request->estado,
+                'tipo' => 'Estandar',
                 'fecha_hora_inicio' => $request->fecha_hora_inicio,
                 'fecha_hora_fin' => $request->fecha_hora_fin,
-                'estado' => $request->estado
+                'facebook' => [
+                    'visualizaciones' => 0,
+                    'alcance' => 0,
+                    'interacciones' => 0,
+                    'clics_enlaces' => 0,
+                    'reacciones' => 0,
+                    'comentarios' => 0,
+                    'compartidos' => 0,
+                    'guardados' => 0
+                ],
+                'instagram' => [
+                    'visualizaciones' => 0,
+                    'alcance' => 0,
+                    'interacciones' => 0,
+                    'me_gusta' => 0,
+                    'comentarios' => 0,
+                    'compartidos' => 0,
+                    'guardados' => 0
+                ]
             ];
             
             // Agregar a los arrays existentes
