@@ -18,11 +18,22 @@
         <div class="login-right">
             <h2>Login</h2>
             <p>Para revisar sus campañas activas, por favor inicie sesión con su cuenta de ED-REPORTES.</p>
+            
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('login.post') }}" id="loginForm">
                 @csrf
                 <div class="input-group">
                     <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" name="usuario" required>
+                    <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" required>
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
@@ -40,7 +51,18 @@
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            this.submit();  // Usar submit de forma controlada por el formulario Blade.
+            
+            // Validar campos
+            const usuario = document.getElementById('usuario').value;
+            const password = document.getElementById('password').value;
+            
+            if (!usuario || !password) {
+                alert('Por favor complete todos los campos');
+                return;
+            }
+            
+            // Enviar formulario
+            this.submit();
         });
     </script>
 </body>

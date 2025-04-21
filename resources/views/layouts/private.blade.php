@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
     <link rel="stylesheet" href="{{ asset('css/private.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/campañas/display/create_display.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
@@ -24,37 +25,37 @@
             </div>
 
             <ul class="list-unstyled components">
-                <li class="active">
+                <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}">
                         <i class="bi bi-house-door"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ request()->routeIs('campañas.*') ? 'active' : '' }}">
                     <a href="{{ route('campañas.index') }}">
                         <i class="bi bi-megaphone"></i>
                         <span>Campañas</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ request()->routeIs('reportes.*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="bi bi-graph-up"></i>
                         <span>Reportes</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ request()->routeIs('facturas.*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="bi bi-file-earmark-text"></i>
                         <span>Facturas</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ request()->routeIs('mensajes.*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="bi bi-chat-dots"></i>
                         <span>Mensajes</span>
                     </a>
                 </li>
-                <li>
+                <li class="{{ request()->routeIs('configuracion.*') ? 'active' : '' }}">
                     <a href="#">
                         <i class="bi bi-gear"></i>
                         <span>Configuración</span>

@@ -23,12 +23,15 @@ Route::get('/', function () {
 })->name('home');
 
 // Rutas de autenticación
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+});
+
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Rutas protegidas
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth.custom'])->group(function () {
     // Ruta del menú
     Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 

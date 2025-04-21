@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class CampañaController extends Controller
 {
@@ -13,6 +14,57 @@ class CampañaController extends Controller
         $json = file_get_contents(base_path('branded_content.json'));
         return json_decode($json, true);
     }
+
+    private $medidasBannersDefault = [
+        'premium' => [
+            'desktop' => [
+                'top' => '970x90',
+                'l1' => '120x600',
+                'l2' => '120x600',
+                'c1' => '300x250'
+            ],
+            'mobile' => [
+                'top' => '320x100',
+                'a1' => '300x250'
+            ]
+        ],
+        'gold' => [
+            'desktop' => [
+                'a1' => '300x250',
+                'a2' => '300x250',
+                'c2' => '300x250',
+                'sb1' => '300x250',
+                'sb2' => '300x600'
+            ],
+            'mobile' => [
+                'a2' => '300x250',
+                'a3' => '300x250',
+                'c2' => '300x250',
+                'a1' => '300x100'
+            ]
+        ],
+        'social' => [
+            'desktop' => [
+                'c3' => '300x250',
+                'c4' => '300x250',
+                'layer' => '970x250',
+                'c2' => '300x250',
+                'sidebar' => '300x600'
+            ],
+            'mobile' => [
+                'cinturon2' => '320x100',
+                'c3' => '300x250'
+            ]
+        ],
+        'take_over' => [
+            'desktop' => '800x400',
+            'mobile' => '300x400'
+        ],
+        'sticky' => [
+            'desktop' => '970x90',
+            'mobile' => '320x100'
+        ]
+    ];
 
     public function index()
     {
@@ -435,9 +487,49 @@ class CampañaController extends Controller
 
     public function createDisplay()
     {
-        $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
-        $clientes = $data['clientes'] ?? [];
-        return view('/campañas/campañasdisplay/create_display', compact('clientes'));
+        try {
+            $jsonPath = base_path('f_alto_impacto.json');
+            
+            if (!File::exists($jsonPath)) {
+                throw new \Exception('El archivo de medidas de banners no existe');
+            }
+
+            $jsonContent = File::get($jsonPath);
+            $data = json_decode($jsonContent, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Error al decodificar el JSON: ' . json_last_error_msg());
+            }
+
+            $medidasBanners = $data['medidas_banners'] ?? null;
+
+            if (!$medidasBanners) {
+                Log::warning('No se encontraron medidas de banners en el JSON, usando valores por defecto');
+                $medidasBanners = $this->medidasBannersDefault;
+            }
+
+            Log::info('Datos que se enviarán a la vista:', [
+                'medidas_banners' => $medidasBanners,
+                'tiene_datos' => !empty($medidasBanners),
+                'claves_disponibles' => array_keys($medidasBanners)
+            ]);
+
+            return view('campañas.campañasdisplay.create_display', [
+                'medidasBanners' => $medidasBanners
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error al cargar medidas de banners:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            // En caso de error, usar los valores por defecto
+            return view('campañas.campañasdisplay.create_display', [
+                'medidasBanners' => $this->medidasBannersDefault,
+                'error' => 'Error al cargar las medidas de banners: ' . $e->getMessage()
+            ]);
+        }
     }
 
     public function createBranded()

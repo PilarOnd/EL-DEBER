@@ -12,6 +12,10 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
+        // Si ya está autenticado, redirigir al dashboard
+        if (Session::has('usuario')) {
+            return redirect()->route('dashboard');
+        }
         return view('login');
     }
 
@@ -35,7 +39,7 @@ class LoginController extends Controller
                 Session::put('usuario', $usuarioData);
                 
                 // Redirigir a dashboard
-                return redirect()->route('dashboard');
+                return redirect()->intended(route('dashboard'));
             }
 
             return back()
@@ -43,8 +47,9 @@ class LoginController extends Controller
                 ->withInput($request->except('password'));
 
         } catch (\Exception $e) {
+            \Log::error('Error en login: ' . $e->getMessage());
             return back()
-                ->withErrors(['error' => 'Error al procesar la solicitud: ' . $e->getMessage()])
+                ->withErrors(['error' => 'Error al procesar la solicitud. Por favor intente nuevamente.'])
                 ->withInput($request->except('password'));
         }
     }
