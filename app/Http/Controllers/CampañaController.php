@@ -195,32 +195,26 @@ class CampañaController extends Controller
         }
 
         $data = json_decode(File::get(base_path('branded_content.json')), true);
-        
-        // Verificar si existe el pedido
-        $pedido = collect($data['pedido'] ?? [])->firstWhere('id', $id);
-        if (!$pedido) {
-            abort(404, 'Pedido no encontrado en el archivo branded_content.json');
-        }
-
-        // Verificar si existe la línea de pedido
-        $lineaPedido = collect($data['linea_pedidos'] ?? [])->firstWhere('id', $pedido['id_lineadepedidos']);
+        // Buscar la línea de pedido por id
+        $lineaPedido = collect($data['linea_pedidos'] ?? [])->firstWhere('id', $id);
         if (!$lineaPedido) {
-            abort(404, 'Línea de pedido no encontrada para el pedido con id ' . $id);
+            abort(404, 'Línea de pedido no encontrada');
         }
-
-        // Verificar si existe el cliente
+        // Buscar el pedido relacionado
+        $pedido = collect($data['pedido'] ?? [])->firstWhere('id_lineadepedidos', $lineaPedido['id']);
+        if (!$pedido) {
+            abort(404, 'Pedido no encontrado para la línea de pedido');
+        }
+        // Buscar el cliente
         $cliente = collect($data['cliente'] ?? [])->firstWhere('id', $lineaPedido['cliente_id']);
         if (!$cliente) {
-            abort(404, 'Cliente no encontrado para la línea de pedido con id ' . $lineaPedido['id']);
+            abort(404, 'Cliente no encontrado para la línea de pedido');
         }
-
         // Verificar que el pedido pertenece al usuario o es administrador
         if ($usuario['nombre'] !== 'Administrador' && (!isset($usuario['cliente_id']) || $cliente['id'] != $usuario['cliente_id'])) {
             abort(403, 'No tienes permiso para ver este pedido');
         }
-
-        $creatividades = collect($data['creatividades'] ?? [])->where('pedido_id', $id)->values();
-        
+        $creatividades = collect($data['creatividades'] ?? [])->where('pedido_id', $pedido['id'])->values();
         $totales = $this->calcularTotalesBranded($pedido, $creatividades);
         $pedidos = [$pedido];
         return view('campañas.branded', compact('pedido', 'cliente', 'creatividades', 'lineaPedido', 'totales', 'pedidos'));
@@ -394,6 +388,10 @@ class CampañaController extends Controller
             abort(403, 'No tienes permiso para ver este pedido');
         }
         $creatividades = collect($data['creatividades'])->where('pedido_id', $pedido['id'])->values();
+        // Calcular métricas
+        $totalImpresiones = $pedido['impresiones'] ?? 0;
+        $porcentajePresupuesto = $linea_pedido['objetivo'] > 0 ? min(100, ($totalImpresiones / $linea_pedido['objetivo']) * 100) : 0;
+        $efectividad = $linea_pedido['objetivo'] > 0 ? round(($totalImpresiones / $linea_pedido['objetivo']) * 100, 2) : 0;
         // Preparar datos del histograma
         $histograma = [
             'fechas' => [],
@@ -440,7 +438,7 @@ class CampañaController extends Controller
                 ];
             })->values()->all()
         ];
-        return view('campañas.display', compact('pedido', 'cliente', 'creatividades', 'linea_pedido', 'displayTakeover', 'histograma'));
+        return view('campañas.display', compact('pedido', 'cliente', 'creatividades', 'linea_pedido', 'displayTakeover', 'histograma', 'totalImpresiones', 'porcentajePresupuesto', 'efectividad'));
     }
 
     public function showRedes($id)
@@ -452,33 +450,39 @@ class CampañaController extends Controller
         }
 
         $data = json_decode(File::get(base_path('redes_sociales.json')), true);
-        
-        // Verificar si existe el pedido
-        $pedido = collect($data['pedido'] ?? [])->firstWhere('id', $id);
-        if (!$pedido) {
-            abort(404, 'Pedido no encontrado');
-        }
-
-        // Verificar si existe la línea de pedido
-        $lineaPedido = collect($data['linea_pedidos'] ?? [])->firstWhere('id', $pedido['id_lineadepedidos']);
+        // Buscar la línea de pedido por id
+        $lineaPedido = collect($data['linea_pedidos'] ?? [])->firstWhere('id', $id);
         if (!$lineaPedido) {
             abort(404, 'Línea de pedido no encontrada');
         }
-
-        // Verificar si existe el cliente
+        // Buscar los pedidos relacionados
+        $pedidos = collect($data['pedido'] ?? [])->where('id_lineadepedidos', $lineaPedido['id'])->values();
+        if ($pedidos->isEmpty()) {
+            abort(404, 'Pedidos no encontrados para la línea de pedido');
+        }
+        // Buscar el cliente
         $cliente = collect($data['cliente'] ?? [])->firstWhere('id', $lineaPedido['cliente_id']);
         if (!$cliente) {
-            abort(404, 'Cliente no encontrado');
+            abort(404, 'Cliente no encontrado para la línea de pedido');
         }
-
         // Verificar que el pedido pertenece al usuario o es administrador
-        if ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre']) {
+        if ($usuario['nombre'] !== 'Administrador' && (!isset($usuario['cliente_id']) || $cliente['id'] != $usuario['cliente_id'])) {
             abort(403, 'No tienes permiso para ver este pedido');
         }
-
-        $creatividades = collect($data['creatividades'] ?? [])->where('pedido_id', $id)->values();
-        
-        return view('campañas.redes', compact('pedido', 'cliente', 'creatividades'));
+        $creatividades = collect($data['creatividades'] ?? [])->whereIn('pedido_id', $pedidos->pluck('id'))->values();
+        // Calcular métricas
+        $totalImpresiones = 0;
+        foreach ($pedidos as $pedido) {
+            if (isset($pedido['facebook']['visualizaciones'])) {
+                $totalImpresiones += $pedido['facebook']['visualizaciones'];
+            }
+            if (isset($pedido['instagram']['visualizaciones'])) {
+                $totalImpresiones += $pedido['instagram']['visualizaciones'];
+            }
+        }
+        $porcentajePresupuesto = $lineaPedido['objetivo'] > 0 ? min(100, ($totalImpresiones / $lineaPedido['objetivo']) * 100) : 0;
+        $efectividad = $lineaPedido['objetivo'] > 0 ? round(($totalImpresiones / $lineaPedido['objetivo']) * 100, 2) : 0;
+        return view('campañas.campañas_digitales', compact('pedidos', 'cliente', 'creatividades', 'lineaPedido', 'totalImpresiones', 'porcentajePresupuesto', 'efectividad'));
     }
 
     public function createDisplay()
