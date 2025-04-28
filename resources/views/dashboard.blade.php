@@ -27,11 +27,13 @@
                             $totalImpresiones = 0;
                             foreach ($pedidos as $pedido) {
                                 if (isset($pedido['impresiones'])) {
-                                    $totalImpresiones += $pedido['impresiones'];
-                                } elseif (isset($pedido['web']['vistas'])) {
-                                    $totalImpresiones += $pedido['web']['vistas'];
-                                } elseif (isset($pedido['facebook']['visualizaciones'])) {
-                                    $totalImpresiones += $pedido['facebook']['visualizaciones'];
+                                    $totalImpresiones += (int)$pedido['impresiones'];
+                                }
+                                if (isset($pedido['web']['vistas'])) {
+                                    $totalImpresiones += (int)$pedido['web']['vistas'];
+                                }
+                                if (isset($pedido['facebook']['visualizaciones'])) {
+                                    $totalImpresiones += (int)$pedido['facebook']['visualizaciones'];
                                 }
                             }
                             echo number_format($totalImpresiones, 0, '', '.');

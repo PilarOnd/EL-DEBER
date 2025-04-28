@@ -37,13 +37,13 @@
                                     @foreach($display as $campania)
                                         <tr>
                                             <td>{{ $campania['cliente']['nombre'] ?? 'Sin cliente' }}</td>
-                                            <td>{{ $campania['nombre'] ?? 'Sin nombre' }}</td>
-                                            <td>{{ $campania['banner'] ?? 'Sin banner' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($campania['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($campania['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
+                                            <td>{{ $campania['pedido']['nombre'] ?? 'Sin nombre' }}</td>
+                                            <td>{{ $campania['pedido']['banner'] ?? 'Sin banner' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($campania['pedido']['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($campania['pedido']['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
                                             <td>
-                                                <span class="badge bg-{{ $campania['estado'] === 'Finalizado' ? 'success' : 'warning' }}">
-                                                    {{ $campania['estado'] ?? 'Sin estado' }}
+                                                <span class="badge bg-{{ $campania['pedido']['estado'] === 'Finalizado' ? 'success' : 'warning' }}">
+                                                    {{ $campania['pedido']['estado'] ?? 'Sin estado' }}
                                                 </span>
                                             </td>
                                             <td>
@@ -94,12 +94,12 @@
                                     @foreach($branded as $campania)
                                         <tr>
                                             <td>{{ $campania['cliente']['nombre'] ?? 'Sin cliente' }}</td>
-                                            <td>{{ $campania['nombre'] ?? 'Sin nombre' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($campania['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($campania['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
+                                            <td>{{ $campania['pedido']['nombre'] ?? 'Sin nombre' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($campania['pedido']['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($campania['pedido']['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
                                             <td>
-                                                <span class="badge bg-{{ $campania['estado'] === 'Finalizado' ? 'success' : 'warning' }}">
-                                                    {{ $campania['estado'] ?? 'Sin estado' }}
+                                                <span class="badge bg-{{ $campania['pedido']['estado'] === 'Finalizado' ? 'success' : 'warning' }}">
+                                                    {{ $campania['pedido']['estado'] ?? 'Sin estado' }}
                                                 </span>
                                             </td>
                                             <td>
@@ -150,12 +150,12 @@
                                     @foreach($redes as $campania)
                                         <tr>
                                             <td>{{ $campania['cliente']['nombre'] ?? 'Sin cliente' }}</td>
-                                            <td>{{ $campania['nombre'] ?? 'Sin nombre' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($campania['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($campania['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
+                                            <td>{{ $campania['pedido']['nombre'] ?? 'Sin nombre' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($campania['pedido']['fecha_hora_inicio'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($campania['pedido']['fecha_hora_fin'])->locale('es')->isoFormat('D [de] MMMM YYYY') }}</td>
                                             <td>
-                                                <span class="badge bg-{{ $campania['estado'] === 'Finalizado' ? 'success' : 'warning' }}">
-                                                    {{ $campania['estado'] ?? 'Sin estado' }}
+                                                <span class="badge bg-{{ $campania['pedido']['estado'] === 'Finalizado' ? 'success' : 'warning' }}">
+                                                    {{ $campania['pedido']['estado'] ?? 'Sin estado' }}
                                                 </span>
                                             </td>
                                             <td>

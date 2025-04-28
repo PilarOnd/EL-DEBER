@@ -77,17 +77,16 @@ class CampañaController extends Controller
         // Cargar datos de campañas display
         $displayData = json_decode(File::get(base_path('f_alto_impacto.json')), true);
         $display = [];
-        if (isset($displayData['pedido'])) {
-            foreach ($displayData['pedido'] as $pedido) {
-                // Obtener la línea de pedido correspondiente
-                $lineaPedido = collect($displayData['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
-                if ($lineaPedido) {
-                    // Obtener el cliente usando el cliente_id de la línea de pedido
-                    $cliente = collect($displayData['clientes'])->firstWhere('id', $lineaPedido['cliente_id']);
-                    // Si es administrador o el pedido pertenece al usuario
-                    if ($usuario['nombre'] === 'Administrador' || ($cliente && $cliente['nombre'] === $usuario['nombre'])) {
-                        $pedido['cliente'] = $cliente;
-                        $display[] = $pedido;
+        if (isset($displayData['linea_pedidos'])) {
+            foreach ($displayData['linea_pedidos'] as $lineaPedido) {
+                $cliente = collect($displayData['clientes'])->firstWhere('id', $lineaPedido['cliente_id']);
+                $pedido = collect($displayData['pedido'])->firstWhere('id_lineadepedidos', $lineaPedido['id']);
+                if ($lineaPedido && $cliente && $pedido) {
+                    // Si es administrador o el cliente_id coincide con el del usuario
+                    if ($usuario['nombre'] === 'Administrador' || (isset($usuario['cliente_id']) && $cliente['id'] == $usuario['cliente_id'])) {
+                        $lineaPedido['cliente'] = $cliente;
+                        $lineaPedido['pedido'] = $pedido;
+                        $display[] = $lineaPedido;
                     }
                 }
             }
@@ -96,17 +95,15 @@ class CampañaController extends Controller
         // Cargar datos de campañas branded content
         $brandedData = json_decode(File::get(base_path('branded_content.json')), true);
         $branded = [];
-        if (isset($brandedData['pedido'])) {
-            foreach ($brandedData['pedido'] as $pedido) {
-                // Obtener la línea de pedido correspondiente
-                $lineaPedido = collect($brandedData['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
-                if ($lineaPedido) {
-                    // Obtener el cliente usando el cliente_id de la línea de pedido
-                    $cliente = collect($brandedData['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
-                    // Si es administrador o el pedido pertenece al usuario
-                    if ($usuario['nombre'] === 'Administrador' || ($cliente && $cliente['nombre'] === $usuario['nombre'])) {
-                        $pedido['cliente'] = $cliente;
-                        $branded[] = $pedido;
+        if (isset($brandedData['linea_pedidos'])) {
+            foreach ($brandedData['linea_pedidos'] as $lineaPedido) {
+                $cliente = collect($brandedData['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+                $pedido = collect($brandedData['pedido'])->firstWhere('id_lineadepedidos', $lineaPedido['id']);
+                if ($lineaPedido && $cliente && $pedido) {
+                    if ($usuario['nombre'] === 'Administrador' || (isset($usuario['cliente_id']) && $cliente['id'] == $usuario['cliente_id'])) {
+                        $lineaPedido['cliente'] = $cliente;
+                        $lineaPedido['pedido'] = $pedido;
+                        $branded[] = $lineaPedido;
                     }
                 }
             }
@@ -115,17 +112,15 @@ class CampañaController extends Controller
         // Cargar datos de campañas redes sociales
         $redesData = json_decode(File::get(base_path('redes_sociales.json')), true);
         $redes = [];
-        if (isset($redesData['pedido'])) {
-            foreach ($redesData['pedido'] as $pedido) {
-                // Obtener la línea de pedido correspondiente
-                $lineaPedido = collect($redesData['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
-                if ($lineaPedido) {
-                    // Obtener el cliente usando el cliente_id de la línea de pedido
-                    $cliente = collect($redesData['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
-                    // Si es administrador o el pedido pertenece al usuario
-                    if ($usuario['nombre'] === 'Administrador' || ($cliente && $cliente['nombre'] === $usuario['nombre'])) {
-                        $pedido['cliente'] = $cliente;
-                        $redes[] = $pedido;
+        if (isset($redesData['linea_pedidos'])) {
+            foreach ($redesData['linea_pedidos'] as $lineaPedido) {
+                $cliente = collect($redesData['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+                $pedido = collect($redesData['pedido'])->firstWhere('id_lineadepedidos', $lineaPedido['id']);
+                if ($lineaPedido && $cliente && $pedido) {
+                    if ($usuario['nombre'] === 'Administrador' || (isset($usuario['cliente_id']) && $cliente['id'] == $usuario['cliente_id'])) {
+                        $lineaPedido['cliente'] = $cliente;
+                        $lineaPedido['pedido'] = $pedido;
+                        $redes[] = $lineaPedido;
                     }
                 }
             }
@@ -204,29 +199,31 @@ class CampañaController extends Controller
         // Verificar si existe el pedido
         $pedido = collect($data['pedido'] ?? [])->firstWhere('id', $id);
         if (!$pedido) {
-            abort(404, 'Pedido no encontrado');
+            abort(404, 'Pedido no encontrado en el archivo branded_content.json');
         }
 
         // Verificar si existe la línea de pedido
         $lineaPedido = collect($data['linea_pedidos'] ?? [])->firstWhere('id', $pedido['id_lineadepedidos']);
         if (!$lineaPedido) {
-            abort(404, 'Línea de pedido no encontrada');
+            abort(404, 'Línea de pedido no encontrada para el pedido con id ' . $id);
         }
 
         // Verificar si existe el cliente
         $cliente = collect($data['cliente'] ?? [])->firstWhere('id', $lineaPedido['cliente_id']);
         if (!$cliente) {
-            abort(404, 'Cliente no encontrado');
+            abort(404, 'Cliente no encontrado para la línea de pedido con id ' . $lineaPedido['id']);
         }
 
         // Verificar que el pedido pertenece al usuario o es administrador
-        if ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre']) {
+        if ($usuario['nombre'] !== 'Administrador' && (!isset($usuario['cliente_id']) || $cliente['id'] != $usuario['cliente_id'])) {
             abort(403, 'No tienes permiso para ver este pedido');
         }
 
         $creatividades = collect($data['creatividades'] ?? [])->where('pedido_id', $id)->values();
         
-        return view('campañas.branded', compact('pedido', 'cliente', 'creatividades'));
+        $totales = $this->calcularTotalesBranded($pedido, $creatividades);
+        $pedidos = [$pedido];
+        return view('campañas.branded', compact('pedido', 'cliente', 'creatividades', 'lineaPedido', 'totales', 'pedidos'));
     }
 
     private function calcularTotales($creatividades)
@@ -378,23 +375,25 @@ class CampañaController extends Controller
         }
 
         $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
-        $pedido = collect($data['pedido'])->firstWhere('id', $id);
-
-        // Verificar que el pedido existe
-        if (!$pedido) {
-            abort(404, 'El pedido no existe');
+        // Buscar la línea de pedido por id
+        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+        if (!$linea_pedido) {
+            abort(404, 'Línea de pedido no encontrada');
         }
-
-        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+        // Buscar el pedido relacionado
+        $pedido = collect($data['pedido'])->firstWhere('id_lineadepedidos', $linea_pedido['id']);
+        if (!$pedido) {
+            abort(404, 'Pedido no encontrado para la línea de pedido');
+        }
         $cliente = collect($data['clientes'])->firstWhere('id', $linea_pedido['cliente_id']);
-
+        if (!$cliente) {
+            abort(404, 'Cliente no encontrado para la línea de pedido');
+        }
         // Verificar que el pedido pertenece al usuario o es administrador
         if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
             abort(403, 'No tienes permiso para ver este pedido');
         }
-
-        $creatividades = collect($data['creatividades'])->where('pedido_id', $id)->values();
-        
+        $creatividades = collect($data['creatividades'])->where('pedido_id', $pedido['id'])->values();
         // Preparar datos del histograma
         $histograma = [
             'fechas' => [],
@@ -402,7 +401,6 @@ class CampañaController extends Controller
             'clics' => [],
             'ctr' => []
         ];
-
         foreach ($pedido['histograma_diario'] as $fecha => $datos) {
             $histograma['fechas'][] = \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('D [de] MMMM');
             $histograma['impresiones'][] = $datos['impresiones'];
@@ -410,7 +408,6 @@ class CampañaController extends Controller
             $ctr = $datos['impresiones'] > 0 ? round(($datos['clics'] / $datos['impresiones']) * 100, 2) : 0;
             $histograma['ctr'][] = $ctr;
         }
-
         // Calcular métricas totales
         $displayTakeover = [
             'metricas_totales' => [
@@ -443,7 +440,6 @@ class CampañaController extends Controller
                 ];
             })->values()->all()
         ];
-
         return view('campañas.display', compact('pedido', 'cliente', 'creatividades', 'linea_pedido', 'displayTakeover', 'histograma'));
     }
 

@@ -47,7 +47,7 @@
                 <div class="row text-center align-items-stretch g-0" style="padding: 20px; background-color: rgba(245, 245, 245, 0.9);">
                     <div class="col-md-4 d-flex flex-column justify-content-center">
                         <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">CAMPAÑA BRANDED CONTENT</h5>
-                        <p class="mb-0">{{ $linea_pedido['tipo'] }}</p>
+                        <p class="mb-0">{{ $lineaPedido['tipo'] }}</p>
                     </div>
 
                     <div class="col-md-4 d-flex flex-column justify-content-center">
@@ -61,16 +61,16 @@
 
                     <div class="col-md-4 text-center d-flex flex-column align-items-center">
                         <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">PRESUPUESTO</h5>
-                        <h4 class="fw-bold" style="font-size: 19.5px;">{{ number_format($linea_pedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</h4>
+                        <h4 class="fw-bold" style="font-size: 19.5px;">{{ number_format($lineaPedido['tarifa']['monto'], 0, '', '.') }} {{ $lineaPedido['tarifa']['moneda'] }}</h4>
                         <div class="progress" style="height: 10px; background-color: #ddd; border-radius: 5px; width: 100%;">
                             @php
-                                $porcentajePresupuesto = $linea_pedido['objetivo'] > 0 ? min(100, ($totales['impresiones'] / $linea_pedido['objetivo']) * 100) : 0;
+                                $porcentajePresupuesto = $lineaPedido['objetivo'] > 0 ? min(100, ($totales['impresiones'] / $lineaPedido['objetivo']) * 100) : 0;
                             @endphp
                             <div class="progress-bar bg-success" role="progressbar"
                                  style="width: {{ $porcentajePresupuesto }}%; border-radius: 5px;" aria-valuenow="{{ $porcentajePresupuesto }}"
                                  aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <p class="mb-1" style="font-size: 13px;">{{ number_format($linea_pedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($linea_pedido['tarifa']['moneda']) }}</p>
+                        <p class="mb-1" style="font-size: 13px;">{{ number_format($lineaPedido['tarifa']['monto'], 0, '', '.') }} ${{ strtoupper($lineaPedido['tarifa']['moneda']) }}</p>
                     </div>            
                 </div>
             </div>
@@ -85,7 +85,7 @@
 
             <div class="col-md-3 d-flex flex-column justify-content-center">
                 <h5 class="fw-bold cliente-text" style="color: {{ $cliente['color_fuente'] }}">Objetivo Proyectado</h5>
-                <p class="mb-0">{{ number_format($linea_pedido['objetivo'] ?? 0, 0, '', '.') }} Visualizaciones</p>
+                <p class="mb-0">{{ number_format($lineaPedido['objetivo'] ?? 0, 0, '', '.') }} Visualizaciones</p>
             </div>
 
             <div class="col-md-3 d-flex flex-column justify-content-center">

@@ -52,6 +52,9 @@ class DashboardController extends Controller
         } else {
             // Si es cliente, mostrar solo sus pedidos
             $clienteId = $usuario['cliente_id'];
+            \Log::info('Usuario actual:', ['usuario' => $usuario]);
+            \Log::info('Cliente ID:', ['cliente_id' => $clienteId]);
+            \Log::info('Branded Content data:', ['data' => $brandedContent]);
 
             // Obtener pedidos de alto impacto
             if (isset($altoImpacto['pedido'])) {
@@ -67,8 +70,14 @@ class DashboardController extends Controller
 
             // Obtener pedidos de branded content
             if (isset($brandedContent['pedido'])) {
+                \Log::info('Branded Content pedidos:', ['pedidos' => $brandedContent['pedido']]);
                 foreach ($brandedContent['pedido'] as $pedido) {
                     $lineaPedido = collect($brandedContent['linea_pedidos'])->firstWhere('id', $pedido['id_lineadepedidos']);
+                    \Log::info('Línea de pedido encontrada:', ['linea_pedido' => $lineaPedido]);
+                    \Log::info('Comparación de IDs:', [
+                        'cliente_id_usuario' => $clienteId,
+                        'cliente_id_linea' => $lineaPedido ? $lineaPedido['cliente_id'] : null
+                    ]);
                     if ($lineaPedido && $lineaPedido['cliente_id'] == $clienteId) {
                         $pedido['tipo_campaña'] = 'branded';
                         $pedidos[] = $pedido;
