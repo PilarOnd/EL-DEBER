@@ -53,6 +53,7 @@
       {
         "id": 2,
         "id_lineadepedidos": 1,
+        "nombre": "Pollo Sofia",
         "estado": "Finalizado",
         "tipo": "Estandar",
         "fecha_hora_inicio": "2025-02-20 08:00:00",

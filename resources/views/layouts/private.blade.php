@@ -67,28 +67,49 @@
         <!-- Page Content -->
         <div id="content">
             <!-- Top Navigation -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <button type="button" id="sidebarCollapse" class="btn btn-light">
                         <i class="bi bi-list"></i>
                     </button>
-
-                    <div class="ms-auto d-flex align-items-center">
-                        @if(session('usuario'))
-                            <span class="me-3">Bienvenido, {{ session('usuario')['nombre'] }}</span>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-danger">
-                                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                                </button>
-                            </form>
-                        @endif
+                    <div class="ms-auto d-flex align-items-center gap-3">
+                        <span class="me-3">Bienvenido, {{ session('usuario')['nombre'] ?? 'Usuario' }}</span>
+                        <a href="#" class="position-relative me-2">
+                            <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                1
+                            </span>
+                        </a>
+                        <div class="dropdown">
+                            <img src="{{ asset('img/avatar.png') }}"
+                                 alt="Avatar"
+                                 class="rounded-circle dropdown-toggle"
+                                 id="userDropdown"
+                                 data-bs-toggle="dropdown"
+                                 aria-expanded="false"
+                                 style="width: 40px; height: 40px; object-fit: cover; cursor:pointer;">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li class="px-3 py-2 text-center">
+                                    <strong>{{ session('usuario')['nombre'] ?? 'Usuario' }}</strong><br>
+                                    <small>{{ session('usuario')['email'] ?? '' }}</small>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
 
             <!-- Main Content -->
-            <div class="container-fluid main-content">
+            <div class="container-fluid main-content" id="main-scroll">
                 @yield('content')
             </div>
         </div>

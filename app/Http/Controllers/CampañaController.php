@@ -257,16 +257,22 @@ class CampañaController extends Controller
         $data = json_decode($json, true);
         
         // Obtener los datos necesarios
-        $cliente = $data['cliente'];
-        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+        $lineaPedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
         
-        if (!$linea_pedido) {
+        if (!$lineaPedido) {
             abort(404, 'Campaña no encontrada');
+        }
+
+        // Obtener el cliente específico basado en el cliente_id de la línea de pedido
+        $cliente = collect($data['cliente'])->firstWhere('id', $lineaPedido['cliente_id']);
+        
+        if (!$cliente) {
+            abort(404, 'Cliente no encontrado');
         }
         
         // Obtener los pedidos relacionados con la línea de pedido
         $pedidos = collect($data['pedido'])
-            ->where('id_lineadepedidos', $linea_pedido['id'])
+            ->where('id_lineadepedidos', $lineaPedido['id'])
             ->all();
         
         // Calcular el total de impresiones
@@ -275,7 +281,7 @@ class CampañaController extends Controller
         });
 
         // Calcular la efectividad usando la función global
-        $efectividad = $this->calcularEfectividad($totalImpresiones, $linea_pedido['objetivo']);
+        $efectividad = $this->calcularEfectividad($totalImpresiones, $lineaPedido['objetivo']);
         
         // Obtener las creatividades relacionadas
         $creatividades = collect($data['creatividades'])
@@ -296,11 +302,11 @@ class CampañaController extends Controller
             \Log::info('No se encontraron creatividades para el pedido');
         }
         
-        $porcentajePresupuesto = $linea_pedido['objetivo'] > 0 ? min(100, ($totalImpresiones / $linea_pedido['objetivo']) * 100) : 0;
+        $porcentajePresupuesto = $lineaPedido['objetivo'] > 0 ? min(100, ($totalImpresiones / $lineaPedido['objetivo']) * 100) : 0;
         
         return view('campañas.campañas_digitales', compact(
             'cliente',
-            'linea_pedido',
+            'lineaPedido',
             'pedidos',
             'creatividades',
             'totalImpresiones',

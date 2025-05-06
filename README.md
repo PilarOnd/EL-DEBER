@@ -64,3 +64,129 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Instrucciones de Instalación
+
+## Requisitos Previos
+
+1. **PHP (versión 8.1 o superior)**
+   - Descargar e instalar desde [php.net](https://www.php.net/downloads.php)
+   - Asegurarse de que las extensiones necesarias estén habilitadas en php.ini:
+     - OpenSSL
+     - PDO
+     - Mbstring
+     - Tokenizer
+     - XML
+     - Ctype
+     - JSON
+
+2. **Composer**
+   - Descargar e instalar desde [getcomposer.org](https://getcomposer.org/download/)
+   - Verificar la instalación ejecutando `composer --version` en la terminal
+
+3. **Node.js y npm**
+   - Descargar e instalar desde [nodejs.org](https://nodejs.org/)
+   - Verificar la instalación ejecutando:
+     ```bash
+     node --version
+     npm --version
+     ```
+
+4. **Base de datos MySQL**
+   - Descargar e instalar desde [mysql.com](https://dev.mysql.com/downloads/)
+   - O usar XAMPP/WAMP que incluye MySQL
+
+## Pasos de Instalación
+
+1. **Clonar el repositorio**
+   ```bash
+   git clone [URL_DEL_REPOSITORIO]
+   cd [NOMBRE_DEL_PROYECTO]
+   ```
+
+2. **Instalar dependencias de PHP**
+   ```bash
+   composer install
+   ```
+
+3. **Instalar dependencias de Node.js**
+   ```bash
+   npm install
+   ```
+
+4. **Configurar el archivo .env**
+   - Copiar el archivo `.env.example` a `.env`
+   - Configurar las variables de entorno:
+     - `DB_CONNECTION=mysql`
+     - `DB_HOST=127.0.0.1`
+     - `DB_PORT=3306`
+     - `DB_DATABASE=nombre_de_la_base`
+     - `DB_USERNAME=usuario`
+     - `DB_PASSWORD=contraseña`
+
+5. **Generar clave de aplicación**
+   ```bash
+   php artisan key:generate
+   ```
+
+6. **Ejecutar migraciones**
+   ```bash
+   php artisan migrate
+   ```
+
+7. **Compilar assets**
+   ```bash
+   npm run build
+   ```
+
+## Ejecutar el Proyecto
+
+1. **Iniciar el servidor de desarrollo**
+   ```bash
+   php artisan serve
+   ```
+
+2. **En otra terminal, iniciar Vite para desarrollo**
+   ```bash
+   npm run dev
+   ```
+
+El proyecto estará disponible en `http://localhost:8000`
+
+## Notas Adicionales
+
+- Asegúrate de tener los permisos correctos en los directorios `storage` y `bootstrap/cache`
+- Si encuentras problemas con las dependencias, intenta:
+  ```bash
+  composer dump-autoload
+  npm cache clean --force
+  ```
+- Para desarrollo, puedes usar:
+  ```bash
+  npm run dev
+  ```
+  Para producción:
+  ```bash
+  npm run build
+  ```
+
+## Solución de Problemas Comunes
+
+1. **Error de permisos**
+   ```bash
+   chmod -R 775 storage bootstrap/cache
+   ```
+
+2. **Error de dependencias**
+   ```bash
+   rm -rf vendor
+   composer install
+   ```
+
+3. **Error de Node.js**
+   ```bash
+   rm -rf node_modules
+   npm install
+   ```
+
+Si encuentras algún otro problema, por favor revisa los logs en `storage/logs` para más detalles.
