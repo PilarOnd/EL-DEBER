@@ -1,0 +1,19 @@
+{
+  "nombre_campaña": "Campaña de Prueba",
+  "cpm": 1000000,
+  "posicion": "premium",
+  "creatividades": {
+    "desktop": {
+      "top": "uploads/desktop_top.jpg",
+      "l1": "uploads/desktop_l1.jpg",
+      "l2": "uploads/desktop_l2.jpg",
+      "c1": "uploads/desktop_c1.jpg"
+    },
+    "mobile": {
+      "top": "uploads/mobile_top.jpg",
+      "a1": "uploads/mobile_a1.jpg"
+    }
+  },
+  "fecha_inicio": "2025-06-01T08:00",
+  "fecha_fin": "2025-06-10T23:59"
+}

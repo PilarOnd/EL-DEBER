@@ -1,55 +1,5 @@
 {
   "tipo": "display",
-  "medidas_banners": {
-    "premium": {
-      "desktop": {
-        "top": "970x90",
-        "l1": "120x600",
-        "l2": "120x600",
-        "c1": "300x250"
-      },
-      "mobile": {
-        "top": "320x100",
-        "a1": "300x250"
-      }
-    },
-    "gold": {
-      "desktop": {
-        "a1": "300x250",
-        "a2": "300x250",
-        "c2": "300x250",
-        "sb1": "300x250",
-        "sb2": "300x600"
-      },
-      "mobile": {
-        "a2": "300x250",
-        "a3": "300x250",
-        "c2": "300x250",
-        "a1": "300x100"
-      }
-    },
-    "social": {
-      "desktop": {
-        "c3": "300x250",
-        "c4": "300x250",
-        "layer": "970x250",
-        "c2": "300x250",
-        "sidebar": "300x600"
-      },
-      "mobile": {
-        "cinturon2": "320x100",
-        "c3": "300x250"
-      }
-    },
-    "take_over": {
-      "desktop": "800x400",
-      "mobile": "300x400"
-    },
-    "sticky": {
-      "desktop": "970x90",
-      "mobile": "320x100"
-    }
-  },
   "clientes": [
     {
       "id": 1,

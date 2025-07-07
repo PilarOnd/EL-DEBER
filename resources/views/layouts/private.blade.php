@@ -6,9 +6,8 @@
     <title>El Deber - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/show.css') }}">
     <link rel="stylesheet" href="{{ asset('css/private.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/show.css') }}">
     <link rel="stylesheet" href="{{ asset('css/campañas/display/create_display.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -38,7 +37,7 @@
                     </a>
                 </li>
                 <li class="{{ request()->routeIs('reportes.*') ? 'active' : '' }}">
-                    <a href="#">
+                    <a href="{{ route('reportes.index') }}">
                         <i class="bi bi-graph-up"></i>
                         <span>Reportes</span>
                     </a>

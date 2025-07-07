@@ -100,13 +100,13 @@
                                                 $ruta = '';
                                                 switch($pedido['tipo_campaña']) {
                                                     case 'display':
-                                                        $ruta = route('campañas.display', $pedido['id_lineadepedidos']);
+                                                        $ruta = route('reportes.display', $pedido['id_lineadepedidos']);
                                                         break;
                                                     case 'branded':
-                                                        $ruta = route('campañas.branded', $pedido['id_lineadepedidos']);
+                                                        $ruta = route('reportes.branded', $pedido['id_lineadepedidos']);
                                                         break;
                                                     case 'redes':
-                                                        $ruta = route('campañas.digital', $pedido['id_lineadepedidos']);
+                                                        $ruta = route('reportes.digital', $pedido['id_lineadepedidos']);
                                                         break;
                                                 }
                                             @endphp

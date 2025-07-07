@@ -27,11 +27,11 @@
                 <div class="row">
                     <div class="col-12 mb-4">
                         <div class="form-group">
-                            <label for="nombre_campania" class="form-label">Nombre de Campaña</label>
+                            <label for="nombre_campaña" class="form-label">Nombre de Campaña</label>
                             <input type="text" 
                                 class="form-control" 
-                                id="nombre_campania" 
-                                name="nombre_campania"
+                                id="nombre_campaña" 
+                                name="nombre_campaña"
                                 placeholder="Ingrese el nombre de la campaña"
                                 required>
                         </div>
@@ -47,7 +47,15 @@
                                 <option value="2000000">2.000.000</option>
                                 <option value="5000000">5.000.000</option>
                                 <option value="8000000">8.000.000</option>
+                                <option value="otro">Otro...</option>
                             </select>
+                            <input type="number" 
+                                   class="form-control mt-2" 
+                                   id="cpm_otro" 
+                                   name="cpm_otro"
+                                   placeholder="Ingrese el CPM deseado"
+                                   style="display: none;"
+                                   min="1">
                         </div>
                     </div>
 
@@ -239,6 +247,18 @@ document.addEventListener('change', async function(e) {
                 e.target.value = '';
             }
         }
+    }
+});
+
+document.getElementById('cpm').addEventListener('change', function() {
+    const otroInput = document.getElementById('cpm_otro');
+    if (this.value === 'otro') {
+        otroInput.style.display = 'block';
+        otroInput.required = true;
+    } else {
+        otroInput.style.display = 'none';
+        otroInput.required = false;
+        otroInput.value = '';
     }
 });
 </script>
