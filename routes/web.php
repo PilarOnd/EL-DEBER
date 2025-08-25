@@ -46,8 +46,10 @@ Route::middleware(['auth.custom'])->group(function () {
 
     // Rutas para Campañas Display
     Route::prefix('campañas/display')->group(function () {
+        Route::get('/', [CampañaController::class, 'indexDisplay'])->name('campañas.display.index');
         Route::get('/create', [CampañaController::class, 'createDisplay'])->name('campañas.display.create');
         Route::post('/', [CampañaController::class, 'storeDisplay'])->name('campañas.display.store');
+        Route::get('/json', [CampañaController::class, 'verJson'])->name('campañas.display.json');
     });
     Route::get('/reportes/display/{id}', [ReporteController::class, 'showDisplay'])->name('reportes.display');
 

@@ -1,5 +1,11 @@
 @extends('layouts.private')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/campañas/display/create_display.css') }}">
+<!-- Asegurar FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+@endpush
+
 @section('content')
 <div class="container-fluid mt-5">
     @php
@@ -25,17 +31,42 @@
         <div class="card-body p-4">
             <form id="formCampaña" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-md-8 mb-4">
-                        <div class="form-group">
-                            <label for="nombre_campaña" class="form-label">Nombre de Campaña</label>
-                            <input type="text" 
-                                class="form-control" 
-                                id="nombre_campaña" 
-                                name="nombre_campaña"
-                                placeholder="Ingrese el nombre de la campaña"
-                                required>
+                    @if($esAdministrador && !empty($clientes))
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label for="cliente_id" class="form-label">Cliente</label>
+                                <select class="form-select" id="cliente_id" name="cliente_id" required>
+                                    <option value="" selected disabled>Seleccione el cliente</option>
+                                    @foreach($clientes as $cliente)
+                                        <option value="{{ $cliente['id'] }}">{{ $cliente['nombre'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-group">
+                                <label for="nombre_campaña" class="form-label">Nombre de Campaña</label>
+                                <input type="text" 
+                                    class="form-control" 
+                                    id="nombre_campaña" 
+                                    name="nombre_campaña"
+                                    placeholder="Ingrese el nombre de la campaña"
+                                    required>
+                            </div>
+                        </div>
+                    @else
+                        <div class="col-md-8 mb-4">
+                            <div class="form-group">
+                                <label for="nombre_campaña" class="form-label">Nombre de Campaña</label>
+                                <input type="text" 
+                                    class="form-control" 
+                                    id="nombre_campaña" 
+                                    name="nombre_campaña"
+                                    placeholder="Ingrese el nombre de la campaña"
+                                    required>
+                            </div>
+                        </div>
+                    @endif
 
                     <div class="col-md-6 mb-4">
                         <div class="form-group">
@@ -68,6 +99,56 @@
                                     <option value="{{ $key }}">{{ ucfirst(str_replace('_', ' ', $key)) }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Selector de Dispositivos -->
+                    <div class="col-12 mb-4">
+                        <div class="form-group">
+                            <label class="form-label">Dispositivos de Campaña</label>
+                            <div class="device-selector-container">
+                                <div class="device-options">
+                                    <div class="device-card">
+                                        <input type="radio" id="device_desktop" name="device_target" value="desktop" class="device-radio">
+                                        <label for="device_desktop" class="device-label">
+                                            <div class="device-icon">
+                                                <i class="fas fa-desktop" aria-hidden="true">🖥️</i>
+                                            </div>
+                                            <div class="device-text">
+                                                <span class="device-title">Solo Desktop</span>
+                                                <span class="device-desc">Campaña únicamente para computadores</span>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="device-card">
+                                        <input type="radio" id="device_both" name="device_target" value="both" class="device-radio" checked>
+                                        <label for="device_both" class="device-label">
+                                            <div class="device-icon">
+                                                <i class="fas fa-desktop" aria-hidden="true">🖥️</i>
+                                                <i class="fas fa-mobile-alt" aria-hidden="true">📱</i>
+                                            </div>
+                                            <div class="device-text">
+                                                <span class="device-title">Ambos Dispositivos</span>
+                                                <span class="device-desc">Campaña para desktop y mobile</span>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div class="device-card">
+                                        <input type="radio" id="device_mobile" name="device_target" value="mobile" class="device-radio">
+                                        <label for="device_mobile" class="device-label">
+                                            <div class="device-icon">
+                                                <i class="fas fa-mobile-alt" aria-hidden="true">📱</i>
+                                            </div>
+                                            <div class="device-text">
+                                                <span class="device-title">Solo Mobile</span>
+                                                <span class="device-desc">Campaña únicamente para móviles</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -251,26 +332,18 @@
 
                 <div class="d-flex justify-content-end mt-3">
                     <button type="button" class="btn btn-light me-2">Cancelar</button>
-                    <button type="submit" class="btn btn-dark">Guardar Campaña</button>
+                    <button type="button" id="btnGuardar" class="btn btn-dark">Guardar Campaña</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<style>
-/* Estilos básicos para dropdowns de hora */
-.hora-dropdown {
-    position: relative;
-    z-index: 1000;
-}
 
-.hora-dropdown option {
-    padding: 6px 12px;
-}
-</style>
 
 <script>
+console.log('🔧 JavaScript cargado - create_display.blade.php');
+
 // Script inteligente para controlar altura del dropdown sin afectar layout
 document.addEventListener('DOMContentLoaded', function() {
     const selectElements = document.querySelectorAll('.hora-dropdown');
@@ -330,6 +403,39 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+});
+
+// JavaScript para los botones de radio visuales de dispositivos
+document.addEventListener('DOMContentLoaded', function() {
+    const deviceRadios = document.querySelectorAll('.device-radio');
+    const desktopSection = document.querySelector('.col-md-6:has(#creatividadesDesktop)');
+    const mobileSection = document.querySelector('.col-md-6:has(#creatividadesMobile)');
+    
+    // Función para mostrar/ocultar secciones según el dispositivo seleccionado
+    function updateDeviceSections(selectedValue) {
+        if (selectedValue === 'desktop') {
+            desktopSection.style.display = 'block';
+            mobileSection.style.display = 'none';
+        } else if (selectedValue === 'mobile') {
+            desktopSection.style.display = 'none';
+            mobileSection.style.display = 'block';
+        } else { // both
+            desktopSection.style.display = 'block';
+            mobileSection.style.display = 'block';
+        }
+    }
+    
+    // Event listeners para los radio buttons
+    deviceRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                updateDeviceSections(this.value);
+            }
+        });
+    });
+    
+    // Inicializar con el estado por defecto (both)
+    updateDeviceSections('both');
 });
 </script>
 
@@ -641,6 +747,213 @@ document.getElementById('cpm').addEventListener('change', function() {
         otroInput.value = '';
     }
 });
+
+// Manejar envío del formulario vía AJAX
+console.log('📝 Registrando event listener para el botón guardar...');
+const btnGuardar = document.getElementById('btnGuardar');
+const formulario = document.getElementById('formCampaña');
+console.log('📝 Botón encontrado:', btnGuardar);
+console.log('📝 Formulario encontrado:', formulario);
+
+if (btnGuardar && formulario) {
+    btnGuardar.addEventListener('click', async function(e) {
+    e.preventDefault();
+    
+    // Debug: Confirmar que el evento se está ejecutando
+    console.log('🚀 BOTÓN PRESIONADO - Evento click capturado');
+    
+    const form = formulario;
+    const submitBtn = this; // El botón que se presionó
+    const originalBtnText = submitBtn.textContent;
+    
+    // Deshabilitar botón y mostrar loading
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+    
+    // Limpiar mensajes de error previos
+    document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+    document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+    document.querySelectorAll('.alert').forEach(el => {
+        if (el.classList.contains('alert-danger') || el.classList.contains('alert-success')) {
+            el.remove();
+        }
+    });
+    
+    try {
+        // Debug: Mostrar información del formulario
+        console.log('=== ENVIANDO FORMULARIO ===');
+        console.log('Formulario:', form);
+        
+        // Validar que todos los archivos requeridos estén presentes
+        const posicion = document.getElementById('posicion').value;
+        const deviceTarget = document.querySelector('input[name="device_target"]:checked').value;
+        
+        console.log('Posición:', posicion);
+        console.log('Device Target:', deviceTarget);
+        
+        if (posicion && !validarArchivosRequeridos(posicion, deviceTarget)) {
+            throw new Error('Faltan creatividades requeridas para la posición seleccionada');
+        }
+        
+        // Crear FormData
+        const formData = new FormData(form);
+        
+        // Agregar token CSRF
+        formData.append('_token', '{{ csrf_token() }}');
+        
+        // Debug: Mostrar datos del formulario
+        console.log('=== DATOS DEL FORMULARIO ===');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
+        // Enviar datos
+        console.log('Enviando a:', '{{ route("campañas.display.store") }}');
+        const response = await fetch('{{ route("campañas.display.store") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        console.log('Response status:', response.status);
+        console.log('Response:', response);
+        
+        // Verificar si la respuesta es exitosa
+        if (!response.ok) {
+            if (response.status === 422) {
+                // Error de validación
+                const errorData = await response.json();
+                console.log('Errores de validación:', errorData.errors);
+                mostrarErroresValidacion(errorData.errors);
+                return;
+            } else {
+                // Otro tipo de error HTTP
+                const errorText = await response.text();
+                throw new Error(`Error HTTP ${response.status}: ${errorText}`);
+            }
+        }
+        
+        const data = await response.json();
+        console.log('Response data:', data);
+        
+        if (data.success) {
+            // Mostrar mensaje de éxito
+            mostrarMensaje('success', data.message);
+            
+            // Redireccionar después de un breve delay
+            setTimeout(() => {
+                window.location.href = data.redirect;
+            }, 1500);
+        } else {
+            throw new Error(data.message || 'Error al crear la campaña');
+        }
+        
+    } catch (error) {
+        console.error('=== ERROR CAPTURADO ===');
+        console.error('Error completo:', error);
+        console.error('Mensaje:', error.message);
+        console.error('Stack:', error.stack);
+        
+        // Mostrar mensaje de error general
+        mostrarMensaje('danger', error.message || 'Error al crear la campaña');
+    } finally {
+        // Restaurar botón
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+    }
+    });
+} else {
+    console.error('❌ ERROR: No se encontró el botón o formulario');
+    console.error('Botón:', btnGuardar);
+    console.error('Formulario:', formulario);
+}
+
+// Función para validar archivos requeridos
+function validarArchivosRequeridos(posicion, deviceTarget) {
+    const medidasBanners = @json($medidasBanners);
+    const medidas = medidasBanners[posicion];
+    
+    if (!medidas) return true; // Si no hay medidas definidas, no validar
+    
+    let archivosRequeridos = [];
+    
+    // Determinar qué archivos se requieren según el dispositivo
+    if (deviceTarget === 'desktop' || deviceTarget === 'both') {
+        if (medidas.desktop) {
+            if (typeof medidas.desktop === 'object') {
+                Object.keys(medidas.desktop).forEach(pos => {
+                    archivosRequeridos.push(`creatividad_desktop_${pos}`);
+                });
+            } else {
+                archivosRequeridos.push('creatividad_desktop_principal');
+            }
+        }
+    }
+    
+    if (deviceTarget === 'mobile' || deviceTarget === 'both') {
+        if (medidas.mobile) {
+            if (typeof medidas.mobile === 'object') {
+                Object.keys(medidas.mobile).forEach(pos => {
+                    archivosRequeridos.push(`creatividad_mobile_${pos}`);
+                });
+            } else {
+                archivosRequeridos.push('creatividad_mobile_principal');
+            }
+        }
+    }
+    
+    // Verificar que todos los archivos requeridos estén presentes
+    for (const nombreArchivo of archivosRequeridos) {
+        const input = document.querySelector(`input[name="${nombreArchivo}"]`);
+        if (!input || !input.files || input.files.length === 0) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+// Función para mostrar mensajes
+function mostrarMensaje(tipo, mensaje) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${tipo} alert-dismissible fade show`;
+    alertDiv.innerHTML = `
+        <strong>${tipo === 'success' ? 'Éxito:' : 'Error:'}</strong> ${mensaje}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    // Insertar al inicio del contenido del card
+    const cardBody = document.querySelector('.card-body');
+    cardBody.insertBefore(alertDiv, cardBody.firstChild);
+    
+    // Auto-dismiss después de 5 segundos
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+
+// Función para mostrar errores de validación
+function mostrarErroresValidacion(errors) {
+    Object.keys(errors).forEach(field => {
+        const input = document.querySelector(`[name="${field}"]`);
+        if (input) {
+            input.classList.add('is-invalid');
+            
+            const feedback = document.createElement('div');
+            feedback.className = 'invalid-feedback';
+            feedback.textContent = errors[field][0];
+            
+            input.parentNode.appendChild(feedback);
+        }
+    });
+    
+    // Mostrar mensaje general
+    mostrarMensaje('danger', 'Por favor corrige los errores en el formulario');
+}
 </script>
 @endsection
 

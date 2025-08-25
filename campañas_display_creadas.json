@@ -1,0 +1,108 @@
+{
+    "metadata": {
+        "version": "1.0",
+        "descripcion": "Archivo para almacenar campañas display creadas desde el formulario",
+        "ultima_actualizacion": "2025-08-20T20:25:21.451578Z",
+        "total_campañas": 3
+    },
+    "campañas": [
+        {
+            "id": 1,
+            "cliente_id": 1,
+            "nombre": "Campaña Ejemplo - Premium",
+            "posicion": "premium",
+            "cpm": 1000000,
+            "device_target": "both",
+            "fecha_inicio": "2025-08-20T08:00",
+            "fecha_fin": "2025-08-27T23:59",
+            "estado": "activo",
+            "creatividades": {
+                "desktop": {
+                    "top": {
+                        "nombre_original": "banner_top_970x90.jpg",
+                        "nombre_archivo": "1724158845_desktop_top.jpg",
+                        "ruta": "uploads\/creatividades\/1724158845_desktop_top.jpg",
+                        "tamaño": 245760,
+                        "tipo": "image\/jpeg",
+                        "subido_at": "2025-08-20T15:30:45.000000Z"
+                    }
+                },
+                "mobile": {
+                    "top": {
+                        "nombre_original": "banner_mobile_320x100.jpg",
+                        "nombre_archivo": "1724158846_mobile_top.jpg",
+                        "ruta": "uploads\/creatividades\/1724158846_mobile_top.jpg",
+                        "tamaño": 89456,
+                        "tipo": "image\/jpeg",
+                        "subido_at": "2025-08-20T15:30:46.000000Z"
+                    }
+                }
+            },
+            "created_at": "2025-08-20T15:30:45.000000Z",
+            "updated_at": "2025-08-20T15:30:45.000000Z",
+            "usuario_creador": "Administrador"
+        },
+        {
+            "id": 2,
+            "cliente_id": 1,
+            "nombre": "PRUEBA OFICIAL",
+            "posicion": "take_over",
+            "cpm": "1000000",
+            "device_target": "mobile",
+            "fecha_inicio": "2025-08-20T12:00",
+            "fecha_fin": "2025-09-18T23:59",
+            "estado": "activo",
+            "creatividades": {
+                "desktop": [],
+                "mobile": {
+                    "principal": {
+                        "nombre_original": "1_Outled_Ago_Exp_TKmobile.gif",
+                        "nombre_archivo": "1755707903_mobile_principal.gif",
+                        "ruta": "uploads\/creatividades\/1755707903_mobile_principal.gif",
+                        "tamaño": 72060,
+                        "tipo": "image\/gif",
+                        "subido_at": "2025-08-20T16:38:23.792055Z"
+                    }
+                }
+            },
+            "created_at": "2025-08-20T16:38:23.793529Z",
+            "updated_at": "2025-08-20T16:38:23.793806Z",
+            "usuario_creador": "Administrador"
+        },
+        {
+            "id": 3,
+            "cliente_id": "2",
+            "nombre": "PRUEBA OFICIAL100",
+            "posicion": "premium",
+            "cpm": "500000",
+            "device_target": "mobile",
+            "fecha_inicio": "2025-08-20T16:00",
+            "fecha_fin": "2025-08-26T23:59",
+            "estado": "activo",
+            "creatividades": {
+                "desktop": [],
+                "mobile": {
+                    "top": {
+                        "nombre_original": "CC_Liofilizado-promo-1-St-320x100.jpg",
+                        "nombre_archivo": "1755721521_mobile_top.jpg",
+                        "ruta": "uploads\/creatividades\/1755721521_mobile_top.jpg",
+                        "tamaño": 34225,
+                        "tipo": "image\/jpeg",
+                        "subido_at": "2025-08-20T20:25:21.449761Z"
+                    },
+                    "a1": {
+                        "nombre_original": "CC_Liofilizado-promo-2-ED-300x250-1.jpg",
+                        "nombre_archivo": "1755721521_mobile_a1.jpg",
+                        "ruta": "uploads\/creatividades\/1755721521_mobile_a1.jpg",
+                        "tamaño": 79684,
+                        "tipo": "image\/jpeg",
+                        "subido_at": "2025-08-20T20:25:21.451040Z"
+                    }
+                }
+            },
+            "created_at": "2025-08-20T20:25:21.451474Z",
+            "updated_at": "2025-08-20T20:25:21.451538Z",
+            "usuario_creador": "Administrador"
+        }
+    ]
+}

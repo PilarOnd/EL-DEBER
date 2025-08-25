@@ -1,32 +1,390 @@
-.form-control:focus, .form-select:focus {
-    border-color: #666;
-    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+/* Variables CSS para consistencia de colores */
+:root {
+    --primary-color: #007bff;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-muted: #495057;
+    --border-color: #e9ecef;
+    --focus-border: #007bff;
+    --border-radius: 0.75rem;
+    --border-radius-sm: 0.375rem;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0, 123, 255, 0.15);
 }
 
+/* Estados de focus unificados */
+.form-control:focus, 
+.form-select:focus,
+.device-label:focus-within {
+    border-color: var(--focus-border);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Estilos de tarjetas */
 .card {
     border: none;
-    border-radius: 0.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
 }
 
 .card-header {
-    border-radius: 0.5rem 0.5rem 0 0 !important;
+    border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid var(--border-color);
 }
 
+/* Botones */
 .btn {
     padding: 0.5rem 1.2rem;
-    font-weight: normal;
+    font-weight: 500;
+    border-radius: var(--border-radius-sm);
 }
 
+/* Labels de formulario */
 .form-label {
     font-weight: 500;
-    color: #444;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
 }
 
+/* Selects */
 .form-select {
     padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    border-radius: var(--border-radius-sm);
+    border-color: var(--border-color);
 }
 
-#medidasRequeridas {
-    margin-top: 0.5rem;
+/* Estilos básicos para dropdowns de hora */
+.hora-dropdown {
+    position: relative;
+    z-index: 1000;
+    border-radius: var(--border-radius-sm);
+    border-color: var(--border-color);
+}
+
+.hora-dropdown option {
+    padding: 0.375rem 0.75rem;
+    color: var(--text-primary);
+}
+
+/* Botones de Radio Visuales para Dispositivos */
+.device-selector-container {
+    margin: 20px 0;
+}
+
+.device-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.device-card {
+    position: relative;
+}
+
+.device-radio {
+    display: none;
+}
+
+.device-label {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem;
+    background: #fff;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.device-label:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.device-label::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.device-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    margin-right: 15px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.device-icon i {
+    font-size: 24px;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+    line-height: 1;
+    display: inline-block;
+    font-style: normal !important;
+    font-weight: 900 !important;
+}
+
+/* Cuando hay múltiples iconos, hacerlos más pequeños */
+.device-icon i + i {
+    margin-left: 2px;
+}
+
+.device-icon:has(i + i) i {
+    font-size: 18px;
+    margin: 0 1px;
+}
+
+/* Fallback para navegadores que no soportan :has() */
+.device-icon i:first-child:not(:last-child),
+.device-icon i:last-child:not(:first-child) {
+    font-size: 18px;
+    margin: 0 1px;
+}
+
+/* Asegurar que los iconos se vean correctamente */
+.device-icon .fas {
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    text-rendering: auto;
+}
+
+.device-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.device-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.device-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Estado seleccionado */
+.device-radio:checked + .device-label {
+    border-color: var(--primary-color);
+    background: linear-gradient(135deg, #f8fbff, #e3f2fd);
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.2);
+}
+
+.device-radio:checked + .device-label::before {
+    background: var(--primary-color);
+}
+
+.device-radio:checked + .device-label .device-icon {
+    background: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.device-radio:checked + .device-label .device-icon i {
+    color: #fff;
+}
+
+.device-radio:checked + .device-label .device-title {
+    color: var(--primary-color);
+}
+
+/* Responsive - Tablet */
+@media (max-width: 992px) {
+    .device-options {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+    }
+    
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+    /* Container principal más compacto */
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-top: 1rem !important;
+    }
+    
+    /* Cards más compactas */
+    .card {
+        margin-bottom: 1rem;
+        border-radius: var(--border-radius-sm);
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .card-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Formulario responsive */
+    .row > [class*="col-"] {
+        margin-bottom: 1rem;
+    }
+    
+    /* Dispositivos en una sola columna */
+    .device-options {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin: 10px 0;
+    }
+    
+    .device-label {
+        padding: 12px;
+        border-radius: var(--border-radius-sm);
+    }
+    
+    .device-icon {
+        width: 45px;
+        height: 45px;
+        margin-right: 10px;
+    }
+    
+    .device-icon i {
+        font-size: 18px;
+    }
+    
+    /* Iconos múltiples en mobile */
+    .device-icon:has(i + i) i,
+    .device-icon i:first-child:not(:last-child),
+    .device-icon i:last-child:not(:first-child) {
+        font-size: 14px;
+    }
+    
+    .device-title {
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+    
+    .device-desc {
+        font-size: 11px;
+        line-height: 1.3;
+    }
+    
+    /* Botones de duración más compactos */
+    .d-flex.flex-wrap.gap-2 {
+        gap: 0.5rem !important;
+    }
+    
+    .btn-sm {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Campos de fecha y hora en mobile */
+    .col-8, .col-4 {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    
+    /* Labels más pequeños */
+    .form-label {
+        font-size: 14px;
+        margin-bottom: 0.25rem;
+    }
+    
+    .form-label.small {
+        font-size: 12px;
+    }
+    
+    /* Inputs y selects más compactos */
+    .form-control, .form-select {
+        padding: 0.5rem 0.75rem;
+        font-size: 14px;
+    }
+    
+    .hora-dropdown {
+        font-size: 13px;
+    }
+}
+
+/* Responsive - Mobile pequeño */
+@media (max-width: 480px) {
+    .container-fluid {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    
+    /* Botones de duración en 2 filas */
+    .d-flex.flex-wrap.gap-2 {
+        justify-content: center;
+    }
+    
+    .btn-sm {
+        flex: 1 1 calc(50% - 0.25rem);
+        min-width: 120px;
     margin-bottom: 0.5rem;
+    }
+    
+    /* Dispositivos aún más compactos */
+    .device-label {
+        padding: 10px;
+    }
+    
+    .device-icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 8px;
+    }
+    
+    .device-icon i {
+        font-size: 16px;
+    }
+    
+    .device-icon:has(i + i) i,
+    .device-icon i:first-child:not(:last-child),
+    .device-icon i:last-child:not(:first-child) {
+        font-size: 12px;
+    }
+    
+    .device-title {
+        font-size: 13px;
+    }
+    
+    .device-desc {
+        font-size: 10px;
+    }
+    
+    /* Título principal más pequeño */
+    .h4 {
+        font-size: 1.1rem;
+    }
+    
+    /* Fechas en columna completa en móviles muy pequeños */
+    .col-md-6 {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 } 
