@@ -1,7 +1,42 @@
-/* home.css */
+/* home.css - Estilos unificados para la página de inicio */
 
-/* Sección principal */
-.hero-section {
+/* Variables globales para home */
+:root {
+    --home-verde-principal: #207742;
+}
+
+/* Estilo específico del body para home */
+.home-body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Botón personalizado del home */
+.home-btn-ingresar {
+    background-color: var(--home-verde-principal);
+    color: white;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    text-decoration: none;
+    font-size: smaller
+}
+
+.home-btn-ingresar:hover {
+    background-color: var(--home-verde-principal);
+    color: black;
+}
+
+/* Estilo del logo en home */
+.home-brand img {
+    width: 175px; /* Ajusta según el tamaño deseado */
+    height: auto;
+    margin-top: -50px; /* Sube la imagen */
+}
+
+/* Sección principal del home */
+.home-hero-section {
     position: relative;
     background-size: cover;
     height: 100vh;
@@ -12,8 +47,8 @@
     text-align: center;
 }
 
-/* Capa de superposición */
-.overlay {
+/* Capa de superposición del home */
+.home-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -22,8 +57,8 @@
     background: rgba(255, 255, 255, 0.8);
 }
 
-/* Contenido centrado */
-.content {
+/* Contenido centrado del home */
+.home-content {
     position: relative;
     z-index: 2;
 }

@@ -3,47 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SMID BI</title>
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <title>EL DEBER - Lectura de Campañas</title>
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="login-body">
+    
+    @if($errors->any())
+        <div class="login-alert-error-overlay">
+            <div class="login-alert-error-content">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+    
     <div class="login-container">
-        <div class="login-left">
+        <div class="login-panel-left">
             <h1>EL DEBER</h1>
             <p>REPORTING ONLINE</p>
         </div>
-        <div class="login-right">
-            <h2>Login</h2>
+        <div class="login-panel-right">
+            <h2>Inicio de sesión</h2>
             <p>Para revisar sus campañas activas, por favor inicie sesión con su cuenta de ED-REPORTES.</p>
-            
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 
             <form method="POST" action="{{ route('login.post') }}" id="loginForm">
                 @csrf
-                <div class="input-group">
+                <div class="login-input-group">
                     <label for="usuario">Usuario</label>
                     <input type="text" id="usuario" name="usuario" value="{{ old('usuario') }}" required>
                 </div>
-                <div class="input-group">
+                <div class="login-input-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <div class="checkbox-group">
+                <div class="login-checkbox-group">
                     <input type="checkbox" id="recordar" name="remember">
                     <label for="recordar">Recuérdame</label>
                 </div>
-                <button type="submit" class="btn">Iniciar sesión →</button>
+                <button type="submit" class="login-btn">Iniciar sesión →</button>
             </form>
         </div>
     </div>
