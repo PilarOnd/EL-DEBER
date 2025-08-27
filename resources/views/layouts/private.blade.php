@@ -14,6 +14,7 @@
     <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @stack('styles')
 </head>
 <body>
     <div class="wrapper">

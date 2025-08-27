@@ -1,0 +1,32 @@
+/* ===== ESTILOS PARA REPORTES Y GRÁFICOS ===== */
+
+/* Estilos para elementos Canvas */
+canvas {
+    width: 100% !important;
+    height: 250px !important;
+}
+
+/* Contenedor de gráficos */
+.graphs-container {
+    background-color: rgb(233, 229, 229);
+    padding: 20px;
+    margin-top: 20px;
+}
+
+/* Títulos de gráficos */
+.graph-title {
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+/* Card-body específico para gráficos con altura mínima */
+.card-body {
+    min-height: 250px;
+    position: relative;
+    padding: 15px;
+}
+
+/* Estilos generales para cards en reportes */
+.card {
+    margin-bottom: 20px;
+}

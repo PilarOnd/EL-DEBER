@@ -1,5 +1,9 @@
 @extends('layouts.private')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/reportes.css') }}">
+@endpush
+
 @section('content')
 <div class="container-fluid py-4">
     <div class="row mb-4">
