@@ -1,18 +1,17 @@
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
+/* Esto afecta a private.blade.php - Contenedor principal del layout sidebar + contenido */
 .wrapper {
     display: flex;
     width: 100%;
     align-items: stretch;
 }
 
+/* Esto afecta a private.blade.php - Lista de menú del sidebar */
 .components {
     padding: 20px 0;
 }
 
+/* Esto afecta a private.blade.php - Botón para colapsar/expandir sidebar */
 #sidebarCollapse {
     background: transparent;
     border: none;
@@ -20,10 +19,12 @@ body {
     cursor: pointer;
 }
 
+/* Esto afecta a private.blade.php - Icono del botón colapsar sidebar */
 #sidebarCollapse i {
     font-size: 1.5rem;
 }
 
+/* Esto afecta a private.blade.php - Sidebar principal del sistema */
 #sidebar {
     min-width: 250px;
     max-width: 250px;
@@ -37,10 +38,12 @@ body {
     border-right: 1px solid #f0f0f0;
 }
 
+/* Esto afecta a private.blade.php - Estado colapsado del sidebar */
 #sidebar.active {
     margin-left: -250px;
 }
 
+/* Esto afecta a private.blade.php - Área de contenido principal (donde se inyectan las vistas) */
 #content {
     margin-left: 250px;
     margin-top: 0;
@@ -51,10 +54,12 @@ body {
     transition: all 0.3s;
 }
 
+/* Esto afecta a private.blade.php - Contenido expandido cuando sidebar está colapsado */
 #content.active {
     margin-left: 0;
 }
 
+/* Esto afecta a private.blade.php - Navbar superior fijo */
 .navbar {
     position: fixed;
     top: 0;
@@ -68,11 +73,13 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Esto afecta a private.blade.php - Navbar expandido cuando sidebar está colapsado */
 #content.active .navbar {
     left: 0;
     width: 100%;
 }
 
+/* Esto afecta a private.blade.php - Área principal donde se inyecta @yield('content') */
 .main-content {
     position: relative;
     margin-top: 85px;
@@ -82,10 +89,12 @@ body {
     background: transparent;
 }
 
+/* Esto afecta a dashboard.blade.php, campañas/index.blade.php, reportes/index.blade.php - Espaciado entre cards */
 .card {
     margin-bottom: 20px;
 }
 
+/* Esto afecta a private.blade.php - Elementos del menú sidebar */
 #sidebar ul li {
     padding: 12px 30px;
     font-size: 16px;
@@ -95,6 +104,7 @@ body {
     cursor: pointer;
 }
 
+/* Esto afecta a private.blade.php - Estados activo y hover del menú sidebar */
 #sidebar ul li.active,
 #sidebar ul li:hover {
     background: #f5f7fa;
@@ -102,6 +112,7 @@ body {
     border-left: 4px solid #007bff;
 }
 
+/* Esto afecta a private.blade.php - Iconos del menú sidebar */
 #sidebar ul li i {
     margin-right: 12px;
     font-size: 20px;
@@ -109,20 +120,24 @@ body {
     vertical-align: middle;
 }
 
+/* Esto afecta a private.blade.php - Iconos activos/hover del menú sidebar */
 #sidebar ul li.active i,
 #sidebar ul li:hover i {
     color: #007bff;
 }
 
+/* Esto afecta a private.blade.php - Texto del menú sidebar */
 #sidebar ul li span {
     color: #333 !important;
 }
 
+/* Esto afecta a private.blade.php - Texto activo/hover del menú sidebar */
 #sidebar ul li.active span,
 #sidebar ul li:hover span {
     color: #007bff !important;
 }
 
+/* Esto afecta a private.blade.php - Header del sidebar con logo */
 #sidebar .sidebar-header {
     height: 85px;
     padding: 0 20px;
@@ -134,30 +149,36 @@ body {
     justify-content: center;
 }
 
+/* Esto afecta a private.blade.php - Logo en header del sidebar */
 #sidebar .sidebar-header .logo {
     max-width: 150px;
     height: auto;
 }
 
+/* Esto afecta a private.blade.php - Avatar circular en navbar */
 .navbar .rounded-circle {
     border: 2px solid #f0f0f0;
     box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
 
+/* Esto afecta a private.blade.php - Icono de notificaciones en navbar */
 .navbar .bi-bell {
     color: #888;
     transition: color 0.2s;
 }
 
+/* Esto afecta a private.blade.php - Hover del icono de notificaciones */
 .navbar .bi-bell:hover {
     color: #007bff;
 }
 
+/* Esto afecta a private.blade.php - Badge de notificaciones en navbar */
 .navbar .badge {
     font-size: 0.75rem;
     padding: 0.4em 0.5em;
 }
 
+/* Esto afecta a private.blade.php - Menú dropdown del usuario */
 .dropdown-menu {
     min-width: 220px;
 }
@@ -165,6 +186,7 @@ body {
     text-align: center;
 }
 
+/* Esto afecta a private.blade.php - Estilos generales para imágenes circulares */
 img.rounded-circle {
     border-radius: 50% !important;
     width: 40px;
@@ -172,6 +194,7 @@ img.rounded-circle {
     object-fit: cover;
     display: inline-block;
 }
+/* Esto afecta a private.blade.php - Enlaces y elementos de la lista del sidebar */
 #sidebar .components li a {
     display: block;
     width: 100%;
@@ -183,33 +206,25 @@ img.rounded-circle {
     cursor: pointer;
 }
 
-/* Mejoras para el espaciado del contenido */
+/* Esto afecta a dashboard.blade.php, campañas/index.blade.php, reportes/index.blade.php - Mejoras para el espaciado del contenido */
 .container-fluid.main-content {
     padding-top: 0;
 }
 
-/* Asegurar que el contenido sea legible sobre la imagen de fondo */
+/* Esto afecta a dashboard.blade.php, campañas/index.blade.php, reportes/index.blade.php - Asegurar que el contenido sea legible sobre la imagen de fondo */
 .main-content .card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Esto afecta a dashboard.blade.php, campañas/index.blade.php, reportes/index.blade.php - Títulos principales legibles */
 .main-content h1 {
     color: #333;
     text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
 }
 
-.container-fluid.main-content .row:first-child {
-    margin-top: 0;
-}
-
-.container-fluid.main-content h1 {
-    margin-top: 0;
-    padding-top: 0;
-}
-
-/* Asegurar que el navbar esté siempre visible */
+/* Esto afecta a private.blade.php - Asegurar que el navbar esté siempre visible */
 .navbar .container-fluid {
     height: 100%;
     display: flex;

@@ -2,8 +2,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/campañas/display/create_display.css') }}">
-<!-- Asegurar FontAwesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 @endpush
 
 @section('content')
@@ -112,7 +110,7 @@
                                         <input type="radio" id="device_desktop" name="device_target" value="desktop" class="device-radio">
                                         <label for="device_desktop" class="device-label">
                                             <div class="device-icon">
-                                                <i class="fas fa-desktop" aria-hidden="true">🖥️</i>
+                                                <img src="{{ asset('img/computadora.png') }}" alt="Desktop" />
                                             </div>
                                             <div class="device-text">
                                                 <span class="device-title">Solo Desktop</span>
@@ -125,8 +123,7 @@
                                         <input type="radio" id="device_both" name="device_target" value="both" class="device-radio" checked>
                                         <label for="device_both" class="device-label">
                                             <div class="device-icon">
-                                                <i class="fas fa-desktop" aria-hidden="true">🖥️</i>
-                                                <i class="fas fa-mobile-alt" aria-hidden="true">📱</i>
+                                                <img src="{{ asset('img/ambos.png') }}" alt="Ambos Dispositivos" />
                                             </div>
                                             <div class="device-text">
                                                 <span class="device-title">Ambos Dispositivos</span>
@@ -139,7 +136,7 @@
                                         <input type="radio" id="device_mobile" name="device_target" value="mobile" class="device-radio">
                                         <label for="device_mobile" class="device-label">
                                             <div class="device-icon">
-                                                <i class="fas fa-mobile-alt" aria-hidden="true">📱</i>
+                                                <img src="{{ asset('img/celular.png') }}" alt="Mobile" />
                                             </div>
                                             <div class="device-text">
                                                 <span class="device-title">Solo Mobile</span>

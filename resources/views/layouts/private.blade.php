@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('css/private.css') }}">
     <link rel="stylesheet" href="{{ asset('css/show.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/campañas/display/create_display.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
