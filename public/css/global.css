@@ -1,0 +1,417 @@
+/* ========================================
+   SISTEMA DE BOTONES GLOBALES
+   ======================================== */
+
+/* Variables globales para consistencia */
+:root {
+    --color-primary: #007bff ;
+    --color-primary-hover: #156bc8 ;
+    --color-secondary: #6c757d;
+    --color-secondary-hover: #5a6268;
+    --color-success: #28a745;
+    --color-success-hover: #218838;
+    --color-danger: #dc3545;
+    --color-danger-hover: #c82333;
+    --color-warning: #ffc107;
+    --color-warning-hover: #e0a800;
+    --color-info: #17a2b8;
+    --color-info-hover: #138496;
+    --color-light: #f8f9fa;
+    --color-light-hover: #e2e6ea;
+    --color-dark: #343a40;
+    --color-dark-hover: #23272b;
+    
+    /* Sombras y transiciones */
+    --btn-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --btn-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --btn-transition: all 0.3s ease;
+    --btn-border-radius: 5px;
+}
+
+/* ========================================
+   BOTÓN BASE
+   ======================================== */
+
+.btn-global {
+    display: inline-block;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 10px 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: var(--btn-border-radius);
+    transition: var(--btn-transition);
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--btn-shadow);
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-global:hover {
+    box-shadow: var(--btn-shadow-hover);
+    transform: translateY(-1px);
+}
+
+.btn-global:active {
+    transform: translateY(0);
+    box-shadow: var(--btn-shadow);
+}
+
+.btn-global:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(32, 119, 66, 0.25);
+}
+
+.btn-global:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: var(--btn-shadow) !important;
+}
+
+/* ========================================
+   VARIANTES DE BOTONES
+   ======================================== */
+
+/* Botón Primario (Verde principal) */
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    color: white;
+}
+
+/* Botón Secundario */
+.btn-secondary {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-secondary-hover);
+    border-color: var(--color-secondary-hover);
+    color: white;
+}
+
+/* Botón de Éxito */
+.btn-success {
+    background-color: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: var(--color-success-hover);
+    border-color: var(--color-success-hover);
+    color: white;
+}
+
+/* Botón de Peligro */
+.btn-danger {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: var(--color-danger-hover);
+    border-color: var(--color-danger-hover);
+    color: white;
+}
+
+/* Botón de Advertencia */
+.btn-warning {
+    background-color: var(--color-warning);
+    border-color: var(--color-warning);
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background-color: var(--color-warning-hover);
+    border-color: var(--color-warning-hover);
+    color: #212529;
+}
+
+/* Botón de Información */
+.btn-info {
+    background-color: var(--color-info);
+    border-color: var(--color-info);
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: var(--color-info-hover);
+    border-color: var(--color-info-hover);
+    color: white;
+}
+
+/* Botón Claro */
+.btn-light {
+    background-color: var(--color-light);
+    border-color: var(--color-light);
+    color: #212529;
+}
+
+.btn-light:hover {
+    background-color: var(--color-light-hover);
+    border-color: var(--color-light-hover);
+    color: #212529;
+}
+
+/* Botón Oscuro */
+.btn-dark {
+    background-color: var(--color-dark);
+    border-color: var(--color-dark);
+    color: white;
+}
+
+.btn-dark:hover {
+    background-color: var(--color-dark-hover);
+    border-color: var(--color-dark-hover);
+    color: white;
+}
+
+/* ========================================
+   BOTONES OUTLINE (CONTORNO)
+   ======================================== */
+
+.btn-outline-primary {
+    background-color: transparent;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    border-color: var(--color-secondary);
+    color: var(--color-secondary);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: white;
+}
+
+.btn-outline-danger {
+    background-color: transparent;
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+}
+
+.btn-outline-danger:hover {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: white;
+}
+
+/* ========================================
+   TAMAÑOS DE BOTONES
+   ======================================== */
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    border-radius: 4px;
+}
+
+.btn-lg {
+    padding: 12px 24px;
+    font-size: 1.25rem;
+    border-radius: 6px;
+}
+
+.btn-xl {
+    padding: 16px 32px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+}
+
+/* ========================================
+   BOTONES ESPECIALES
+   ======================================== */
+
+/* Botón redondeado */
+.btn-rounded {
+    border-radius: 50px !important;
+}
+
+/* Botón de ancho completo */
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* Botón con ícono */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-icon i {
+    font-size: 1.1em;
+}
+
+/* Botón flotante */
+.btn-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+.btn-float:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   GRUPOS DE BOTONES
+   ======================================== */
+
+.btn-group {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.btn-group .btn-global {
+    margin-right: -1px;
+    border-radius: 0;
+}
+
+.btn-group .btn-global:first-child {
+    border-top-left-radius: var(--btn-border-radius);
+    border-bottom-left-radius: var(--btn-border-radius);
+}
+
+.btn-group .btn-global:last-child {
+    border-top-right-radius: var(--btn-border-radius);
+    border-bottom-right-radius: var(--btn-border-radius);
+}
+
+/* ========================================
+   BOTONES DE ACCIÓN RÁPIDA
+   ======================================== */
+
+/* Botón de editar */
+.btn-edit {
+    background-color: var(--color-info);
+    border-color: var(--color-info);
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+.btn-edit:hover {
+    background-color: var(--color-info-hover);
+    border-color: var(--color-info-hover);
+    color: white;
+}
+
+/* Botón de eliminar */
+.btn-delete {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+.btn-delete:hover {
+    background-color: var(--color-danger-hover);
+    border-color: var(--color-danger-hover);
+    color: white;
+}
+
+/* Botón de ver/mostrar */
+.btn-view {
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+.btn-view:hover {
+    background-color: var(--color-secondary-hover);
+    border-color: var(--color-secondary-hover);
+    color: white;
+}
+
+/* ========================================
+   ESTADOS DE CARGA
+   ======================================== */
+
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* ========================================
+   RESPONSIVIDAD
+   ======================================== */
+
+@media (max-width: 768px) {
+    .btn-global {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-lg {
+        padding: 10px 20px;
+        font-size: 1.1rem;
+    }
+    
+    .btn-float {
+        bottom: 15px;
+        right: 15px;
+        width: 48px;
+        height: 48px;
+    }
+}

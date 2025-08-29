@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReporteController extends Controller
 {
@@ -237,5 +238,163 @@ class ReporteController extends Controller
         if ($objetivo <= 0) return 0;
         $porcentaje = ($logrado / $objetivo) * 100;
         return round(min($porcentaje, $maximo), 2);
+    }
+
+    public function showDisplayPrueba($id)
+    {
+        $usuario = session('usuario');
+        if (!$usuario) return redirect()->route('login');
+        
+        $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
+        $linea_pedido = collect($data['linea_pedidos'])->firstWhere('id', $id);
+        
+        if (!$linea_pedido) abort(404, 'Línea de pedido no encontrada');
+        
+        $pedido = collect($data['pedido'])->firstWhere('id_lineadepedidos', $linea_pedido['id']);
+        if (!$pedido) abort(404, 'Pedido no encontrado para la línea de pedido');
+        
+        $cliente = collect($data['clientes'])->firstWhere('id', $linea_pedido['cliente_id']);
+        if (!$cliente) abort(404, 'Cliente no encontrado para la línea de pedido');
+        
+        if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
+            abort(403, 'No tienes permiso para ver este pedido');
+        }
+        
+        $creatividades = collect($data['creatividades'])->where('pedido_id', $pedido['id'])->values();
+        $totalImpresiones = $pedido['impresiones'] ?? 0;
+        $porcentajePresupuesto = $linea_pedido['objetivo'] > 0 ? min(100, ($totalImpresiones / $linea_pedido['objetivo']) * 100) : 0;
+        $efectividad = $linea_pedido['objetivo'] > 0 ? round(($totalImpresiones / $linea_pedido['objetivo']) * 100, 2) : 0;
+        
+        $histograma = [ 'fechas' => [], 'impresiones' => [], 'clics' => [], 'ctr' => [] ];
+        foreach ($pedido['histograma_diario'] as $fecha => $datos) {
+            $histograma['fechas'][] = \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('D [de] MMMM');
+            $histograma['impresiones'][] = $datos['impresiones'];
+            $histograma['clics'][] = $datos['clics'];
+            $ctr = $datos['impresiones'] > 0 ? round(($datos['clics'] / $datos['impresiones']) * 100, 2) : 0;
+            $histograma['ctr'][] = $ctr;
+        }
+        
+        $displayTakeover = [
+            'metricas_totales' => [
+                'impresiones' => $pedido['impresiones'],
+                'clics' => $pedido['clics'],
+                'ctr' => $pedido['impresiones'] > 0 ? round(($pedido['clics'] / $pedido['impresiones']) * 100, 2) : 0
+            ],
+            'totales_dispositivos' => [
+                'mobile' => [
+                    'impresiones' => $pedido['dispositivos']['mobile']['impresiones'],
+                    'clics' => $pedido['dispositivos']['mobile']['clics'],
+                    'ctr' => $pedido['dispositivos']['mobile']['impresiones'] > 0 ? round(($pedido['dispositivos']['mobile']['clics'] / $pedido['dispositivos']['mobile']['impresiones']) * 100, 2) : 0
+                ],
+                'desktop' => [
+                    'impresiones' => $pedido['dispositivos']['desktop']['impresiones'],
+                    'clics' => $pedido['dispositivos']['desktop']['clics'],
+                    'ctr' => $pedido['dispositivos']['desktop']['impresiones'] > 0 ? round(($pedido['dispositivos']['desktop']['clics'] / $pedido['dispositivos']['desktop']['impresiones']) * 100, 2) : 0
+                ]
+            ],
+            'resultados_bloque' => collect($pedido['histograma_diario'])->map(function($item, $fecha) {
+                $ctr = $item['impresiones'] > 0 ? round(($item['clics'] / $item['impresiones']) * 100, 2) : 0;
+                return [
+                    'nombre' => $fecha,
+                    'fecha' => $fecha,
+                    'impresiones' => $item['impresiones'],
+                    'clics' => $item['clics'],
+                    'ctr' => $ctr
+                ];
+            })->values()->all()
+        ];
+        
+        return view('reportes.pruebadisplay', compact('pedido', 'cliente', 'creatividades', 'linea_pedido', 'displayTakeover', 'histograma', 'totalImpresiones', 'porcentajePresupuesto', 'efectividad'));
+    }
+
+    public function generateDisplayPDF(Request $request)
+    {
+        $usuario = session('usuario');
+        if (!$usuario) return redirect()->route('login');
+        
+        $pedidoId = $request->input('pedido_id');
+        
+        // Buscar la línea de pedido correspondiente
+        $data = json_decode(File::get(base_path('f_alto_impacto.json')), true);
+        $linea_pedido = null;
+        
+        foreach ($data['linea_pedidos'] as $lp) {
+            $pedido = collect($data['pedido'])->firstWhere('id_lineadepedidos', $lp['id']);
+            if ($pedido && $pedido['id'] == $pedidoId) {
+                $linea_pedido = $lp;
+                break;
+            }
+        }
+        
+        if (!$linea_pedido) abort(404, 'Línea de pedido no encontrada');
+        
+        $pedido = collect($data['pedido'])->firstWhere('id_lineadepedidos', $linea_pedido['id']);
+        if (!$pedido) abort(404, 'Pedido no encontrado para la línea de pedido');
+        
+        $cliente = collect($data['clientes'])->firstWhere('id', $linea_pedido['cliente_id']);
+        if (!$cliente) abort(404, 'Cliente no encontrado para la línea de pedido');
+        
+        if (!$cliente || ($usuario['nombre'] !== 'Administrador' && $cliente['nombre'] !== $usuario['nombre'])) {
+            abort(403, 'No tienes permiso para ver este pedido');
+        }
+        
+        $creatividades = collect($data['creatividades'])->where('pedido_id', $pedido['id'])->values();
+        $totalImpresiones = $pedido['impresiones'] ?? 0;
+        
+        $histograma = [ 'fechas' => [], 'impresiones' => [], 'clics' => [], 'ctr' => [] ];
+        foreach ($pedido['histograma_diario'] as $fecha => $datos) {
+            $histograma['fechas'][] = \Carbon\Carbon::parse($fecha)->locale('es')->isoFormat('D [de] MMMM');
+            $histograma['impresiones'][] = $datos['impresiones'];
+            $histograma['clics'][] = $datos['clics'];
+            $ctr = $datos['impresiones'] > 0 ? round(($datos['clics'] / $datos['impresiones']) * 100, 2) : 0;
+            $histograma['ctr'][] = $ctr;
+        }
+        
+        $displayTakeover = [
+            'metricas_totales' => [
+                'impresiones' => $pedido['impresiones'],
+                'clics' => $pedido['clics'],
+                'ctr' => $pedido['impresiones'] > 0 ? round(($pedido['clics'] / $pedido['impresiones']) * 100, 2) : 0
+            ],
+            'totales_dispositivos' => [
+                'mobile' => [
+                    'impresiones' => $pedido['dispositivos']['mobile']['impresiones'],
+                    'clics' => $pedido['dispositivos']['mobile']['clics'],
+                    'ctr' => $pedido['dispositivos']['mobile']['impresiones'] > 0 ? round(($pedido['dispositivos']['mobile']['clics'] / $pedido['dispositivos']['mobile']['impresiones']) * 100, 2) : 0
+                ],
+                'desktop' => [
+                    'impresiones' => $pedido['dispositivos']['desktop']['impresiones'],
+                    'clics' => $pedido['dispositivos']['desktop']['clics'],
+                    'ctr' => $pedido['dispositivos']['desktop']['impresiones'] > 0 ? round(($pedido['dispositivos']['desktop']['clics'] / $pedido['dispositivos']['desktop']['impresiones']) * 100, 2) : 0
+                ]
+            ],
+            'resultados_bloque' => collect($pedido['histograma_diario'])->map(function($item, $fecha) {
+                $ctr = $item['impresiones'] > 0 ? round(($item['clics'] / $item['impresiones']) * 100, 2) : 0;
+                return [
+                    'nombre' => $fecha,
+                    'fecha' => $fecha,
+                    'impresiones' => $item['impresiones'],
+                    'clics' => $item['clics'],
+                    'ctr' => $ctr
+                ];
+            })->values()->all()
+        ];
+        
+        // Crear una vista especial para PDF (sin controles interactivos)
+        $html = view('reportes.display-pdf', compact('pedido', 'cliente', 'creatividades', 'linea_pedido', 'displayTakeover', 'histograma', 'totalImpresiones'))->render();
+        
+        // Generar PDF
+        $pdf = Pdf::loadHTML($html)
+            ->setPaper('a4', 'portrait')
+            ->setOptions([
+                'dpi' => 150,
+                'defaultFont' => 'sans-serif',
+                'isRemoteEnabled' => true,
+                'isHtml5ParserEnabled' => true
+            ]);
+        
+        $filename = 'Reporte_Display_' . $cliente['nombre'] . '_' . date('Y-m-d') . '.pdf';
+        
+        return $pdf->download($filename);
     }
 }

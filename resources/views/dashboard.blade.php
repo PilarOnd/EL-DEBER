@@ -110,7 +110,9 @@
                                                         break;
                                                 }
                                             @endphp
-                                            <a href="{{ $ruta }}" class="btn btn-sm btn-primary" target="_blank">Ver</a>
+                                            <a href="{{ $ruta }}" class="btn-global btn-view btn-sm" target="_blank">
+                                                <i class="bi bi-eye"></i> Ver
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

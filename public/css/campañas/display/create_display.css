@@ -34,13 +34,6 @@
     border-bottom: 1px solid var(--border-color);
 }
 
-/* Botones */
-.btn {
-    padding: 0.5rem 1.2rem;
-    font-weight: 500;
-    border-radius: var(--border-radius-sm);
-}
-
 /* Labels de formulario */
 .form-label {
     font-weight: 500;
@@ -245,10 +238,7 @@
         gap: 0.5rem !important;
     }
     
-    .btn-sm {
-        padding: 0.375rem 0.75rem;
-        font-size: 0.875rem;
-    }
+    /* .btn-sm removido - usar sistema global */
     
     /* Campos de fecha y hora en mobile */
     .col-8, .col-4 {
@@ -289,11 +279,7 @@
         justify-content: center;
     }
     
-    .btn-sm {
-        flex: 1 1 calc(50% - 0.25rem);
-        min-width: 120px;
-    margin-bottom: 0.5rem;
-    }
+    /* .btn-sm responsive removido - usar sistema global */
     
     /* Dispositivos aún más compactos */
     .device-label {

@@ -48,7 +48,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ route('reportes.display', $campania['id']) }}" class="btn btn-sm btn-primary" target="_blank">
+                                                <a href="{{ route('reportes.display', $campania['id']) }}" class="btn-global btn-view btn-sm" target="_blank">
                                                     <i class="bi bi-eye"></i> Ver
                                                 </a>
                                             </td>
@@ -101,7 +101,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ route('reportes.branded', $campania['id']) }}" class="btn btn-sm btn-primary" target="_blank">
+                                                <a href="{{ route('reportes.branded', $campania['id']) }}" class="btn-global btn-view btn-sm" target="_blank">
                                                     <i class="bi bi-eye"></i> Ver
                                                 </a>
                                             </td>
@@ -154,7 +154,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ route('reportes.redes', $campania['id']) }}" class="btn btn-sm btn-primary" target="_blank">
+                                                <a href="{{ route('reportes.redes', $campania['id']) }}" class="btn-global btn-view btn-sm" target="_blank">
                                                     <i class="bi bi-eye"></i> Ver
                                                 </a>
                                             </td>

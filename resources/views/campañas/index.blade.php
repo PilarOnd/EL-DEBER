@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Campañas Display</h5>
-                    <a href="{{ route('campañas.display.create') }}" class="btn btn-primary">
+                    <a href="{{ route('campañas.display.create') }}" class="btn-global btn-primary">
                         <i class="bi bi-plus-circle"></i> Nueva Campaña Display
                     </a>
                 </div>
@@ -98,16 +98,16 @@
                                                 @if(isset($campaña['pedido']))
                                                     <!-- Campaña de reportes -->
                                                     <a href="{{ route('reportes.display', $campaña['pedido']['id']) }}" 
-                                                       class="btn btn-sm btn-outline-primary">
+                                                       class="btn-global btn-view btn-sm">
                                                         <i class="bi bi-eye"></i> Ver Reporte
                                                     </a>
                                                 @else
                                                     <!-- Campaña creada desde formulario -->
                                                     <a href="{{ route('campañas.display.index') }}" 
-                                                       class="btn btn-sm btn-outline-primary">
+                                                       class="btn-global btn-secondary btn-sm">
                                                         <i class="bi bi-list"></i> Ver Lista
                                                     </a>
-                                                    <button class="btn btn-sm btn-outline-info ms-1" 
+                                                    <button class="btn-global btn-info btn-sm ms-1" 
                                                             onclick="verDetallesCampaña({{ $campaña['id'] }}, '{{ addslashes($campaña['nombre']) }}')">
                                                         <i class="bi bi-info-circle"></i> Detalles
                                                     </button>
@@ -130,7 +130,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Campañas Branded Content</h5>
-                    <a href="{{ route('campañas.branded.create') }}" class="btn btn-primary">
+                    <a href="{{ route('campañas.branded.create') }}" class="btn-global btn-primary">
                         <i class="bi bi-plus-circle"></i> Nueva Campaña Branded Content
                     </a>
                 </div>
@@ -169,7 +169,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Campañas Redes Sociales</h5>
-                    <a href="{{ route('campañas.redes.create') }}" class="btn btn-primary">
+                    <a href="{{ route('campañas.redes.create') }}" class="btn-global btn-primary">
                         <i class="bi bi-plus-circle"></i> Nueva Campaña Redes Sociales
                     </a>
                 </div>
@@ -204,6 +204,7 @@
 </div>
 @endsection
 
+@push('scripts')
 <script>
 function verDetallesCampaña(id, nombre) {
     // Crear modal dinámico para mostrar detalles
@@ -225,8 +226,8 @@ function verDetallesCampaña(id, nombre) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <a href="{{ route('campañas.display.index') }}" class="btn btn-primary">
+                        <button type="button" class="btn-global btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a href="{{ route('campañas.display.index') }}" class="btn-global btn-primary">
                             <i class="bi bi-list"></i> Ver Todas las Campañas
                         </a>
                     </div>
@@ -241,8 +242,9 @@ function verDetallesCampaña(id, nombre) {
         existingModal.remove();
     }
     
-    // Agregar nuevo modal
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    // Agregar nuevo modal al contenedor principal en lugar del body
+    const mainContent = document.querySelector('.main-content') || document.body;
+    mainContent.insertAdjacentHTML('beforeend', modalHtml);
     
     // Mostrar modal
     const modal = new bootstrap.Modal(document.getElementById('modalDetallesCampaña'));
@@ -268,3 +270,4 @@ function verDetallesCampaña(id, nombre) {
     }, 1000);
 }
 </script>
+@endpush
